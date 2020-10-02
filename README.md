@@ -28,4 +28,4 @@ Follow this [manuel](https://tecadmin.net/install-go-on-ubuntu/)
 - `go get github.com/tools/godep`: install godep
 
 ## Hello-world
-- [Hello-world](hello-world/README.md)
+- [Hello-world](00_hello-world/README.md)
