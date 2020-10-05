@@ -11,15 +11,11 @@ $GOBIN=$GOPATH/bin # GO可执行文件目录
 在MacOS下可以通过 `vim ~/.zshrc` 配置
 ```bash
 export GOROOT=/usr/local/go
-export GOPATH=/Users/ruanhe/go
+export GOPATH=/Users/XXX/go
 export GOBIN=$GOPATH/bin
 # export $PATH=$PATH:$GOBIN:$GOROOT/bin
 ```
 通过 `sourc ~/.zshrc`更新环境变量
 
 
-## Workspace
-Go的workspace被定义在$GOPATH工作目录下，其结构有三个子目录（需要自行创建）：
-- src：存放源代码文件
-- pkg：存放编译后的文件
-- bin：存放编译后的可执行文件 
+
