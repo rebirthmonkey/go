@@ -111,7 +111,7 @@ go build
 
 ### Lib在不同Github包
 ```bash
-cd relatedlib
+cd gitlib
 go mod init
 go mod tidy
 go run ./main.go
@@ -133,5 +133,7 @@ wkmodule3
 1. [亲测GO环境搭建，理解go build、go install、go get](https://blog.csdn.net/zhangliangzi/article/details/77914943)
 1. [go module 基本使用](https://www.cnblogs.com/chnmig/p/11806609.html)
 1. [一文搞懂 Go Modules 前世今生及入门使用](https://www.cnblogs.com/wongbingming/p/12941021.html)
+1. [关于Go Modules，看这一篇文章就够了](https://zhuanlan.zhihu.com/p/105556877?utm_source=wechat_session)
+
 
 

@@ -17,5 +17,9 @@ export PATH=$PATH:$GOBIN:$GOROOT/bin
 ```
 通过 `sourc ~/.zshrc`更新环境变量
 
-
+## hello-world
+```bash
+go run hello-world.go
+go build hello-world.go
+```
 
