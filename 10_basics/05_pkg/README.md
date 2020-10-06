@@ -32,6 +32,8 @@ Go的workspace被定义在$GOPATH工作目录下，其结构有三个子目录�
   - 如果为命令源码文件（package "main"且包含main方法）:会编译生成可执行文件到 $GOPATH/bin 目录下；
   - 如果为库源码文件：会被编译到 $GOPATH/pkg/$GOOS_$GOARCH 目录下。 
 - get: git clone到 $GOPATH/src，然后 `go install` 
+- clean: 
+  - go clean -i：删除对应的库文件或命令文件
 
 注意：**在import第三方包的时候，当源码和.a均已安装的情况下，编译器链接的是源码。**
 注意：在import标准库中的包（如fmt）时，也是必须要源码的。不过与自定义包不同的是，如果未找到源码，不会尝试重新编译标准包，而是在链接时链接已经编译好的`.a`文件。
