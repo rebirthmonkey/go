@@ -37,6 +37,7 @@ Go的workspace被定义在$GOPATH工作目录下，其结构有三个子目录�
 注意：在import标准库中的包（如fmt）时，也是必须要源码的。不过与自定义包不同的是，如果未找到源码，不会尝试重新编译标准包，而是在链接时链接已经编译好的`.a`文件。
 
 ### Example
+- `export GO111MODULE=off`
 - `cp -r wkpkg $GOPATH/src`：把`wkpkg`复制到 $GOPATH/src 目录下
 - `go install wkpkg`：build `wkpgk.a` 归档文件到 $GOPATH/pkg 目录下，可以被其他程序import
 - `go build main.go`：在本地创建临时的无依赖关系的可执行文件
@@ -61,11 +62,12 @@ go env -w GO111MODULE=on
 ```bash
 cd wkmodule
 go mod init wkmodule # 创建 go.mod
+go mod tidy # tidy会检测该文件夹目录下所有引入的依赖，创建 go.sum 文件
+go mod download # 将依赖全部下载至 $GOPATH 下
 go install  # download pkg in $GOPATH/src pkg and build wkmodule in $GOPATH/bin
-go mod tidy # tidy会检测该文件夹目录下所有引入的依赖,写入 go.mod 文件
-go mod download # 将依赖全部下载至 GOPATH 下
 go mod vendor # 将刚才下载至 GOPATH 下的依赖转移至该项目根目录下的 vendor(自动新建) 文件夹下
 ```
+go install = go tidy + go download + go build 
 
 更新依赖
 ```bash
@@ -90,13 +92,39 @@ go mod vendor
 go build -ldflags "-s -w" -a -installsuffix cgo -o wkmodule-local .
 ```
 
+## 库源代码
+名称的首字母为大写的程序实体才可以被当前包外的代码引用，否则它就只能被当前包内的其他代码引用。
 
-## 源代码
+### Lib在同一包中
+- go run
+```bash
+cd samelib
+go run main.go lib1.go -name="XXX"
+```
 
-- [命令源代码](cmd-code.md)
-- [库源代码](archi-code.md)
-- [测试源代码](test-code.md)
+- go build
+```bash
+cd samelib
+go build 
+./samelib -name="XXX"
+```
 
+### Lib在不同Github包
+```bash
+cd relatedlib
+go mod init
+go mod tidy
+go run ./main.go
+```
+
+### Lib在不同包的相对路径下
+```bash
+cd relatedlib/wkmodule3
+go mod tidy
+go mod download
+go install
+wkmodule3
+```
 
 
 ## Ref

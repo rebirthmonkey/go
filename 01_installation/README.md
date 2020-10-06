@@ -13,7 +13,7 @@ $GOBIN=$GOPATH/bin # GO可执行文件目录
 export GOROOT=/usr/local/go
 export GOPATH=/Users/XXX/go
 export GOBIN=$GOPATH/bin
-# export $PATH=$PATH:$GOBIN:$GOROOT/bin
+export PATH=$PATH:$GOBIN:$GOROOT/bin
 ```
 通过 `sourc ~/.zshrc`更新环境变量
 
