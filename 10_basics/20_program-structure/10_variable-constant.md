@@ -27,6 +27,15 @@ name := "XXX"
 - 如果当前代码块中没有，那么会沿着代码块的嵌套关系一层层地向上查找，一直查到当前代码包代码块
 - 如果仍然找不到，那么 Go 语言的编译器就会报错了
 
+### 类型断言 表达式
+- `x.(T)`：x代表要被判断类型的值，T带包判断类型
+- `T(x)`：类型转换表达式
+
+```go
+value, ok := interface{}(container).([]string)
+```
+- 把container变量的值转换为空接口值的interface{}(container)
+- 判断前者的类型是否为切片类型 []string 的 .([]string)
 
 ## Constant
 
