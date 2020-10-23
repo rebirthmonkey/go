@@ -9,6 +9,6 @@ func main() {
 		arr[i] = i
 	}
 	fmt.Println(arr)
-	count := len(arr)
-	fmt.Println("Length of array", count)
+	fmt.Println("Length of array", len(arr))
+	fmt.Println("Capacity of array", cap(arr))
 }
