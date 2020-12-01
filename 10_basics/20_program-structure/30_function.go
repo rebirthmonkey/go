@@ -14,7 +14,7 @@ func IncrementPassByPointer(ptr *int) {
 }
 
 func main() {
-	fmt.Println(max(10, 20))
+	fmt.Println("max of 10 and 20 is", max(10, 20))
 
 	i := 10
 	fmt.Println("Value of i before increment is : ", i)

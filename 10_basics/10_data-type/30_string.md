@@ -4,12 +4,16 @@
 - String is an immutable type variable. 
 - Double quotes are used to declare strings.
 
+
+
+## 初始化
+
 ```go
-var s string = "Hello, World!" // standard declaration
+var s string = "Hello, World!" // 标准
 ```
 
 ```go
-s := "Hello, World!" // short declaration
+s := "Hello, World!" // 简短
 ```
 
 ## Operation

@@ -22,7 +22,7 @@ byte = int8
 #### rune
 rune = int32, used to store Unicode characters
 
-### Float
+### float
 ```go
 var f float32 = 1.2345
 ```

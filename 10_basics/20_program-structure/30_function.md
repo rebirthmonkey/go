@@ -1,6 +1,6 @@
 # Function
 
-## Parameter Pass
+## 传递参数
 ### by value
 默认是by value
 

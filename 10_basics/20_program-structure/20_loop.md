@@ -40,5 +40,15 @@ The Go for loop has four forms:
 ### Range
 The range keyword is used in for loop to iterate data in data structures (arrays, slices, string, maps etc.). 
 
+```go
+func main() {
+	arr := []int{1, 2, 3}
+	for _, v := range arr {
+		arr = append(arr, v)
+	}
+	fmt.Println(arr)
+}
+```
+
 
 
