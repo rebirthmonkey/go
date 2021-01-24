@@ -1,58 +1,57 @@
 # 包管理
 
 ## 简介
-Golang使用包（package）这种语法元素来组织源码，所有语法可见性均定义在package这个级别。
-
-一个目录下不同 go 文件内的函数对于包来说同级，不会区分不同文件。
-
-比如在使用实时分布式消 息平台nsq提供的go client api时，导入的路径如下：
+Golang使用包（package）这种语法元素来组织源码，所有语法可见性均定义在package这个级别。一个目录下不同 go 文件内的函数对于包来说同级，不会区分不同文件。比如在使用实时分布式消息平台 nsq 提供的 go client api 时，导入的路径如下：
 
    import “github.com/bitly/go-nsq”
 
-但在使用其提供的函数时，却直接用nsq做前缀包名：
+但在使用其提供的函数时，却直接用 nsq 做前缀包名：
 
    q, _ := nsq.NewConsumer("write_test", "ch", config)
 
-import后面的最后一个元素应该是包在 $GOPATH 下的目录路径，并非包名。
-而在代码中使用的是真正的包名。【1】
+import 后面的最后一个元素应该是包在 $GOPATH 下的目录路径，并非包名。而在代码中使用的是真正的包名。【1】
 
 ## GOPATH Workspace
-Go的workspace被定义在$GOPATH工作目录下，其结构有三个子目录（需要自行创建）：
+Go 的 workspace 被定义在 $GOPATH 工作目录下，其结构有三个子目录（需要自行创建）：
 - src：存放源代码文件
-- pkg：存放编译后的文件
+- pkg：存放编译后的库文件
 - bin：存放编译后的可执行文件 
 
 ![img](figures/2fdfb5620e072d864907870e61ae5f3c.png)
 
-### Install & Build & Get
-- build: 在当前目录下编译生成可执行文件。go build指令会调用所有引用包的源码，重新编译，而不是直接使用 $GOPATH/pkg 里的编译后文件，如果在【$GOROOT】与【$GOPATH】下没有找到import引入包的项目源码，就会报错。
-  - 库源码文件：那么操作后产生的结果文件只会存在于临时目录中。这里的构建的主要意义在于检查和验证。
-  - 命令源码文件：那么操作的结果文件会被搬运到源码文件所在的目录中。
-- install：安装操作会先执行构建，然后还会进行链接操作，并且把结果文件搬运到指定目录。
-  - 如果为命令源码文件（package "main"且包含main方法）:会编译生成可执行文件到 $GOPATH/bin 目录下；
-  - 如果为库源码文件：会被编译到 $GOPATH/pkg/$GOOS_$GOARCH 目录下。 
-- get: git clone到 $GOPATH/src，然后 `go install` 
+### Build/Install/Get
+- build：在当前目录下编译生成可执行/库文件。go build 会拉取所有引用包的源码，重新编译，而不是直接使用 `$GOPATH/pkg` 里的编译文件。如果在 `$GOROOT` 与`$GOPATH` 下没有找到 import 的源码，就会报错。
+- install：先执行 build 构建，然后进行链接操作，并且把结果文件搬运到指定目录。
+  - 命令源码文件（package "main"且包含main方法）：会编译生成可执行文件到 $GOPATH/bin 目录下；
+  - 库源码文件：会被编译到 `$GOPATH/pkg/$GOOS_$GOARCH` 目录下。 
+- get：git clone 到 $GOPATH/src，然后 `go install` 
 - clean: 
   - go clean -i：删除对应的库文件或命令文件
 
-注意：**在import第三方包的时候，当源码和.a均已安装的情况下，编译器链接的是源码。**
-注意：在import标准库中的包（如fmt）时，也是必须要源码的。不过与自定义包不同的是，如果未找到源码，不会尝试重新编译标准包，而是在链接时链接已经编译好的`.a`文件。
+注意：在 import 第三方包的时候，当源码和 .a 均已安装的情况下，编译器链接的是源码。
+注意：在 import 标准库中的包（如fmt）时，也是必须要源码的。不过与自定义包不同的是，如果未找到源码，不会尝试重新编译标准包，而是在链接时链接已经编译好的`.a`文件。
 
 ### Example
+
+Build
+
 - `export GO111MODULE=off`
+- `go build hello.go`：在本地验证编译，不会有文件生成
+
+Install
+
 - `cp -r wkpkg $GOPATH/src`：把`wkpkg`复制到 $GOPATH/src 目录下
-- `go install wkpkg`：build `wkpgk.a` 归档文件到 $GOPATH/pkg 目录下，可以被其他程序import
-- `go build main.go`：在本地创建临时的无依赖关系的可执行文件
+- `go install -x wkpkg`：build `wkpgk.a` 并归档文件到 $GOPATH/pkg/darwin_amd64 目录下，可以被其他程序 import
 - `cp -r wkapp $GOPATH/src`: 把`wkapp`复制到 $GOPATH/src 目录下
-- `go install wkapp`：build 可执行文件 `wkapp` 并放在 $GOPATH/bin 目录下
+- 在 GoLand 中 wkpkg 依赖无法解决，需要 `sudo ln -s $GOPATH/src/wkpkg $GOROOT/src/wkpkg`，因为GoLand包依赖搜索只寻找 GOROOT
+- `go install -x wkapp`：build 可执行文件 `wkapp` 并放在 $GOPATH/bin 目录下
 
 
 ## GO Module
-GO MODULE 是保证在非 $GOPATH/src 目录下，可以编译go包，并把结果输出到 $GOPATH 目录下。
+GO MODULE 确保在非 `$GOPATH/src` 目录下，可以编译 go 包，并把结果输出到 $GOPATH 目录下。
 
 ### Configuration
-Go在1.13版本后是默认开启 MODULE, 代表当项目在 GOPATH/src 外且项目根目录有 go.mod 文件时，开启 go module.
-也就是说,如果你不把代码放置在 GOPATH/src 下则默认使用 MODULE 管理.
+Go 在 1.13 版本后是默认开启 MODULE, 代表当项目在 GOPATH/src 外且项目根目录有 go.mod 文件时，开启 go module。也就是说，如果你不把代码放置在 GOPATH/src 下则默认使用 MODULE 管理.
 
 ```bash
 go env -w GOPROXY=https://mirrors.cloud.tencent.com/go/,direct
@@ -66,10 +65,9 @@ cd wkmodule
 go mod init wkmodule # 创建 go.mod
 go mod tidy # tidy会检测该文件夹目录下所有引入的依赖，创建 go.sum 文件
 go mod download # 将依赖全部下载至 $GOPATH 下
-go install  # download pkg in $GOPATH/src pkg and build wkmodule in $GOPATH/bin
-go mod vendor # 将刚才下载至 GOPATH 下的依赖转移至该项目根目录下的 vendor(自动新建) 文件夹下
+go install  # download pkg in $GOPATH/src and build wkmodule in $GOPATH/bin
+go mod vendor # 将刚才下载至 GOPATH 下的依赖转移至该项目目录下的 vendor(自动新建) 文件夹下
 ```
-go install = go tidy + go download + go build 
 
 更新依赖
 ```bash
@@ -87,7 +85,7 @@ go build .
 ```
 
 ### 在本地目录进行编译（推荐）
-不使用 $GOPATH 而使用本地目录 wkmodule 进行编译
+不使用 $GOPATH/pkg 而使用本地目录 vendor/ 进行编译
 
 ```bash
 go mod vendor
@@ -97,7 +95,10 @@ go build -ldflags "-s -w" -a -installsuffix cgo -o wkmodule-local .
 ## 库源代码
 名称的首字母为大写的程序实体才可以被当前包外的代码引用，否则它就只能被当前包内的其他代码引用。
 
-### Lib在同一包中
+### Lib 在同一包中
+
+同一个目录下、相同包名的文件属于同一个包
+
 - go run
 ```bash
 cd samelib
@@ -111,7 +112,7 @@ go build
 ./samelib -name="XXX"
 ```
 
-### Lib在不同Github包
+### Lib 在不同 Github 包 
 ```bash
 cd gitlib
 go mod init
@@ -119,7 +120,7 @@ go mod tidy
 go run ./main.go
 ```
 
-### Lib在不同包的相对路径下
+### Lib 在不同包的相对路径下
 ```bash
 cd relatedlib/wkmodule3
 go mod tidy

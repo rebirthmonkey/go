@@ -1,6 +1,6 @@
 package wkpkg
 
 func SayHello() string {
-	return "Hello World!"
+	return "Hello wkpkg!"
 }
 

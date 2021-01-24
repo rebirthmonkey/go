@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	println(wk.SayHello())
+	println("gitlib say: ", wk.SayHello())
 }

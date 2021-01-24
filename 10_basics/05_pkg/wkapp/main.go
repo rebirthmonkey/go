@@ -6,5 +6,5 @@ import (
 )
 
 func main(){
-	fmt.Println("Say", wkpkg.SayHello())
+	fmt.Println("wkapp Say: ", wkpkg.SayHello())
 }
