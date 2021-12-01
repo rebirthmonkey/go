@@ -1,16 +1,18 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
-func PrintSlice(data []int) {
+func printSlice(data []int) {
 	fmt.Printf("%v :: len=%d cap=%d \n", data, len(data), cap(data))
 }
 
 func main() {
-	var s []int
-	for i := 1; i <= 17; i++ {
-		s = append(s, i)
-		PrintSlice (s)
+	var sli []int
+	for i := 0; i <= 5; i++ {
+		sli = append(sli, i)
+		printSlice (sli)
 	}
 }
 

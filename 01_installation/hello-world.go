@@ -4,8 +4,8 @@ import (
 	"fmt"
 )
 
-var a = "xxx"
-var b string = "yyy"
+var a string = "yyy"
+var b = "xxx"
 var c bool
 
 func main() {

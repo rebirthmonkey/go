@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 )
+
 func main() {
 	maxInt8 := math.MaxInt8
 	minInt8 := math.MinInt8

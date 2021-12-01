@@ -1,7 +1,7 @@
 package main
 
 import (
-	"_/tmplib"
+	"relatedlib"
 )
 
 func main() {

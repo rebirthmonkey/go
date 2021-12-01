@@ -1,9 +1,9 @@
 package main
 
 import (
-	wk "github.com/rebirthmonkey/wklib"
+	"github.com/rebirthmonkey/wklib"
 )
 
 func main() {
-	println("gitlib say: ", wk.SayHello())
+	println("git say: ", wklib.SayHello())
 }
