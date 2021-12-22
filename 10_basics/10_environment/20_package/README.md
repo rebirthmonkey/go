@@ -109,7 +109,7 @@ go env -w GO111MODULE=on
 ```bash
 cd wkmodule
 go mod init wkmodule # 创建 go.mod
-go mod tidy # 检测该文件夹目录下所有引入的依赖，并放入 go.sum 文件
+go mod tidy # 检测该文件夹目录下所有引入的依赖，并放入 go.mod 文件
 go mod download # 将检测到的所有依赖下载至 $GOPATH 下
 go install  # 安装 wkmodule 可执行文件到 $GOPATH/bin
 ```
