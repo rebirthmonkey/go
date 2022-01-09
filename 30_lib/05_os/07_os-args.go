@@ -12,3 +12,5 @@ func main() {
 	}
 	fmt.Println(s)
 }
+
+// go run 07_os-args.go a b c d

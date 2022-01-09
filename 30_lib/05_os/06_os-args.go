@@ -13,3 +13,5 @@ func main() {
 	}
 	fmt.Println(s)
 }
+
+// go run 06_os-args.go a b c d

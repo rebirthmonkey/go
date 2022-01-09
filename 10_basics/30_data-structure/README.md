@@ -350,11 +350,13 @@ func main() {
 
 <img src="figures/image-20211126113650944.png" alt="image-20211126113650944" style="zoom: 25%;" />
 
-
+【1】
 
 ## Exercises
 
 - [Exercises](90_exercises/README.md)
 
+## Ref
+1. [Golang 之 interface接口全面理解](https://blog.csdn.net/Webben/article/details/110448404?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0.queryctr&spm=1001.2101.3001.4242.1&utm_relevant_index=2)
 
 

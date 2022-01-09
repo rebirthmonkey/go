@@ -5,6 +5,11 @@ import (
 	"math"
 )
 
+type Shape interface {
+	Area() float64
+	Perimeter() float64
+}
+
 type Rec struct {
 	width float64
 	height float64
@@ -12,11 +17,6 @@ type Rec struct {
 
 type Circle struct {
 	radius float64
-}
-
-type Shape interface {
-	Area() float64
-	Perimeter() float64
 }
 
 func (r Rec) Area() float64 {
