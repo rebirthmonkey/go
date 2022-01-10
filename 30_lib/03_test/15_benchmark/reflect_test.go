@@ -1,8 +1,8 @@
 package demo
 
 import (
-"reflect"
-"testing"
+	"reflect"
+	"testing"
 )
 
 type Student struct {

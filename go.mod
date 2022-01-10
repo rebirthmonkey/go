@@ -17,6 +17,7 @@ require (
 	github.com/google/go-cmp v0.5.5 // indirect
 	github.com/google/gofuzz v1.1.0 // indirect
 	github.com/googleapis/gnostic v0.5.5 // indirect
+	github.com/hyahm/goconfig v0.0.0-20210807100611-f5321c90d492 // indirect
 	github.com/imdario/mergo v0.3.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect

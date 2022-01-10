@@ -35,7 +35,7 @@ func (c Circle) Perimeter() float64 {
 	return 2 * math.Pi * c.radius
 }
 
-func TotalArea(shapes ...Shape) float64 {
+func TotalArea(shapes []Shape) float64 {
 	var area float64
 	for _, s := range shapes {
 		area += s.Area()
@@ -43,7 +43,7 @@ func TotalArea(shapes ...Shape) float64 {
 	return area
 }
 
-func TotalPerimeter(shapes ...Shape) float64 {
+func TotalPerimeter(shapes []Shape) float64 {
 	var peri float64
 	for _, s := range shapes {
 		peri += s.Perimeter()
@@ -54,7 +54,8 @@ func TotalPerimeter(shapes ...Shape) float64 {
 func main() {
 	r := Rec{width: 10, height: 10}
 	c := Circle{radius: 10}
+	shapes := []Shape{r, c}
 	// 任何实现了interface的struct都可以作为参数传给函数
-	fmt.Println("Total Area is: ", TotalArea(r, c))
-	fmt.Println("Total Perimeter is: ", TotalPerimeter(r, c))
+	fmt.Println("Total Area is: ", TotalArea(shapes))
+	fmt.Println("Total Perimeter is: ", TotalPerimeter(shapes))
 }

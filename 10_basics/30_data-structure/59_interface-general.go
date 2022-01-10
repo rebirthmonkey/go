@@ -12,9 +12,11 @@ func PrintAll(vals []interface{}) {
 
 func main() {
 	names := []string{"stanley", "david", "oscar"}
-	vals := make([]interface{}, len(names))
+
+	// 手动将 []string 转为 []interface{}
+	values := make([]interface{}, len(names))
 	for i, v := range names {
-		vals[i] = v
+		values[i] = v
 	}
-	PrintAll(vals)
+	PrintAll(values)
 }

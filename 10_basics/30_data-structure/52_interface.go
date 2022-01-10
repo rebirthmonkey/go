@@ -4,13 +4,11 @@ import (
 	"fmt"
 )
 
-// Payment 接口定义及两个方法
 type Payment interface {
 	order(orderId string) Payment
 	getOrderId() string
 }
 
-// Alipay 结构体定义属性
 type Alipay struct{
 	orderId string
 }
@@ -28,10 +26,8 @@ func (o *Alipay) getOrderId() string{
 }
 
 func main(){
-	// 初始化变量
 	var alipay Payment
-	// 一定要用 new
-	alipay = new(Alipay)
+	alipay = new(Alipay) // 一定要用 new
 	alipay.order( "20201999293334")
 	fmt.Println( alipay.getOrderId())
 }
