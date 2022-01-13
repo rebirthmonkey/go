@@ -7,9 +7,8 @@ import (
 	//"net/http"
 	// "wukong/go/50_web/20_gin/helloGin/database"
 	//	"program/com.ypc/helloGin/database"
-	"wukong/go/50_web/20_gin/ginMVC/model"
+	"wukong/go/50_web/20_gin/60_ginMVC/model"
 )
-
 
 //var db *sql.DB
 /*
@@ -18,11 +17,11 @@ func init()  {
 	db = database.GetDataBase()
 }
 
- */
+*/
 
-
-// localhost:8080/user/get/2/hello
-func QueryById (context *gin.Context) {
+// localhost:0080/user/get/:id/:username
+// localhost:8080/user/get/2/xxx
+func QueryById(context *gin.Context) {
 	println(">>>> get user by id and name action start <<<<")
 
 	//id := context.Param("id")
@@ -43,9 +42,10 @@ func QueryById (context *gin.Context) {
 	//user.Id = id
 
 	//checkError(err)
-	context.JSON(200,gin.H{
-	//	"result": user,
+	context.JSON(200, gin.H{
+		//	"result": user,
 		"name": user.Username,
+		//"id":   user.Id,
 	})
 }
 
@@ -105,7 +105,7 @@ func InsertNewUser (context *gin.Context) {
 
 }
 
- */
+*/
 
 /*
 // form表单提交
@@ -151,4 +151,4 @@ func checkError(e error) {
 	}
 }
 
- */
+*/
