@@ -11,7 +11,7 @@ import (
 // @Produce  json
 // @Param id path int true "ID"
 // @Param name path string true "NAME"
-//@Resource User
+// @Resource User
 // @Router /user/{id}/{name} [get]
 // @Success 200 {object} model.User
 func QueryById(context *gin.Context) {
