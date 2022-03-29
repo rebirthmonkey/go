@@ -4,26 +4,26 @@ import (
 	"fmt"
 )
 
-type Animal interface {
+type Animal2 interface {
 	Speak() string
 }
 
-type Dog struct {
+type Dog2 struct {
 }
 
-func (d Dog) Speak() string {
+func (d Dog2) Speak() string {
 	return "Woof!"
 }
 
-type Cat struct {
+type Cat2 struct {
 }
 
-func (c *Cat) Speak() string {
+func (c *Cat2) Speak() string {
 	return "Meow!"
 }
 
 func main() {
-	animals := []Animal{Dog{}, &Cat{}}
+	animals := []Animal2{Dog2{}, &Cat2{}}
 	for _, animal := range animals {
 		fmt.Println(animal.Speak())
 	}

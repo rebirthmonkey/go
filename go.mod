@@ -9,13 +9,12 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/hyahm/goconfig v0.0.0-20210807100611-f5321c90d492
 	github.com/lib/pq v1.10.4
-	github.com/rebirthmonkey/wklib v1.0.1
 	github.com/swaggo/files v0.0.0-20210815190702-a29dd2bc99b2
 	github.com/swaggo/gin-swagger v1.3.3
 	github.com/swaggo/swag v1.7.8
-	golang.org/x/net v0.0.0-20211123203042-d83791d6bcd9
 	google.golang.org/grpc v1.36.0
-	google.golang.org/protobuf v1.27.1
+	google.golang.org/grpc/examples v0.0.0-20211129222818-58beff180d7a
+	google.golang.org/protobuf v1.28.0
 	k8s.io/apimachinery v0.22.1
 	k8s.io/client-go v0.22.1
 )
@@ -49,6 +48,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/ugorji/go/codec v1.2.6 // indirect
 	golang.org/x/crypto v0.0.0-20211117183948-ae814b36b871 // indirect
+	golang.org/x/net v0.0.0-20211123203042-d83791d6bcd9 // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
 	golang.org/x/sys v0.0.0-20211124211545-fe61309f8881 // indirect
 	golang.org/x/term v0.0.0-20210220032956-6a3ed077a48d // indirect
@@ -56,9 +56,6 @@ require (
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
 	golang.org/x/tools v0.1.7 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
-	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0 // indirect
-	google.golang.org/grpc/examples v0.0.0-20211129222818-58beff180d7a // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
 	google.golang.org/genproto v0.0.0-20201019141844-1ed22bb0c154 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

@@ -4,23 +4,23 @@ import (
 	"fmt"
 )
 
-type Animal interface {
+type Animal3 interface {
 	GetName() string
 }
 
-type Cat struct {
+type Cat3 struct {
 	name string
 }
 
-func (c *Cat)GetName() string {
+func (c *Cat3)GetName() string {
 	return c.name
 }
 
-type Dog struct {
+type Dog3 struct {
 	name string
 }
 
-func (d *Dog)GetName() string {
+func (d *Dog3)GetName() string {
 	return d.name
 }
 
@@ -44,15 +44,15 @@ func (p Pig)GetName() string {
 
 func main() {
 	monkey := Monkey{name: "wukong"}
-	cat := Cat{name: "kitty"}
+	cat := Cat3{name: "kitty"}
 
 	// 子类->基类：struct->interface
 	// 值接收器
-	animal1 := Animal(monkey)
+	animal1 := Animal3(monkey)
 	fmt.Println("I'm animal1", animal1.GetName())
 
 	// 指针接收器
-	animal2 := Animal(&cat) // 括号里需要传递一个*Cat类型而不能是Cat类型，因为是*Cat类型实现了GetName()方法，而不是Cat类型
+	animal2 := Animal3(&cat) // 括号里需要传递一个*Cat类型而不能是Cat类型，因为是*Cat类型实现了GetName()方法，而不是Cat类型
 	fmt.Println("I'm animal2", animal2.GetName())
 
 	// 子类->子类：struct->struct
@@ -62,11 +62,11 @@ func main() {
 
 	// 指针接收器
 	// 结构体
-	dog1 := Dog(cat) // 括号里需要传递一个Cat类型，因为Cat=Dog, *Cat=*Dog
+	dog1 := Dog3(cat) // 括号里需要传递一个Cat类型，因为Cat=Dog, *Cat=*Dog
 	fmt.Println("I'm dog1", dog1.GetName())
 
 	// 结构体指针
-	dog2 := (*Dog)(&cat)
+	dog2 := (*Dog3)(&cat)
 	fmt.Println("I'm dog2", dog2.GetName())  // 如上所述，*Cat = *Dog
 
 	// 基类->子类：interface->struct
@@ -79,7 +79,7 @@ func main() {
 	}
 
 	// 指针接收器：结构体
-	cat2, ok := animal2.(*Cat) // 类型断言，左边必须是接口类型的对象，当接口对象的实际类型和要转换的目标类型匹配时，转换成功，否则失败
+	cat2, ok := animal2.(*Cat3) // 类型断言，左边必须是接口类型的对象，当接口对象的实际类型和要转换的目标类型匹配时，转换成功，否则失败
 	if ok {
 		fmt.Println("convert animal2 to cat", cat2.GetName())
 	} else {
@@ -87,7 +87,7 @@ func main() {
 	}
 
 	// 指针接收器：结构体
-	dog3 , ok := animal2.(*Dog) // 类型断言，接口对象的实际类型和要转换的目标类型不匹配
+	dog3 , ok := animal2.(*Dog3) // 类型断言，接口对象的实际类型和要转换的目标类型不匹配
 	if ok {
 		fmt.Println("convert animal2 to dog - " + dog3.GetName())
 	} else {

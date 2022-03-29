@@ -11,12 +11,6 @@ type Bird struct {
 }
 
 func main(){
-	/*
-	{
-	  "species": "pigeon",
-	  "decription": "likes to perch on rocks"
-	}
-	 */
 	birdJson := `{"species": "pigeon","description": "likes to perch on rocks"}`
 
 	var bird Bird

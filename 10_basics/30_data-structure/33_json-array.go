@@ -5,27 +5,16 @@ import (
 	"fmt"
 )
 
-type Bird struct {
+type Bird3 struct {
 	Species string
 	Description string
 }
 
 func main(){
-	/*
-	[
-	  {
-	    "species": "pigeon",
-	    "description": "likes to perch on rocks"
-	  },
-	  {
-	    "species":"eagle",
-	    "description":"bird of prey"
-	  }
-	]
-	 */
-	birdJson := `[{"species":"pigeon","description":"likes to perch on rocks"},{"species":"eagle","description":"bird of prey"}]`
+	birdJson := `[{"species":"pigeon","description":"likes to perch on rocks"},
+				  {"species":"eagle","description":"bird of prey"}]`
 
-	var birds []Bird
+	var birds []Bird3
 
 	json.Unmarshal([]byte(birdJson), &birds)
 	fmt.Printf("Birds : %+v", birds)
