@@ -2,14 +2,14 @@ package main
 
 import "fmt"
 
-type Person struct {
+type Person3 struct {
 	name string
 	age int
 }
 
-func NewPersonFactory(age int) func(name string) Person {
-	return func(name string) Person {
-		return Person{
+func NewPersonFactory(age int) func(name string) Person3 {
+	return func(name string) Person3 {
+		return Person3{
 			name: name,
 			age: age,
 		}
