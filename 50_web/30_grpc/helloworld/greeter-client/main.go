@@ -25,12 +25,8 @@ import (
 	"log"
 	"time"
 
-	pb "github.com/rebirthmonkey/grcp/helloworld"
+	pb "google.golang.org/grpc/examples/helloworld/helloworld"
 	"google.golang.org/grpc"
-<<<<<<< HEAD:50_web/30_grpc/helloworld/greeter-client/main.go
-=======
-	pb "wukong/go/50_web/30_grpc/10_helloworld/helloworld"
->>>>>>> fed42cd3c06f614da3edd0ee336dc6d0aab91caa:50_web/30_grpc/helloworld/client/main.go
 )
 
 const (
@@ -62,9 +58,11 @@ func main() {
 	}
 	log.Printf("Greeting: %s", r.GetMessage())
 
-	r, err = c.SayHelloAgain(ctx, &pb.HelloRequest{Name: *name})
+	/* r, err = c.SayHelloAgain(ctx, &pb.HelloRequest{Name: *name})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
 	log.Printf("Greeting: %s", r.GetMessage())
+
+	 */
 }

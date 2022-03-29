@@ -3,8 +3,8 @@ module main
 go 1.17
 
 require (
-	github.com/rebirthmonkey/grcp/helloworld v0.0.1
 	google.golang.org/grpc v1.32.0
+	google.golang.org/grpc/examples/helloworld/helloworld v0.0.1
 )
 
 require (
@@ -16,4 +16,4 @@ require (
 	google.golang.org/protobuf v1.28.0 // indirect
 )
 
-replace github.com/rebirthmonkey/grcp/helloworld => ../helloworld
+replace google.golang.org/grpc/examples/helloworld/helloworld => ../helloworld

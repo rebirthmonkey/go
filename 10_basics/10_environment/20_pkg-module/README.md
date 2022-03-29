@@ -145,6 +145,7 @@ go env -w GO111MODULE=on
 
 ```bash
 cd wkmodule
+rm go.mod & rm go.sum # 清除环境
 go mod init wkmodule # 创建go.mod
 go mod tidy # 检测该目录下所有引入的依赖，并放入 go.mod中，并自动下周所有依赖包至$GOPATH/pkg/mod
 go run main.go

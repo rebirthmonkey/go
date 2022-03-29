@@ -27,11 +27,7 @@ import (
 	"net"
 
 	"google.golang.org/grpc"
-<<<<<<< HEAD:50_web/30_grpc/helloworld/greeter-server/main.go
-	pb "github.com/rebirthmonkey/grcp/helloworld"
-=======
-	pb "wukong/go/50_web/30_grpc/10_helloworld/helloworld"
->>>>>>> fed42cd3c06f614da3edd0ee336dc6d0aab91caa:50_web/30_grpc/helloworld/server/main.go
+	pb "google.golang.org/grpc/examples/helloworld/helloworld"
 )
 
 var (
