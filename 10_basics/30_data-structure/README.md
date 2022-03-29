@@ -10,7 +10,7 @@ var B bool = true
 
 ### integer
 
-int8, int16, int32 & int64
+int8、int16、int32、int64：8 表示变量在内存中的大小（以位为单位）
 
 ```go
 var i int = -1000
@@ -18,7 +18,7 @@ var i int = -1000
 
 #### unsigned integer
 
-uint8, uint16, uint32 & uint64
+uint8、uint16、uint32、uint64
 
 ```go
 var j uint = 1000
@@ -34,35 +34,20 @@ rune = int32, used to store Unicode characters
 
 ### float
 
+float32、float64
+
 ```go
 var f float32 = 1.2345
 ```
 
-### pointer
+### complex
 
-#### 声明
+复数：complex64、complex128
 
-```go
-var a *MyStruct
-```
 
-#### 赋值
+### Lab
+- [基础数据结构](01_basic.go)
 
-```go
-b := &MyStruct{i: 40}
-```
-
-#### 调用
-
-```go
-b.i 
-```
-
-### 通道
-
-一个通道相当于一个先进先出（FIFO）的队列。也就是说，通道中的各个元素值都是严格地按照发送的顺序排列的，先被发送通道的元素值一定会先被接收。元素值的发送和接收都需要用到操作符<-。我们也可以叫它接送操作符。一个左尖括号紧接着一个减号形象地代表了元素值的传输方向。
-
-元素值从外界进入通道时会被复制。更具体地说，进入通道的并不是在接收操作符右边的那个元素值，而是它的副本。
 
 ## 复合
 
@@ -72,7 +57,7 @@ b.i
 
 数组是由相同类型元素的集合组成的数据结构，系统会为数组分配一块连续的内存来保存其中的元素，可以利用数组中元素的索引快速访问元素对应的存储地址。常见的数组大多都是一维的线性数组，而多维数组在数值和图形计算领域却有比较常见的应用。
 
-Go 语言中数组在初始化之后大小就无法改变，存储元素类型相同、但是大小不同的数组类型在 Go 语言看来也是完全不同的两个数组。
+Go 中数组在初始化之后大小就无法改变，存储元素类型相同、但是大小不同的数组类型在 Go 看来也是完全不同的两个数组。
 
 #### 申明/创建
 
@@ -144,27 +129,15 @@ s := []int{1,2,3,4,5,6,7,8,9,10} // 跳过声明
 - cap()
 - append()：在slice尾部添加跟多的元素或切片。在无需扩容时，append函数返回的是指向原底层数组的新切片，而在需要扩容时，append函数返回的是指向新底层数组的新切片。
 
-### 列表（list）
-
-Go 语言的链表实现在标准库的container/list代码包中，List 实现了一个双向链表，而 Element 则代表了链表中元素的结构。
-
-List和Element都是结构体类型。结构体类型的特点就是它们的零值都会是拥有特定结构，但是没有任何定制化内容的值，相当于一个空壳。值中的字段也都会被分别赋予各自类型的零值。广义来讲，所谓的零值就是只做了声明，但还未做初始化的变量被给予的缺省值。每个类型的零值都会依据该类型的特性而被设定。
-
-#### Ring
-
-container/ring包中的Ring类型实现的是一个循环链表，也就是我们俗称的环。
-
-循环链表一旦被创建，其长度是不可变的。
-
 ### 字典（map）
 
 哈希表是除了数组之外，最常见的数据结构，几乎所有的语言都会有数组和哈希表这两种集合元素，有的语言将数组实现成列表，有的语言将哈希表称作结构体或者字典，但是它们是两种设计集合元素的思路，数组用于表示元素的序列，而哈希表示的是键值对之间映射关系，只是不同语言的叫法和实现稍微有些不同。
 
 A map is a collection of Key-Value pairs. Hash-Table is used to store elements in a Map so it is unordered.
 
-字典（map）存储的不是单一值的集合，而是键值对的集合。在 Go 语言中，为了避免歧义，将键值对换了一种称呼，叫做：“键 - 元素对”。A map is a collection of Key-Value pairs. Hash-Table is used to store elements in a Map so it is unordered.
+字典（map）存储的不是单一值的集合，而是键值对的集合。在 Go 中，为了避免歧义，将键值对换了一种称呼，叫做：“键 - 元素对”。A map is a collection of Key-Value pairs. Hash-Table is used to store elements in a Map so it is unordered.
 
-Go 语言的字典类型其实是一个哈希表（hash table）的实现，在这个实现中，键和元素的最大不同在于，键的类型是受限的，而元素却可以是任意类型的。可以把键理解为元素的一个索引，可以在哈希表中通过键查找与它成对的那个元素。键和元素的这种对应关系，在数学里就被称为“映射”，这也是“map”这个词的本意，哈希表的映射过程就存在于对键 - 元素对的增、删、改、查的操作之中。
+Go 的字典类型其实是一个哈希表（hash table）的实现。在这个实现中，键和元素的最大不同在于，键的类型是受限的，而元素却可以是任意类型的。可以把键理解为元素的一个索引，可以在哈希表中通过键查找与它成对的那个元素。键和元素的这种对应关系，在数学里就被称为“映射”，这也是“map”这个词的本意，哈希表的映射过程就存在于对键 - 元素对的增、删、改、查的操作之中。
 
 #### 声明/创建
 
@@ -192,6 +165,16 @@ hash["3"] = 4
 hash["5"] = 6
 ```
 
+### 列表（list）
+
+Go 的链表实现在标准库的 container/list 包中，实现了一个双向链表，而 Element 则代表了链表中元素的结构。
+
+List 和 Element 都是结构体类型。结构体类型的特点就是它们的零值都会是拥有特定结构，但是没有任何定制化内容的值，相当于一个空壳。值中的字段也都会被分别赋予各自类型的零值。广义来讲，所谓的零值就是只做了声明，但还未做初始化的变量被给予的缺省值。每个类型的零值都会依据该类型的特性而被设定。
+
+### Ring
+
+container/ring 包中的 Ring 类型实现的是一个循环链表，也就是俗称的环。循环链表一旦被创建，其长度是不可变的。
+
 ### 字符串（string）
 
 - A String is a sequence of Unicode character. 
@@ -217,37 +200,58 @@ s := "Hello, World!" // 简短
 - mystring[0] --> “h” Indexing: String are indexed same as array.
 - mystring[1:4] --> "ell": Slicing
 
-## struct
+### Lab
+- [数组 Array](10_array.go)
+- [切片 Slice](11_slice.go)
+- [切片 Slice](12_slice2.go)
+- [切片 Slice Sum](14_slice-sum.go)：the sum of all the elements of the integer list，given list as an input argument.
+- [切片 Slice Sequential Search](15_slice-sequential-search.go)：for unsorted values
+- [切片 Slice Binary Search](16_slice-binary-search.go)：for sorted values
+- [字典 Map](22_map.go)
+- [双向链表 List](25_list.go)
+- [字符串 String](29_string.go)
 
-### 结构体（struct）
+
+## 结构体（struct）
 
 structures are a collection of multiple data types as a single entity.
 
 
-#### 申明
+### 声明
 
 ```go
-type Student struct { 
-    rollNo int
-    name string 
+type Point struct { 
+    x int
+    y int 
 }
 ```
 
 #### 初始化
 
 ```go
-stud := Student{1, "Johnny"}
+point1 := Point{50, 50}
+point2 := Point{x: 100, y: 100}
 ```
 
 #### 访问/赋值
 
 ```go
-stud.rooNo = 31
+point1.x = 3
+a := point2.y
 ```
 
-### 方法
+### 成员
 
-在 Go中，将函数绑定到具体的类型中，则称该函数是该类型的方法，其定义的方式是在 func 与函数名称之间加上具体类型变量，这个类型变量称为"方法接收器"。
+#### 变量
+
+- point1.X
+- 结构体不能包含自身，但可包含自身的结构体指针
+
+#### 方法
+
+##### 方法接收器
+
+在 Go 中，将函数绑定到结构体上，则称该函数是该结构体的方法，其定义的方式是在 func 与函数名间加上具体结构体变量，这个结构体变量称为"方法接收器"。
 
 ```go
 type Member struct {
@@ -258,11 +262,13 @@ type Member struct {
     Age    int
 }
 
-func setName(m Member,name string){//普通函数
+//普通函数
+func setName(m Member,name string){
     m.Name = name
 }
 
-func (m *Member)setName(name string){//绑定到Member结构体的方法，只有指针才能传递
+//绑定到Member结构体的方法，只有指针才能传递
+func (m *Member)setName(name string){
     m.Name = name
 }
 
@@ -271,21 +277,74 @@ m.setName("小明")
 fmt.Println(m.Name)//输出小明，如果非指针则为空
 ```
 
+###### 值接收器
+
+值传递，修改时不会修改原变量
+
+```go
+func (p Point) Distance(q Point) float64 {
+  ...
+}
+```
+
+###### 指针接收器
+
+指针传递，修改时会修改值中原变量
+
+```go
+func (p *Point) Distance(q Point) float64 {
+  ...
+}
+```
+
+### 匿名组合
+
+通过结构体嵌套实现继承，Point 的成员直接变为 Circle 的成员，而不需要加一层嵌套。
+
+```go
+type Circle struct { 
+  Point 
+}
+c := Circle{x:8, y:10}
+```
+
+### 结构体指针
+
+```go
+var ppoint3 *Point = &point1
+```
+
+- (*ppoint3).x 与ppoint3.y 等价：可以通过指针名直接调用值的变量或方法。指针可用来代替值，但值无法代替指针，因为可能有多个指针指向同一个值，Go会自动把指针转换为值。
+- 函数的输入/输出一般采用结构体指针
+
+### Lab
+
+- [结构体 struct](50_struct.go)
+- [结构体方法 method](51_struct-method.go)
 
 
+## 接口（interface）
 
+### 简介
 
-### 接口
+Go 中的接口定义了一组**方法**的集合，但这些方法不会在接口上直接实现，而是需要用户自定义的方法来实现。
 
-Go 中的接口是一种内置的类型，它定义了一组**方法**的签名。但这些行为不会在接口上直接实现，而是需要用户自定义的方法来实现。
+在接口类型中的方法都是没有实际结构体的，仅仅只是在接口中存放一些方法的签名（签名 = 函数名+参数(类型)+返回值(类型)）。
 
-在接口类型中的方法都是没有实际结构体，仅仅只是在接口r中存放一些方法的签名（签名 = 函数名+参数(类型)+返回值(类型)）。
+#### 优点
 
-当用户自定义的类型实现了接口上定义的这些方法，那么自定义类型的实例可以赋值给接口类型的实例，这个赋值过程使得接口实例中保存了用户自定义类型实例。
+- 代码扩展性更强了
+- 可以解耦上下游的实现：为不同层级的模块提供一个定义好的中间层。这样，上游不再需要依赖下游的具体实现，充分地对上下游进行了解耦。
+- 提高了代码的可测性
+- 代码更健壮、更稳定了
 
-#### 声明
+#### Go语言是面向接口编程
 
-在接口声明中只能定义方法签名，不能包含成员变量。
+面向接口编程是根据结构体可以执行的操作而不是其所包含的数据来设计抽象。接口可以看做结构体的“基类”，它定义了结构体的行为。结构体则是接口的实现，通过实现所有接口声明的方法来实现该接口。当结构体中包含了该接口，则表示结构体实现该“基类”
+
+### 声明
+
+在接口声明中只能定义方法签名，不能包含变量。
 
 ```go
 package main
@@ -343,20 +402,96 @@ func main() {
 }
 ```
 
-接口实例包含了两个地址：
+当用户自定义的结构体实现了接口中定义的方法时，那么自定义结构体的实例可以赋值给接口类型的实例，这个赋值过程使得接口实例中保存了用户自定义结构体实例。如：结构体实例 c 与接口实例 ins1 包含了两个地址：【1】
 
 - 第一部分是实例的类型信息
 - 第二个部分是实例自身信息
 
 <img src="figures/image-20211126113650944.png" alt="image-20211126113650944" style="zoom: 25%;" />
 
-【1】
+### 实现
 
-## Exercises
+当一个结构体为一个接口中所有的方法提供定义时，它被称为实现该接口。而判断一个结构体是否实现了一个接口是完全是自动地。
 
-- [Exercises](90_exercises/README.md)
+### 多态
+
+通过接口定义“基类”，多个结构体实现接口中定义的所有方法，从而实现这个“基类”。当通过结构体调用该接口的方法时，所有符合该接口的结构体都可被调用，从而实现多态调用。
+
+#### 基类（接口）定义
+
+重点是实现方法的主体，无论是结构体还是结构体指针
+
+```go
+animals := []Animal{Dog{}, Cat{}} # Animal是个接口
+animals := []Animal{Dog{}, &Cat{}} # 既有结构体，也有接头体指针
+func TotalPerimeter(shapes ...Shape) float64 {...}
+TotalPerimeter(a, b, c, d) # 实现Shape的结构体或结构体指针
+```
+
+
+
+### interface{}
+
+interface{} 作为所有类的“基类”被使用
+
+```go
+func PrintAll(vals []interface{}) {...}
+```
+
+可将 []string 转为 []interface{} 类型
+
+
+
+## 类型转换
+
+### 基本
+
+b=type(a) 如：`b = int32(a)`
+
+### 结构体
+
+#### 子类->基类
+
+struct->interface
+
+- 值接收器：animal1 := Animal(monkey)
+
+- 指针接收器：animal2 := Animal(&cat)
+
+#### 子类->子类
+
+struct->struct，因为两个结构体都实现了该接口（方法）
+
+- 值接收器：pig := Pig(monkey)
+
+- 指针接收器：
+
+  - 结构体：dog1 := Dog(cat)
+
+  - 结构体指针：dog2 := (*Dog)(&cat)
+
+#### 基类->子类
+
+interface->struct
+
+- 值接收器：monkey2, ok := animal1.(Monkey)
+
+- 指针接收器
+
+  - 结构体
+
+    - 原路返回（animal2 从 cat 转换过来）：cat2, ok := animal2.(*Cat) 
+
+    - 非原路返回（不可行）：dog3 , ok := animal2.(*Dog) 
+
+  - 结构体指针：太复杂，不考虑
+
+### Lab
+- [基础数据结构转换](80_basic-type-trans.go)
+- [字符串String转换](81_basic-string-trans.go)
+- [Interface-Struct转换](85_interface-trans.go)
+
 
 ## Ref
 1. [Golang 之 interface接口全面理解](https://blog.csdn.net/Webben/article/details/110448404?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0.queryctr&spm=1001.2101.3001.4242.1&utm_relevant_index=2)
-
 

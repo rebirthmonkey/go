@@ -1,5 +1,20 @@
 # 程序结构
 
+## 源文件
+
+- 文件名
+- 包申明：package name
+  - package main：可执行文件
+- 包引入：
+  - import . "fmt"：调用 fmt 包内函数不需要用包名可以直接调用
+- 变量&常量
+- 函数
+  - 内容
+    - 语句&表达式
+    - 注释
+  - 类型
+    - main：主函数入口
+
 ## 变量&常量
 
 ### 变量
@@ -9,6 +24,8 @@
 - 标准声明
 
 ```go
+var name string = "XXX"
+或
 var name string 
 name = "XXX"
 ```
@@ -37,7 +54,7 @@ name := "XXX"
 
 #### 类型断言 表达式
 
-- `x.(T)`：x代表要被判断类型的值，T带包判断类型
+- `x.(T)`：x 代表要被判断类型的值，T 代表判断类型
 - `T(x)`：类型转换表达式
 
 ```go
@@ -45,20 +62,82 @@ value, ok := interface{}(container).([]string)
 ```
 
 - 把container变量的值转换为空接口值的interface{}(container)
-- 判断前者的类型是否为切片类型 []string 的 .([]string)
+- 判断前者的类型是否为切片类型 []string  `.([]string)`
 
 ### 常量
 
-### 代码
 
-- [变量声明](10_variable-declaration.go)
+
+### 指针
+
+#### 声明
+
+- 标准声明：var p *int = &b
+- 简化声明：p := &b
+
+#### 赋值
+
+- 指针赋值：p = &b
+- 值赋值：*p = 2
+
+#### 使用
+
+- a := *p
+
+### type
+
+自定义变量类型
+
+- type xxx int：一般类型申明
+
+- type xxx struct{}：结构型声明
+
+- type xxx interface{}：接口
+
+### nil
+
+空
+
+- if err != nil：如果err不为空，即有错误。
+
+### Lab
+
+- [变量声明](10_variable-constant-declaration.go)
 - [变量作用域](12_variable-scope.go)
 
-## Loop
+## 函数
 
-### Condition
+形式：func 函数名 (参数列表) (返回值列表) {函数体}
 
-#### IF
+### 参数列表
+
+- 变量+类型
+
+- ...
+  - 函数任意多个该类型的独立参数
+  - 不是作为参数列表，而是作为一个个参数直接传！
+  
+#### 传递参数
+
+- by value：默认是by value
+- by pointer
+
+#### Lab
+
+- [函数&传参](30_function.go)
+
+### 返回值列表
+
+- 变量+类型，但变量可以省略
+- 如果只有一个输出，可以省略()
+
+### 函数体
+
+#### Loop
+
+##### Condition
+
+###### IF
 
 ```go
 if <Boolean expression> { 
@@ -66,7 +145,7 @@ if <Boolean expression> {
 }
 ```
 
-#### IF-ELSE
+###### IF-ELSE
 
 ```go
 if <Boolean expression> { 
@@ -76,7 +155,7 @@ if <Boolean expression> {
 }
 ```
 
-#### Switch
+###### Switch
 
 ```go
 switch {
@@ -90,7 +169,7 @@ switch {
 ```
 
 
-### Loop
+##### Loop
 
 The Go for loop has 4forms:
 
@@ -99,7 +178,7 @@ The Go for loop has 4forms:
 3. for{}-aninfinitewhileloop.
 4. forwithrange.
 
-#### Range
+###### Range
 
 The range keyword is used in for loop to iterate data in data structures (arrays, slices, string, maps etc.). 
 
@@ -113,18 +192,72 @@ func main() {
 }
 ```
 
-### 代码
+##### Lab
 
-- [loop for]()
-- [loop switch]()
+- [loop for](33_loop-for.go)
+- [loop switch](34_loop-switch.go)
 
-## 函数
+#### defer
 
-### 传递参数
-#### by value
-默认是by value
+##### 使用场景
 
-#### by pointer
+- 函数 return 前执行已注册 defer
+- 函数执行到最后执行已注册 defer
+- panic 前执行已注册 defer
+
+##### 原理
+
+- 先给返回值赋值
+- 执行defer语句
+- 包裹函数return返回
+
+#### Lab
+- [Defer](60_defer.go)
+- [Defer](62_defer.go)
+
+#### 异常处理
+
+##### error
+
+程序员可预知的异常
+
+- errors.New()
+- fmt.Errorf()
+- interface
+
+##### panic
+
+- 程序员无法预知的异常
+- recovery
+  - 从panic中恢复，并返回panic value
+    - 导致panic异常的函数不会继续运行，但能正常返回 Exit Code 0
+  - 必须被defer直接调用
+
+#### Lab
+- [错误函数](80_error-func.go)
+- [Error Interface实现错误](82_error-interface.go)
+- [Panic简介](84_panic.go)
+- [Panic通过Defer来Recover](85_panic-recover.go)
+
+### 匿名函数
+
+申明：func (参数列表) (返回值列表) {函数体}：没有函数名、只有函数体
+
+#### 赋值
+
+```go
+f := func(data int){fmt.Println("hello", data)}
+```
+
+- 可以被作为一种类型被赋值给函数类型的变量
+
+```go
+f(100) # 调用
+```
+
+#### 用途
+
+- Callback 回调函数
 
 
 

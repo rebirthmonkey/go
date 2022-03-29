@@ -54,7 +54,7 @@ func TotalPerimeter(shapes ...Shape) float64 {
 func main() {
 	r := Rec{width: 10, height: 10}
 	c := Circle{radius: 10}
-	// 任何实现了interface的struct都可以作为参数传给函数
+	// 任何实现了interface的struct都可以作为接口"基类"的子类的实例参数传给函数
 	fmt.Println("Total Area is: ", TotalArea(r, c))
 	fmt.Println("Total Perimeter is: ", TotalPerimeter(r, c))
 }
