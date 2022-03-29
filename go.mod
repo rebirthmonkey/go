@@ -15,7 +15,6 @@ require (
 	github.com/swaggo/swag v1.7.8
 	golang.org/x/net v0.0.0-20211123203042-d83791d6bcd9
 	google.golang.org/grpc v1.36.0
-	google.golang.org/grpc/examples v0.0.0-20211129222818-58beff180d7a
 	google.golang.org/protobuf v1.27.1
 	k8s.io/apimachinery v0.22.1
 	k8s.io/client-go v0.22.1
@@ -57,13 +56,10 @@ require (
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
 	golang.org/x/tools v0.1.7 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
-<<<<<<< HEAD
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0 // indirect
 	google.golang.org/grpc/examples v0.0.0-20211129222818-58beff180d7a // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
-=======
 	google.golang.org/genproto v0.0.0-20201019141844-1ed22bb0c154 // indirect
->>>>>>> fed42cd3c06f614da3edd0ee336dc6d0aab91caa
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
