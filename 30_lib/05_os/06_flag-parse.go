@@ -6,7 +6,7 @@ import (
 )
 
 func main(){
-	// 注册参数
+	// 把flat参数注册到变量指针port上
 	port := flag.Int("p", 8080, "server Port")
 	// 解析参数
 	flag.Parse()

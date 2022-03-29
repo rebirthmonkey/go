@@ -17,10 +17,14 @@ type BaseConfig struct {
 	RabbitMQ // MQ信息
 }
 
-func ReadBaseConfig(bconfig *BaseConfig, confFile string) {
-	//goconfig.InitConf(confFile, goconfig.INI)
-	goconfig.InitConf(confFile, goconfig.JSON)
+func ReadBaseConfig(bconfig *BaseConfig, mode string, confFile string) {
+	if mode == "ini" {
+		goconfig.InitConf(confFile, goconfig.INI)
+	} else if mode == "json" {
+		goconfig.InitConf(confFile, goconfig.JSON)
+	}
 	bconfig.MsgFrequency = goconfig.ReadInt64("Base.messageFrequency", 3)
+	bconfig.MQUrl = goconfig.ReadString("RabbitMQ.MQUrl", "")
 	bconfig.RabbitMQ.MQUrl = goconfig.ReadString("RabbitMQ.MQUrl", "")
 	bconfig.RabbitMQ.Exchange = goconfig.ReadString("RabbitMQ.Exchange", "")
 	bconfig.RabbitMQ.ExchangeType = goconfig.ReadString("RabbitMQ.ExchangeType", "")
@@ -28,9 +32,20 @@ func ReadBaseConfig(bconfig *BaseConfig, confFile string) {
 }
 
 func main() {
-	baseConfig := BaseConfig{}
-	// ReadBaseConfig(&baseConfig, "./11_config.ini")
-	ReadBaseConfig(&baseConfig, "./11_config.json")
-	fmt.Printf("mq.MQUrl = %s \t mq.Exchange = %s \t mq.ExchangeType = %s \t mq.RoutingKey = %s\n", baseConfig.RabbitMQ.MQUrl, baseConfig.RabbitMQ.Exchange, baseConfig.RabbitMQ.ExchangeType, baseConfig.RabbitMQ.RoutingKey)
-	fmt.Printf("msgFrequency = %d\n", baseConfig.MsgFrequency)
+	baseConfigIni := BaseConfig{}
+	ReadBaseConfig(&baseConfigIni, "ini","./11_config.ini")
+	fmt.Println("msgFrequency = ", baseConfigIni.MsgFrequency)
+	fmt.Println("mq.MQUrl = ", baseConfigIni.MQUrl)
+	fmt.Println("mq.MQUrl = ", baseConfigIni.RabbitMQ.MQUrl) // embedded struct
+	fmt.Println("mq.Exchange = ", baseConfigIni.RabbitMQ.Exchange)
+	fmt.Println("mq.ExchangeType = ", baseConfigIni.RabbitMQ.ExchangeType)
+	fmt.Println("mq.RoutingKey = ", baseConfigIni.RabbitMQ.RoutingKey)
+
+	baseConfigJson := BaseConfig{}
+	ReadBaseConfig(&baseConfigJson, "json","./11_config.json")
+	fmt.Println("msgFrequency = ", baseConfigJson.MsgFrequency)
+	fmt.Println("mq.MQUrl = ", baseConfigJson.RabbitMQ.MQUrl)
+	fmt.Println("mq.Exchange = ", baseConfigJson.RabbitMQ.Exchange)
+	fmt.Println("mq.ExchangeType = ", baseConfigJson.RabbitMQ.ExchangeType)
+	fmt.Println("mq.RoutingKey = ", baseConfigJson.RabbitMQ.RoutingKey)
 }

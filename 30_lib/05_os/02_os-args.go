@@ -12,6 +12,10 @@ func main() {
 		s += sep + os.Args[i]
 	}
 	fmt.Println(s)
-}
 
-// go run 06_os-args.go a b c d
+	var s2 string
+	for _, p := range os.Args[1:]{ // 否则Args[0]也会展示
+		s2 += sep + p
+	}
+	fmt.Println(s2)
+}
