@@ -82,15 +82,26 @@
 
 ## Lab
 ### log
-Go 标准的 pkg/log 库
+Go 标准的 pkg/log 包
 - [log print](10_log/10_print.go)
 - [log fatal](10_log/20_fatal.go)
 - [log panic](10_log/30_panic.go)
 - [log customize](10_log/40_customize.go)
 
 ### wklog
-wklog 是一个简单的 log 库实现，demo 中主要展示了 WithLevel() 和 WithFormatter() 两个函数的设置。
+wklog 是一个简单的 log 包实现，demo 中主要展示了 WithLevel() 和 WithFormatter() 两个函数的设置。
+- [example.go](20_wklog/example.go)
 ```shell
-cd 20_wklong
-go run main.go
+go run example.go
+```
+
+### rebirthmonky/pkg/log
+是个可在生产环境使用的 log 包
+- [example1.go](30_rebirthmonkey-log/example1.go)
+- [example2.go](30_rebirthmonkey-log/example2.go)
+
+```shell
+go run example1.go
+go run example2.go
+go run exmaple2.go -l warn
 ```

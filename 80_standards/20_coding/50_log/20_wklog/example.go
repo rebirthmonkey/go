@@ -1,3 +1,8 @@
+
+
+
+
+// this example initially comes from github.com/rebirthmonkey/pkg/wklog/examples/
 package main
 
 import (
