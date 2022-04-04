@@ -21,7 +21,3 @@ func main(){
 	router.Run(":8080")
 }
 
-/*
-curl http://localhost:8080/v1/login
-curl http://localhost:8080/v2/login
- */

@@ -20,10 +20,3 @@ func main() {
 	router.Run(":8080")
 }
 
-/*
-curl http://127.0.0.1:8080/welcome
-curl http://127.0.0.1:8080/welcome\?firstname\=中国
-curl http://127.0.0.1:8080/welcome\?firstname\=中国\&lastname\=天朝
-curl http://127.0.0.1:8080/welcome\?firstname\=\&lastname\=天朝
-curl http://127.0.0.1:8080/welcome\?firstname\=%E4%B8%AD%E5%9B%BD
-*/

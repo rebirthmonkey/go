@@ -1,0 +1,12 @@
+{
+  "Base" : {
+    "messageFrequency" : 5
+  },
+  "RabbitMQ" : {
+    "MQUrl" : "amqp://trkj:trkj@192.168.5.62:5672/test",
+    "Exchange": "EX.WALLDATA",
+    "ExchangeType": "fanout",
+    "RoutingKey": "RK.WALLDATA"
+  },
+  "Port": 8888,
+}

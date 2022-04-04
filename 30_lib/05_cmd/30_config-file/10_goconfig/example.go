@@ -33,7 +33,7 @@ func ReadBaseConfig(bconfig *BaseConfig, mode string, confFile string) {
 
 func main() {
 	baseConfigIni := BaseConfig{}
-	ReadBaseConfig(&baseConfigIni, "ini","./11_config.ini")
+	ReadBaseConfig(&baseConfigIni, "ini","./config.ini")
 	fmt.Println("msgFrequency = ", baseConfigIni.MsgFrequency)
 	fmt.Println("mq.MQUrl = ", baseConfigIni.MQUrl)
 	fmt.Println("mq.MQUrl = ", baseConfigIni.RabbitMQ.MQUrl) // embedded struct
@@ -42,7 +42,7 @@ func main() {
 	fmt.Println("mq.RoutingKey = ", baseConfigIni.RabbitMQ.RoutingKey)
 
 	baseConfigJson := BaseConfig{}
-	ReadBaseConfig(&baseConfigJson, "json","./11_config.json")
+	ReadBaseConfig(&baseConfigJson, "json","./config.json")
 	fmt.Println("msgFrequency = ", baseConfigJson.MsgFrequency)
 	fmt.Println("mq.MQUrl = ", baseConfigJson.RabbitMQ.MQUrl)
 	fmt.Println("mq.Exchange = ", baseConfigJson.RabbitMQ.Exchange)

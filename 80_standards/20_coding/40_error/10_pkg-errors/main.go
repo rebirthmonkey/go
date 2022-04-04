@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/pkg/errors"
 	"log"
+
+	"github.com/pkg/errors"
 )
 
 func main() {
 	if err := funcA(); err != nil {
-		log.Fatalf("main call func got failed: %v", err)
+		log.Fatalln("main call func got failed:", err)
 		return
 	}
 	log.Println("call func success")

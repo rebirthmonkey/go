@@ -25,6 +25,3 @@ func main(){
 	router.Run(":8080")
 }
 
-/*
-curl -X POST http://127.0.0.1:8080/form_post -H "Content-Type:application/x-www-form-urlencoded" -d "message=hello&nick=ruan"
- */

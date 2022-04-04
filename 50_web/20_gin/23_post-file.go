@@ -21,9 +21,3 @@ func main(){
 
 	router.Run(":8080")
 }
-
-/*
-curl -X POST http://localhost:8080/upload \
-	-F "file=@./23_post-file.go" \
-	-H "Content-Type: multipart/form-data"
-*/

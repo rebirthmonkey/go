@@ -32,11 +32,7 @@ func main() {
 			})
 		}
 	}
+
 	router.Run()
 }
 
-/*
-curl http://localhost:8080/user/index
-curl http://localhost:8080/user/login
-curl http://localhost:8080/user/shop/index
- */

@@ -9,7 +9,7 @@ func main() {
 	router := gin.Default()
 
 	// *号能匹配的规则就更多
-	router.GET("/user/:name/*action", func(c *gin.Context) {
+	router.GET("/users/:name/*action", func(c *gin.Context) {
 		name := c.Param("name")
 		action := c.Param("action")
 		message := name + " is " + action

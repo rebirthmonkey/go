@@ -8,7 +8,7 @@ import (
 func main() {
 	router := gin.Default()
 
-	router.GET("/user/:name", func(c *gin.Context) {
+	router.GET("/users/:name", func(c *gin.Context) {
 		name := c.Param("name")
 		c.String(http.StatusOK, "Hello %s", name)
 	})

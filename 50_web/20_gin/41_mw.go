@@ -8,19 +8,19 @@ import (
 
 func MiddleWare1() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println("before middleware")
+		fmt.Println("before middleware1")
 		c.Set("request", "XXX")
 		c.Next()
-		fmt.Println("before middleware")
+		fmt.Println("after middleware1")
 	}
 }
 
 func MiddleWare2() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println("before middleware")
+		fmt.Println("before middleware2")
 		c.Set("request", "YYY")
 		c.Next()
-		fmt.Println("before middleware")
+		fmt.Println("after middleware2")
 	}
 }
 
@@ -28,6 +28,7 @@ func main(){
 	router := gin.Default()
 
 	router.Use(MiddleWare1())
+
 	router.GET("/before", func(c *gin.Context) {
 		request := c.MustGet("request").(string)
 		c.JSON(http.StatusOK, gin.H{
@@ -36,6 +37,7 @@ func main(){
 	})
 
 	router.Use(MiddleWare2())
+
 	router.GET("/after", func(c *gin.Context) {
 		request := c.MustGet("request").(string)
 		c.JSON(http.StatusOK, gin.H{
