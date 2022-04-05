@@ -118,7 +118,7 @@ go run example1.go
 
 - [viper example](30_config-file/20_viper/example.go)
 - [viper with struct unmarshal](30_config-file/20_viper/example2.go)
-
+- [viper 处理嵌套结构体](30_config-file/20_viper/example3.go)
 
 #### 使用 Pflag
 

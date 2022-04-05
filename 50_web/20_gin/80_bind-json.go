@@ -88,8 +88,6 @@ func router() http.Handler {
 }
 
 func main() {
-	var eg errgroup.Group
-
 	// 一进程多端口
 	insecureServer := &http.Server{
 		Addr:         ":8080",
@@ -104,6 +102,8 @@ func main() {
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
+
+	var eg errgroup.Group
 
 	eg.Go(func() error {
 		err := insecureServer.ListenAndServe()

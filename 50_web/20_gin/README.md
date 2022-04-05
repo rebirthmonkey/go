@@ -133,19 +133,41 @@ curl http://127.0.0.1:8080/user/login
 curl http://127.0.0.1:8080/user/shop/index
 ```
 
-- [Middleware1](41_mw.go)
+- [Middleware1](41_middleware.go)
+
+/before 会通过 middleware1
+
+/after 会同时通过 middleware1 和 middleware2
 
 ```shell
 curl http://127.0.0.1:8080/before
 curl http://127.0.0.1:8080/after
 ```
 
-- [Middleware2](43_mw.go)
+- [Middleware2](43_middleware.go)
+
+/before 会只通过 middleware3
+
+/after 会只通过 middleware4，所以会报错 request4 不存在
+
 
 ```shell
 curl http://127.0.0.1:8080/before
 curl http://127.0.0.1:8080/after
 ```
+
+- [Middleware with new Logger MW](45_middleware-logger.go)：自定义 logger middleware
+
+Middleware c.next() 之前的代码会在调用前完成，之后的代码会在调用返回后完成。
+
+```shell
+curl http://127.0.0.1:8080/test
+```
+
+- [Middleware with Basic Auth](46_middleware-basic-auth.go)：使用现有 Basic Auth Middleware
+
+Basic Auth 必须采用浏览器登录
+
 
 - [Async](51_async.go)
 
@@ -158,6 +180,9 @@ curl http://127.0.0.1:8080/async
 
 - [A Real Web Application with HTTP and HTTPS](80_bind-json.go)：通过c.ShouldBindJSON函数，将 Body 中的 JSON 格式数据解析到指定的 Struct 中，通过c.JSON函数返回 JSON 格式的数据。
 
+主要做法是创建一个 struct，然后把 POST 的内容通过 c.ShouldBindJSON 添加到该 struct 的变量。
+在给这个 struct 变量添加类似 Create()、Get() 等方法注册到 router 的 POST、GET 上。
+
 ```shell
 # 创建产品
 $ curl -XPOST -H"Content-Type: application/json" -d'{"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford"}' http://127.0.0.1:8080/v1/products
@@ -168,13 +193,7 @@ $ curl -XGET http://127.0.0.1:8080/v1/products/iphone12
 {"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford","createdAt":"2021-06-20T11:17:03.818065988+08:00"}
 ```
 
-- [Middleware with new Logger MW](82_mw-logger.go)：自定义 logger middleware
-
-```shell
-curl http://127.0.0.1:8080/test
-```
-
-- [Middleware with Gin MW](84_mw.go)：使用 Gin 现有的 middleware
+- [Middleware with Gin MW](82_bind-json-mw.go)：使用 Gin 现有的 middleware
 
 
 ## Ref
