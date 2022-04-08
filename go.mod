@@ -5,15 +5,14 @@ go 1.17
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/gin-contrib/cors v1.3.1
-	github.com/gin-contrib/requestid v0.0.3
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-sql-driver/mysql v1.6.0
-	github.com/golang/protobuf v1.5.2
+	github.com/gofrs/uuid v4.0.0+incompatible
 	github.com/hyahm/goconfig v0.0.0-20210807100611-f5321c90d492
 	github.com/lib/pq v1.10.4
-	github.com/marmotedu/component-base v1.6.2
 	github.com/pkg/errors v0.9.1
-	github.com/rebirthmonkey/pkg v0.0.2
+	github.com/rebirthmonkey/pkg v0.0.7
+	github.com/rebirthmonkey/pkg/log v0.0.0-20220406061931-5997f8101b2a
 	github.com/rebirthmonkey/pkg/wklog v0.0.0-20220401033958-8bdb7c605dcd
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/pflag v1.0.5
@@ -45,9 +44,9 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/google/gofuzz v1.1.0 // indirect
-	github.com/google/uuid v1.2.0 // indirect
 	github.com/googleapis/gnostic v0.5.5 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/imdario/mergo v0.3.8 // indirect
@@ -57,8 +56,8 @@ require (
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/marmotedu/component-base v1.6.2 // indirect
 	github.com/marmotedu/iam v1.6.2 // indirect
-	github.com/marmotedu/log v0.0.1 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mitchellh/mapstructure v1.4.2 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect

@@ -14,15 +14,6 @@ func main() {
 		log.Panic(err.Error())
 	}
 
-	//opts := &log.Options{
-	//	Level:            "debug",
-	//	Format:           "console",
-	//	EnableColor:      true, // if you need output to local path, with EnableColor must be false.
-	//	DisableCaller:    true,
-	//	OutputPaths:      []string{"stdout"},
-	//	ErrorOutputPaths: []string{"stderr"},
-	//}
-
 	// 初始化全局logger
 	log.Init(ginConfig.Log)
 	defer log.Flush()

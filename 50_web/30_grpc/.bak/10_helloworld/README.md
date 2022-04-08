@@ -23,8 +23,8 @@ gRPC 支持定义 4 种类型的服务方法，分别是简单模式、服务端
 ### Install
 
 ```shell
-$ go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
-$ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
+go install google.golang.org/protobuf/cmd/protoc-gen-go
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 ```
 
 ## Protocol Buffers
@@ -79,7 +79,7 @@ service Cache{
 ```go
 syntax = "proto3";
 
-package main;
+package helloworld;
 
 // The greeting service definition.
 service Greeter {
@@ -108,6 +108,13 @@ message HelloReply {
 $ protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     helloworld.proto
+
+$ protoc --go_out=plugins=grpc:. --go_opt=paths=source_relative ProductInfo.proto
+$ protoc --go_out=plugins=grpc:. --go_opt=paths=source_relative ProductInfo.proto
+    
+protoc --go_out=. --go_opt=paths=source_relative \
+  --go-grpc_out=require_unimplemented_servers=false:. --go-grpc_opt=paths=source_relative \
+  ProductInfo.proto
 $ ls
 helloworld.pb.go  helloworld.proto # 新增了一个 helloworld.pb.go 文件
 ```
@@ -137,17 +144,6 @@ helloworld.pb.go  helloworld.proto # 新增了一个 helloworld.pb.go 文件
   - RPC 不需要打包和解包，RPC 调用的入参和返回的结果都是 Go 的结构体，不需要对传入参数进行打包操作，也不需要对返回参数进行解包操作，简化了调用步骤。
 - 创建完 main.go 文件后，在当前目录下执行 `go run main.go`  发起 RPC 调用。
 
-### productinfo
-
-```go
-type server struct {
-	productMap map[string]*pb.Product
-	pb.UnimplementedProductInfoServer // 需要手动加上该行
-}
-```
-
-
-
 ### route-guide
 
 #### 创建proto
@@ -160,9 +156,11 @@ type server struct {
   - An interface type for servers to implement, also with the methods defined in the `RouteGuide` service.
 
 ```shell
-$ protoc --go_out=. --go_opt=paths=source_relative \
+protoc --go_out=plugins=grpc:./test/ ./test.proto
+
+protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-    route_guide.proto
+    test/test.proto
 ```
 
 #### 创建 server 端
@@ -170,4 +168,3 @@ $ protoc --go_out=. --go_opt=paths=source_relative \
 
 
 #### 创建 client 端
-

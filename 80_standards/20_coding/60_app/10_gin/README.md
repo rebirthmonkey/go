@@ -13,30 +13,26 @@
 - middleware：Gin 用到的中间件
 - handler.go：Gin 应用真正的逻辑代码实现
 
-## TODP
 
-- options 直接导入 list
-
-## 使用
-
-### 二次开发
-
-- 添加 handler 或 middleware
-- 配置 router.go
-
-### 运行
+## 运行
 
 
 ```shell
-go run main.go options.go config.go server.go router.go middleware.go handler.go 
+$ go run main.go options.go config.go server.go router.go middleware.go handler.go 
 ```
 
 ```shell
 # 创建产品
-curl -XPOST -H"Content-Type: application/json" -d'{"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford"}' http://127.0.0.1:8080/v1/products
+$ curl -XPOST -H"Content-Type: application/json" -d'{"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford"}' http://127.0.0.1:8080/v1/products
 {"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford","createdAt":"2021-06-20T11:17:03.818065988+08:00"}
 
 # 获取产品信息
 $ curl -XGET http://127.0.0.1:8080/v1/products/iphone12
 {"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford","createdAt":"2021-06-20T11:17:03.818065988+08:00"}
 ```
+
+
+## 二次开发
+
+- 添加 handler 或 middleware
+- 配置 router.go
