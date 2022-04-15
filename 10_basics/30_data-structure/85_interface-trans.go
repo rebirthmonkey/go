@@ -71,6 +71,7 @@ func main() {
 
 	// 基类->子类：interface->struct
 	// 值接收器
+	// 原路返回
 	monkey2, ok := animal1.(Monkey)
 	if ok {
 		fmt.Println("convert animal1 to monkey", monkey2.GetName())
@@ -78,7 +79,16 @@ func main() {
 		fmt.Println("can not convert animal1 to monkey")
 	}
 
-	// 指针接收器：结构体
+	// 非原路返回
+	pig3, ok := animal1.(Pig)
+	if ok {
+		fmt.Println("convert animal1 to pig", pig3.GetName())
+	} else {
+		fmt.Println("can not convert animal1 to pig")
+	}
+
+	// 指针接收器
+	// 原路返回
 	cat2, ok := animal2.(*Cat3) // 类型断言，左边必须是接口类型的对象，当接口对象的实际类型和要转换的目标类型匹配时，转换成功，否则失败
 	if ok {
 		fmt.Println("convert animal2 to cat", cat2.GetName())
@@ -86,7 +96,8 @@ func main() {
 		fmt.Println("can not convert animal2 to cat")
 	}
 
-	// 指针接收器：结构体
+	// 指针接收器
+	// 非原路返回
 	dog3 , ok := animal2.(*Dog3) // 类型断言，接口对象的实际类型和要转换的目标类型不匹配
 	if ok {
 		fmt.Println("convert animal2 to dog - " + dog3.GetName())

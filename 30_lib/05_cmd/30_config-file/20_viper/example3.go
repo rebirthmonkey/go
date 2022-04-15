@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/rebirthmonkey/pkg/log"
 
 	"github.com/spf13/viper"
 )
@@ -27,7 +28,9 @@ func main(){
 		}
 		Server struct {
 			Mode string 	`mapstructure:"mode"`
+			Healthz bool	`mapstructure:"healthz"`
 		}
+		Log log.Options
 	}
 
 	var opts Options
@@ -39,6 +42,8 @@ func main(){
 
 	fmt.Println("address is:", opts.Insecure.Address)
 	fmt.Println("port is:", opts.Insecure.Port)
-	fmt.Println("mode is:", opts.Server.Mode)
+	fmt.Println("server mode is:", opts.Server.Mode)
+	fmt.Printf("server mode is: %t \n", opts.Server.Healthz)
+	fmt.Printf("log DisableCaller is: %t\n", opts.Log.DisableCaller)
 }
 

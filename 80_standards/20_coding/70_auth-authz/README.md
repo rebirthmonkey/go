@@ -185,5 +185,24 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJpYW0uYXV0aHoubWFybW90ZWR1LmNvbSI
 
 签名后服务端会返回生成的 Token，客户端下次请求会携带该 Token。服务端收到 Token 后会解析出 header.payload，然后用相同的加密算法和密钥对 header.payload 再进行一次加密，得到 Signature。并且，对比加密后的 Signature 和收到的 Signature 是否相同，如果相同则验证通过，不相同则返回 HTTP 401 Unauthorized 的错误。
 
+#### gin-jwt
 
+#### 运行
+```shell
+$ go run example.go
+```
+
+```shell
+$ brew install httpie
+$ http -v --json POST 127.0.0.1:8000/login username=admin password=admin
+$ http -f GET 127.0.0.1:8000/auth/hello \
+  "Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDk0NzMzNzIsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY0OTQ2OTc3Mn0.nXBuqZAoANdjPkvyGhv8kMiirY0GXH5YIwml7iw-9YM" \
+  "Content-Type: application/json"
+```
+
+
+
+## Ref
+
+1. [JWT Token](https://github.com/appleboy/gin-jwt)
 

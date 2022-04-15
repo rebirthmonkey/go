@@ -450,6 +450,8 @@ b=type(a) 如：`b = int32(a)`
 
 ### 结构体
 
+<img src="figures/image-20220410132213918.png" alt="image-20220410132213918" style="zoom:50%;" />
+
 #### 子类->基类
 
 struct->interface
