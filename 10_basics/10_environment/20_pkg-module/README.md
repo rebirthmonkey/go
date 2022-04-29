@@ -58,7 +58,7 @@ go build # 会自动在同目录下寻找依赖函数/文件一起编译
 
 ##### 库包
 
-注意：以下放在在新版 Go 中已被 GO Module 机制替代，已无法运行。
+**注意：以下放在在新版 Go 中已被 GO Module 机制替代，已无法运行。**
 
 ```shell
 cp -r wkpkg $GOPATH/src # 把 wkpkg 复制到 $GOPATH/src 目录下
@@ -67,7 +67,7 @@ go install -x wkpkg # build wkpgk.a 并归档文件到 $GOPATH/pkg/darwin_amd64 
 
 ##### 可执行包
 
-注意：以下放在在新版 Go 中已被 GO Module 机制替代，已无法运行。
+**注意：以下放在在新版 Go 中已被 GO Module 机制替代，已无法运行。**
 
 wkapp 依赖 wkpkg
 
@@ -95,7 +95,7 @@ GO MODULE 的目的是确保在非 `$GOPATH/src` 目录下可以编译 go 源文
 
 执行 go build 后go.mod文件的内容为：
 
-```bash
+```shell
 # cat go.mod
 module wkmodule
 

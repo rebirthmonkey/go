@@ -2,6 +2,8 @@
 
 ## Installation
 
+### Ubuntu
+
 Follow this [manuel](https://tecadmin.net/install-go-on-ubuntu/)
 
 - `https://golang.org/doc/install`：从这里下载，建议安装 1.14.4 版本
@@ -9,11 +11,6 @@ Follow this [manuel](https://tecadmin.net/install-go-on-ubuntu/)
 - `sudo mv go /usr/local`
 - `go version`: check 
 - `go env`
-
-### BeeGo
-
-- `go get -u github.com/beego/bee`: install bee
-- `go get github.com/tools/godep`: install godep
 
 ## 环境变量配置
 ```bash

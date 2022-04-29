@@ -6,10 +6,10 @@ commands 代表命令，arguments 代表非选项（flag）参数，flags 代表
 
 提取命令行输入的参数
 
-- [命令行参数解析](02_os-args.go)
+- [命令行参数解析](10_arg/example.go)
 
 ```shell
-go run 02_os-args.go a b c d
+go run example.go a b c d
 ```
 
 
@@ -33,7 +33,7 @@ go run example2.go # 未输入参数，则采用默认
 
 ```shell
 go run example2.go -d dd -l ll -w true
-go run example2.go x y z # 未输入flag，则采用默认
+go run example3.go x y z # 未输入flag，则采用默认
 ```
 
 ### pflag
@@ -153,15 +153,6 @@ go build -o wkctl .
 ./wkctl hello xxx
 ```
 
-## XXX framework
-
-构建的任何一个应用程序，至少要具备命令行程序、命令行参数解析和配置文件解析这 3 种功能：
-
-- 命令行程序：用来启动一个应用。命令行程序需要实现诸如应用描述、help、参数校验等功能。还可以实现命令自动补全、打印命令行参数等高级功能。
-- 命令行参数解析：用来在启动时指定应用程序的命令行参数，以控制应用的行为。
-- 配置文件解析：用来解析不同格式的配置文件。
-
-上述 3 类功能跟业务关系不大，可以抽象成一个统一的框架。
 
 
 
