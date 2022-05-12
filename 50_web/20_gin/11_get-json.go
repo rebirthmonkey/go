@@ -5,19 +5,18 @@ import (
 	"net/http"
 )
 
-func ping(context *gin.Context) {
-	println(">>>> ping function start <<<<")
+func pingHandler(context *gin.Context) {
+	println(">>>> pingHandler function start <<<<")
 
-	context.JSON(http.StatusOK,gin.H{
-		"code":200,
+	context.JSON(http.StatusOK, gin.H{
+		"code":    200,
 		"message": "pong",
-		"success":true,
+		"success": true,
 	})
 }
 
 func main() {
-	router := gin.Default()
-	router.GET("/ping", ping)
-	router.Run(":8080")
+	ginEngine := gin.Default()
+	ginEngine.GET("/ping", pingHandler)
+	ginEngine.Run(":8080")
 }
-

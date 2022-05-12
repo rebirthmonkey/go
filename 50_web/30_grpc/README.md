@@ -27,7 +27,15 @@ $ go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
 $ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
 ```
 
-## Protocol Buffers
+## 原理
+
+gRPC 由 数据模型、server 端和 client 端 3部分组成
+
+### 数据模型
+
+数据模型由 xxx.proto 文件自动生成，一般又分为 xxx.pb.go 与 xxx_grpc.pb.go
+
+#### Protocol Buffers
 
 Protocol Buffers（ProtocolBuffer/protobuf）是 Google 开发的一套对数据结构进行序列化的方法，可用作（数据）通信协议、数据存储格式等，也是一种更加灵活、高效的数据格式，与 XML、JSON 类似。它的传输性能非常好，所以常被用在一些对数据传输性能要求比较高的系统中，作为数据传输格式。Protocol Buffers 的主要特性有：
 
@@ -66,9 +74,51 @@ service Cache{
 
 - 第三，可以通过 protobuf 序列化和反序列化，提升传输效率。
 
+#### xxx.pb.go
+
+用于存储由 message 定义、创建的数据结构
+
+#### xxx_grpc.pb.go
+用于存储由 service 定义、创建的 interface、struct、method等。该文件采用标准的 Go 包结构，内部包括（以 ProductInfo 为例）
+
+##### client 端
+  - ProductInfoClient interface：定义 client 端的 interface
+  - productInfoClient struct：定义实现接口的 struct
+  - NewProductInfoClient(cc grpc.ClientConnInterface) ProductInfoClient：作为 Factory，返回一个 client 端
+  - productInfoClient struct 的方法：用于实现 interface
+
+##### server 端
+
+- ProductInfoServer interface：定义 server 端的 interface
+- UnimplementedProductInfoServer struct：定义实现接口的 struct，其实是个假实现
+- UnimplementedProductInfoServer struct 的方法：用于**假**实现 interface 中的诸多方法
+- RegisterProductInfoServer：把 interface 的实例注册到一个 gRPC server上
+- _ProductInfo_XXX_Handler：将后续 ProductInfoServer interface 中诸多方法的实现映射到 Handler 上
+- ProductInfo_ServiceDesc：server 端所有的运行参数
 
 
-## Example
+### Server 端（实现）
+
+主要目的：真正实现 ProductInfoServer interface 的几个方法！
+
+server 与 client 通过 server 的 listener 与 client 的 conn 连接。
+
+- server struct：embed UnimplementedProductInfoServer struct 用于实现继承，并且可以添加相应的内部数据结构
+- UnimplementedProductInfoServer struct 的方法：用于**真**实现 interface 中的诸多方法
+- 启动流程
+  - `s := grpc.NewServer()`：创建一个 gRPC server
+  - `pb.RegisterProductInfoServer(s, &server{})`：把 interface 的实例注册到 gRPC server
+  - `s.Serve(listener)`：启动 gRPC server
+
+### Client 端（使用）
+
+主要目的：使用 gRPC 自己生成的 client 库，就像本地调用一下调用 server 端。
+
+- `conn, err := grpc.Dial("127.0.0.1:50051", grpc.WithInsecure())`：创建一个 gRPC client 端 conn
+- `client := pb.NewProductInfoClient(conn)`：创建一个 gRPC client 端实例
+- `productId, err := client.AddProduct(ctx, macProduct)`：通过 client 端实例调用远程 gRPC 服务
+
+## Lab
 
 ### Hello-World
 
@@ -139,11 +189,28 @@ helloworld.pb.go  helloworld.proto # 新增了一个 helloworld.pb.go 文件
 
 ### productinfo
 
+生成 pb
+
+```shell
+protoc --go_out=. --go_opt=paths=source_relative \
+    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
+    productinfo.proto
+```
+
+server/main.go 
+
 ```go
 type server struct {
 	productMap map[string]*pb.Product
 	pb.UnimplementedProductInfoServer // 需要手动加上该行
 }
+```
+
+运行
+
+```shell
+go run server/main.go
+go run client/main.go
 ```
 
 

@@ -5,13 +5,12 @@ import (
 	"net/http"
 )
 
-func main(){
-	router := gin.Default()
+func main() {
+	ginEngine := gin.Default()
 
-	router.GET("/redirect/google", func(c *gin.Context) {
+	ginEngine.GET("/redirect/google", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "https://google.com")
 	})
 
-	router.Run(":8080")
+	ginEngine.Run(":8080")
 }
-

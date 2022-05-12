@@ -6,11 +6,11 @@ import (
 	"net/http"
 )
 
-func main(){
-	router := gin.Default()
-	router.MaxMultipartMemory = 8 << 20
+func main() {
+	ginEngine := gin.Default()
+	ginEngine.MaxMultipartMemory = 8 << 20
 
-	router.POST("/upload", func(c *gin.Context) {
+	ginEngine.POST("/upload", func(c *gin.Context) {
 		file, _ := c.FormFile("file")
 		fmt.Println("filename is:", file.Filename)
 
@@ -19,5 +19,5 @@ func main(){
 		c.String(http.StatusCreated, "upload successful")
 	})
 
-	router.Run(":8080")
+	ginEngine.Run(":8080")
 }

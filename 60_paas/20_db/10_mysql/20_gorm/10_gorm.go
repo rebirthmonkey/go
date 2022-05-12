@@ -11,25 +11,24 @@ import (
 
 type Product struct {
 	gorm.Model
-	Code  string `gorm:"column:code"`
+	Code  string `gorm:"column:code"` // 定义Gorm的Tag
 	Price uint   `gorm:"column:price"`
 }
 
-// TableName maps to mysql table name.
+// TableName maps to mysql table name, from Product to xxx.
 func (p *Product) TableName() string {
-	return "product"
+	return "xxx"
 }
 
-var (
-	host     = pflag.StringP("host", "H", "127.0.0.1:3306", "MySQL service host address")
-	username = pflag.StringP("username", "u", "root", "Username for access to mysql service")
-	password = pflag.StringP("password", "p", "root", "Password for access to mysql, should be used pair with password")
-	database = pflag.StringP("database", "d", "test", "Database name to use")
-	help     = pflag.BoolP("help", "h", false, "Print this help message")
-)
-
 func main() {
-	// Parse command line flags
+	var (
+		host     = pflag.StringP("host", "H", "127.0.0.1:3306", "MySQL service host address")
+		username = pflag.StringP("username", "u", "root", "Username for access to mysql service")
+		password = pflag.StringP("password", "p", "root", "Password for access to mysql, should be used pair with password")
+		database = pflag.StringP("database", "d", "test", "Database name to use")
+		help     = pflag.BoolP("help", "h", false, "Print this help message")
+	)
+
 	pflag.CommandLine.SortFlags = false
 	pflag.Usage = func() {
 		pflag.PrintDefaults()
@@ -52,7 +51,7 @@ func main() {
 		panic("failed to connect database")
 	}
 
-	// 1. Auto migration (binding) for given models, and create corresponding schema
+	// 1. Auto migration (binding) for given models, and create corresponding table/schema
 	db.AutoMigrate(&Product{})
 
 	// 2. Insert the value into database
@@ -81,7 +80,6 @@ func main() {
 	PrintProducts(db)
 }
 
-// List products
 func PrintProducts(db *gorm.DB) {
 	products := make([]*Product, 0)
 	var count int64

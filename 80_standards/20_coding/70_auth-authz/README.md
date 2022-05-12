@@ -15,13 +15,22 @@
 
 ### Basic
 
-Basic 认证是最简单的认证方式，它简单地将“用户名:密码”进行 base64 编码后，放到 HTTP Authorization Header 中。HTTP 请求到达后端服务后，后端服务会解析出 Authorization Header 中的 base64 字符串，解码获取用户名和密码，并将用户名和密码跟数据库中记录的值进行比较，如果匹配则认证通过。例如：
+Basic 认证是最简单的认证方式，它简单地将“用户名:密码”进行 base64 编码后，放到 HTTP Authorization Header 中。HTTP 请求到达后端服务后，后端服务会解析出 Authorization Header 中的 base64 字符串，解码获取用户名和密码，并将用户名和密码跟数据库中记录的值进行比较，如果匹配则认证通过。
 
-```shell
-$ basic=`echo -n  'admin:Admin@2021'|base64`$ curl -XPOST -H"Authorization: Basic  ${basic}" http://127.0.0.1:8080/login
-```
 
 通过 base64 编码，可以将密码以非明文的方式传输，增加一定的安全性。但 base64 不是加密技术，入侵者仍然可以截获 base64 字符串，并反编码获取用户名和密码。另外，即使 Basic 认证中密码被加密，入侵者仍可通过加密后的用户名和密码进行重放攻击。所以，Basic 认证虽然简单，但极不安全。使用 Basic 认证的唯一方式就是将它和 SSL 配合使用，来确保整个认证过程是安全的。
+
+#### Gin Basic Auth
+```shell
+cd 10_gin-basic-auth
+go run example.go auth.go basic.go
+```
+
+```shell
+basic=`echo -n 'admin:admin'|base64`
+curl -XGET -H "Authorization: Basic ${basic}" http://127.0.0.1:8080/test
+```
+
 
 ### Digest
 
@@ -104,7 +113,7 @@ JWT 是 Bearer Token 的一个具体实现，由 JSON 数据格式组成，通�
 - 客户端收到回复后会将 Token 缓存起来，比如放在浏览器 Cookie 中或 LocalStorage 中，之后每次请求都会携带该 Token。
 - 服务端收到请求后，会验证请求中的 Token，验证通过则进行业务逻辑处理，处理完后返回处理后的结果。
 
-##### JWT 格式
+##### Header
 
 JWT 由三部分组成，分别是 Header、Payload 和 Signature，它们之间用圆点.连接，例如：
 
@@ -113,8 +122,6 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJ
 ```
 
 <img src="figures/0c6657bc2d0fd2a98737660c7c373e08.jpg" alt="img" style="zoom: 25%;" />
-
-###### Header
 
 JWT Token 的 Header 中包含两部分信息：一是 Token 的类型，二是 Token 所使用的加密算法。例如：
 
@@ -131,7 +138,7 @@ JWT Token 的 Header 中包含两部分信息：一是 Token 的类型，二是 
 这里需要将 Header 进行 base64 编码：
 
 ```shell
-$ echo -n  '{"typ":"JWT","alg":"HS256"}'|base64
+$ echo -n '{"typ":"JWT","alg":"HS256"}'|base64
 eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
 ```
 
@@ -145,7 +152,7 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
 }
 ```
 
-###### Payload
+##### Payload
 
 Payload 中携带 Token 的具体内容由 3 部分组成：JWT 标准中注册的声明（可选）、公共的声明、私有的声明。
 
@@ -175,7 +182,7 @@ NjA0MTUxNzg3LCJpc3MiOiJpYW1jdGwiLCJuYmYiOjE2MDQxNTE3ODd9
 
 除此之外，还有公共的声明和私有的声明。公共的声明可以添加任何的需要的信息，一般添加用户的相关信息或其他业务需要的信息，注意不要添加敏感信息；私有声明是客户端和服务端所共同定义的声明，因为 base64 是对称解密的，所以一般不建议存放敏感信息。
 
-###### Signature（签名）
+##### Signature（签名）
 
 Signature 是 Token 的签名部分，通过如下方式生成：将 Header 和 Payload 分别 base64 编码后，用 . 连接。然后再使用 Header 中声明的加密方式，利用 secretKey 对连接后的字符串进行加密，加密后的字符串即为最终的  Signature。secretKey 是密钥，保存在服务器中，一般通过配置文件来保存。这里要注意，密钥一定不能泄露。密钥泄露后，入侵者可以使用该密钥来签发 JWT Token，从而入侵系统。最后生成的 Token 如下：
 
@@ -185,20 +192,31 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJpYW0uYXV0aHoubWFybW90ZWR1LmNvbSI
 
 签名后服务端会返回生成的 Token，客户端下次请求会携带该 Token。服务端收到 Token 后会解析出 header.payload，然后用相同的加密算法和密钥对 header.payload 再进行一次加密，得到 Signature。并且，对比加密后的 Signature 和收到的 Signature 是否相同，如果相同则验证通过，不相同则返回 HTTP 401 Unauthorized 的错误。
 
-#### gin-jwt
-
-#### 运行
-```shell
-$ go run example.go
-```
+#### Gin JWT Auth
 
 ```shell
-$ brew install httpie
-$ http -v --json POST 127.0.0.1:8000/login username=admin password=admin
-$ http -f GET 127.0.0.1:8000/auth/hello \
-  "Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDk0NzMzNzIsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY0OTQ2OTc3Mn0.nXBuqZAoANdjPkvyGhv8kMiirY0GXH5YIwml7iw-9YM" \
-  "Content-Type: application/json"
+cd 20_gin-jwt-auth
+go run example.go auth.go jwt.go
 ```
+
+- 通过用户名、密码login，获取JWT
+```shell
+curl -XPOST -H'Content-Type: application/json' -d'{"username":"admin","password":"admin"}' http://127.0.0.1:8080/login 
+{"code":200,"expire":"2022-04-30T18:23:43+08:00","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTEzMTQyMjMsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY1MTMxMDYyM30.AugP8KBMBD7nOmEi03-JKBZ5v1Oo18MGVFE5HpgCS9I"}
+
+jwt=`echo -n 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTEzMTQyMjMsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY1MTMxMDYyM30.AugP8KBMBD7nOmEi03-JKBZ5v1Oo18MGVFE5HpgCS9I'`
+```
+
+- 使用JWT认证、并获取REST资源
+```shell
+curl -XGET -H "Content-Type: application/json" -H "Authorization: Bearer ${jwt}"  http://127.0.0.1:8080/auth/test
+```
+
+
+
+## 鉴权
+
+
 
 
 

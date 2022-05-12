@@ -12,10 +12,10 @@ type User2 struct {
 	Age      int    `form:"age" json:"age"`
 }
 
-func main(){
-	router := gin.Default()
+func main() {
+	ginEngine := gin.Default()
 
-	router.POST("/login", func(c *gin.Context) {
+	ginEngine.POST("/login", func(c *gin.Context) {
 		var user User2
 
 		err := c.Bind(&user) // 自动推断content-type bind的是表单还是json
@@ -24,17 +24,11 @@ func main(){
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"username":   user.Username,
-			"passwd":     user.Passwd,
-			"age":        user.Age,
+			"username": user.Username,
+			"passwd":   user.Passwd,
+			"age":      user.Age,
 		})
 	})
 
-	router.Run(":8080")
+	ginEngine.Run(":8080")
 }
-
-/*
-curl -X POST http://localhost:8080/login \
-	-H "Content-Type:application/json" \
-	-d '{"username": "ruan", "passwd": "123", "age": 21}'
- */

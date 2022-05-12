@@ -25,10 +25,10 @@ func MiddleWare4() gin.HandlerFunc {
 	}
 }
 
-func main(){
-	router := gin.Default()
+func main() {
+	ginEngine := gin.Default()
 
-	router.GET("/before", MiddleWare3(), func(c *gin.Context) {
+	ginEngine.GET("/before", MiddleWare3(), func(c *gin.Context) {
 		request3 := c.MustGet("request3").(string)
 		request4 := c.MustGet("request4").(string)
 		c.JSON(http.StatusOK, gin.H{
@@ -37,7 +37,7 @@ func main(){
 		})
 	})
 
-	router.GET("/after", MiddleWare4(), func(c *gin.Context) {
+	ginEngine.GET("/after", MiddleWare4(), func(c *gin.Context) {
 		request3 := c.MustGet("request3").(string)
 		request4 := c.MustGet("request4").(string)
 		c.JSON(http.StatusOK, gin.H{
@@ -46,5 +46,5 @@ func main(){
 		})
 	})
 
-	router.Run(":8080")
+	ginEngine.Run(":8080")
 }

@@ -12,7 +12,7 @@ type Cat3 struct {
 	name string
 }
 
-func (c *Cat3)GetName() string {
+func (c *Cat3) GetName() string {
 	return c.name
 }
 
@@ -20,7 +20,7 @@ type Dog3 struct {
 	name string
 }
 
-func (d *Dog3)GetName() string {
+func (d *Dog3) GetName() string {
 	return d.name
 }
 
@@ -28,8 +28,7 @@ type Monkey struct {
 	name string
 }
 
-
-func (m Monkey)GetName() string {
+func (m Monkey) GetName() string {
 	return m.name
 }
 
@@ -37,10 +36,9 @@ type Pig struct {
 	name string
 }
 
-func (p Pig)GetName() string {
+func (p Pig) GetName() string {
 	return p.name
 }
-
 
 func main() {
 	monkey := Monkey{name: "wukong"}
@@ -67,7 +65,7 @@ func main() {
 
 	// 结构体指针
 	dog2 := (*Dog3)(&cat)
-	fmt.Println("I'm dog2", dog2.GetName())  // 如上所述，*Cat = *Dog
+	fmt.Println("I'm dog2", dog2.GetName()) // 如上所述，*Cat = *Dog
 
 	// 基类->子类：interface->struct
 	// 值接收器
@@ -98,11 +96,10 @@ func main() {
 
 	// 指针接收器
 	// 非原路返回
-	dog3 , ok := animal2.(*Dog3) // 类型断言，接口对象的实际类型和要转换的目标类型不匹配
+	dog3, ok := animal2.(*Dog3) // 类型断言，接口对象的实际类型和要转换的目标类型不匹配
 	if ok {
 		fmt.Println("convert animal2 to dog - " + dog3.GetName())
 	} else {
 		fmt.Println("can not convert animal2 to dog")
 	}
 }
-
