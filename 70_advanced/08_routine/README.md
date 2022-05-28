@@ -160,6 +160,12 @@ go run 32_multi-process-channel.go
 go run 33_multi-process-wg.go
 ```
 
+- [处理 Context.Done()](38_channel-select-ctx.go)：通过 context.Done() 来协同各个 goroutine
+
+```shell
+go run 38_channel-select-ctx.go
+```
+
 - [Mutex锁](41_sync-mutex.go)
 ```shell
 go run 41_sync-mutex.go 

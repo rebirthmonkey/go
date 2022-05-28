@@ -2,6 +2,8 @@
 
 ## 包
 
+Go 程序被组织到 Go 包中，Go 包是同一目录中一起编译的 Go 源文件的集合。在一个源文件中定义的函数、类型、变量和常量，对于同一包中的所有其他源文件可见。
+
 ### 整体
 
 - repo：一个 repo 一般对应一个 module，但一个 repo 也可以包含多个 module
@@ -49,35 +51,48 @@ go build # 会自动在同目录下寻找依赖函数/文件一起编译
 
 ### 分类
 
-#### 来源
+Go 中有 4 种类型的包：
 
-- 标准包：Go 自带的包
-- 远程包：github 上的包，如：[github.com/user/hello](http://github.com/user/hello)
+- Go 标准包：在 Go 源码目录下，随 Go 一起发布的包。
+- 第三方包：第三方提供的包，比如来自于  github.com  的包。
+- 匿名包：只导入而不使用的包。通常情况下，只是想使用导入包产生的副作用，即引用包级别的变量、常量、结构体、接口等，以及执行导入包的init()函数。
+- 内部包：项目内部的包，位于项目目录下。
 
-#### 类型
 
-##### 库包
-
-**注意：以下放在在新版 Go 中已被 GO Module 机制替代，已无法运行。**
-
-```shell
-cp -r wkpkg $GOPATH/src # 把 wkpkg 复制到 $GOPATH/src 目录下
-go install -x wkpkg # build wkpgk.a 并归档文件到 $GOPATH/pkg/darwin_amd64 或 $GOROOT/.. 目录下，可直接被其他程序 import
-```
-
-##### 可执行包
-
-**注意：以下放在在新版 Go 中已被 GO Module 机制替代，已无法运行。**
-
-wkapp 依赖 wkpkg
-
-```shell
-cp -r wkapp $GOPATH/src # 把 wkapp 复制到 $GOPATH/src 目录下
-# 在 GoLand 中 wkpkg 依赖无法解决，需要 `sudo ln -s $GOPATH/src/wkpkg $GOROOT/src/wkpkg`，因为 GoLand 包依赖搜索只寻找 GOROOT
-go install -x wkapp # build 可执行文件 wkapp 并放在 $GOPATH/bin 目录下
-```
 
 ## Module
+
+Go Modules 是 Go 官方推出的一个  Go 包管理方案，基于 vgo 演进而来，具有下面这几个特性：
+
+- 可以使包的管理更加简单。
+- 支持版本管理。
+- 允许同一个模块多个版本共存。
+- 可以校验依赖包的哈希值，确保包的一致性，增加安全性。
+- 内置在几乎所有的 go 命令中，包括 go get、go build、go install、go run、go test、go list等命令。
+- 具有 Global Caching 特性，不同项目的相同模块版本，只会在服务器上缓存一份。
+
+在 Go1.14 版本以及之后的版本，Go 官方建议在生产环境中使用 Go Modules。因此，以后的 Go 包管理方案会逐渐统一到 Go Modules。
+
+### 历史
+
+从 Go 推出之后，因为没有一个统一的官方方案，所以出现了很多种 Go 包管理方案，比较混乱，也没有彻底解决 Go 包管理的一些问题。
+
+Go 依赖包管理工具经历了五个阶段：
+
+- GOPATH：在 Go1.5  版本之前，没有版本控制，所有的依赖包都放在 GOPATH 下。采用这种方式，无法实现包的多版本管理，并且包的位置只能局限在 GOPATH 目录下。如果 A 项目和 B 项目用到了同一个 Go 包的不同版本，这时候只能给每个项目设置一个 GOPATH，将对应版本的包放在各自的 GOPATH 目录下，切换项目目录时也需要切换 GOPATH。这些都增加了开发和实现的复杂度。
+- Vendoring：Go1.5 推出了vendor 机制，并在 Go1.6 中默认启用。在这个机制中，每个项目的根目录都可以有一个 vendor 目录，里面存放了该项目的 Go 依赖包。在编译 Go 源码时，Go 优先从项目根目录的 vendor 目录查找依赖；如果没有找到，再去 GOPATH 下的 vendor 目录下找；如果还没有找到，就去 GOPATH 下找。这种方式解决了多 GOPATH 的问题，但是随着项目依赖的增多，vendor 目录会越来越大，造成整个项目仓库越来越大。在 vendor 机制下，一个中型项目的 vendor 目录有几百 M  的大小一点也不奇怪。
+- 多种 Go 依赖包管理工具：这个阶段，社区也现了很多 Go 依赖包管理工具。
+  - Godep：解决包依赖的管理工具，Docker、Kubernetes、CoreOS 等 Go  项目都曾用过 godep 来管理其依赖。
+  - Govendor：它的功能比 Godep 多一些，通过 vendor 目录下的vendor.json文件来记录依赖包的版本。
+  - Glide：相对完善的包管理工具，通过 glide.yaml 记录依赖信息，通过 glide.lock 追踪每个包的具体修改。
+- Dep：对于从 0 构建项目的新用户来说，Glide 功能足够，是个不错的选择。不过，Golang 依赖管理工具混乱的局面最终由官方来终结了：Golang 官方接纳了由社区组织合作开发的 Dep，作为标准，成为了事实上的官方包管理工具。
+- Go  Modules：Go1.11 版本推出了 Go Modules 机制，Go Modules 基于 vgo 演变而来，是 Golang  官方的包管理工具。在 Go1.13 版本，Go 语言将 Go Modules 设置为默认的 Go 管理工具；在 Go1.14 版本，Go  语言官方正式推荐在生产环境使用 Go Modules，并且鼓励所有用户从其他的依赖管理工具迁移过来。至此，Go 终于有了一个稳定的、官方的 Go 包管理工具。
+
+
+
+<img src="figures/348d772b26940f721c6fb907f6833be5.jpg" alt="img" style="zoom:50%;" />
+
+
 
 ### 原理
 
@@ -89,9 +104,13 @@ GO MODULE 的目的是确保在非 `$GOPATH/src` 目录下可以编译 go 源文
 
 #### go.mod
 
-- 用来定义 module 名
-- 确认 go 的版本
-- 管理该 module 的所有依赖包及版本
+go.mod 文件中包含了以下部分：
+
+- module：用来定义当前项目的模块路径。
+- go：用来设置预期的 Go 版本，目前只是起标识作用。
+- require：用来设置一个特定的模块版本，格式为<导入包路径> <版本> [//  indirect]。
+- exclude：用来从使用中排除一个特定的模块版本，如果知道模块的某个版本有严重的问题，就可以使用 exclude 将该版本排除掉。
+- replace：用来将一个模块版本替换为另外一个模块版本。格式为 $module => $newmodule  ，$newmodule可以是本地磁盘的相对路径，例如 github.com/gin-gonic/gin =>  ./gin。也可以是本地磁盘的绝对路径，例如 github.com/gin-gonic/gin =>  /home/lk/gin。还可以是网络路径，例如 golang.org/x/text v0.3.2 =>  github.com/golang/text v0.3.2。
 
 执行 go build 后go.mod文件的内容为：
 
@@ -108,6 +127,20 @@ require golang.org/x/sys v0.0.0-20191026070338-33540a1f6037 // indirect
 
 该 module 并没有直接依赖 d 包，因此在 d 的记录后面通过注释形式标记了 indirect，即非直接、传递依赖。
 
+要修改 go.mod 文件，可以采用下面这三种方法：
+
+- Go 命令在运行时自动修改。
+- 手动编辑 go.mod 文件，编辑之后可以执行go mod edit  -fmt格式化 go.mod 文件。
+- 执行 go mod 子命令修改。在实际使用中，我建议采用这种方法，和其他两种相比不太容易出错。
+
+#### go.sum
+
+Go 会根据 go.mod 文件中记载的依赖包及其版本下载包源码，但是下载的包可能被篡改，缓存在本地的包也可能被篡改。单单一个 go.mod 文件，不能保证包的一致性。为了解决这个潜在的安全问题，Go Modules 引入了 go.sum 文件。
+
+go.sum 文件用来记录每个依赖包的 hash 值，在构建时，如果本地的依赖包 hash 值与go.sum文件中记录的不一致，则会拒绝构建。go.sum 中记录的依赖包是所有的依赖包，包括间接和直接的依赖包。
+
+这里提示下，为了避免已缓存的模块被更改，$GOPATH/pkg/mod 下缓存的包是只读的，不允许修改。
+
 #### 导入路径
 
 module 作为包的导入路径，一个 module 下可以包含多个包，所以可以通过不同层级的子目录来区分包。
@@ -118,11 +151,23 @@ module 作为包的导入路径，一个 module 下可以包含多个包，所�
 - 内部路径：api
 - 包名：stringsx
 
+#### go get
+
+在一个 module 内执行 `go get` 时，会自动下载最新版本的包，并且更新 go.mod、go.sum 文件。
+
+<img src="figures/image-20220519210406902.png" alt="image-20220519210406902" style="zoom:50%;" />
+
 ### 命令
 
 #### 配置
 
-Go 在 1.13 版本后是默认开启 MODULE, 代表当项目在 GOPATH/src 外且项目根目录有 go.mod 文件时，开启 go module。也就是说，如果不把代码放置在 GOPATH/src 下则默认使用 MODULE 管理.
+可以通过环境变量 GO111MODULE 来打开或者关闭。GO111MODULE 有 3 个值：
+
+- auto：在 Go1.14  版本中是默认值，在 $GOPATH/src 下，且没有包含 go.mod 时则关闭 Go Modules，其他情况下都开启 Go  Modules。也就是说，如果不把代码放置在 GOPATH/src 下则默认使用 MODULE 管理。
+- on：启用 Go Modules，Go1.14 版本推荐打开，未来版本会设为默认值。
+- off：关闭 Go  Modules，不推荐。
+
+如果要打开 Go Modules，可以设置环境变量 export GO111MODULE=on 或 export  GO111MODULE=auto，建议直接设置 export GO111MODULE=on。
 
 ```bash
 go env -w GOPROXY=https://mirrors.cloud.tencent.com/go/,direct
@@ -132,10 +177,14 @@ go env -w GO111MODULE=on
 
 #### 命令
 
-- go mod init：创建 go.mod 文件
-- go mod tidy：更新/细化 go.mod 文件，它会check go.mod 中所有依赖的 pkg 并下载到 `$GOPATH/pkg/mod/`下
-- go mod downlowd（不需要）：下载所有依赖包到`$GOPATH/pkg/mod/` 下
-- go mod vendor：将 `$GOPATH/pkg/mod/` 下的依赖包复制到本地 vendor/ 目录下
+- init：把当前目录初始化为一个新模块，创建 go.mod 文件。
+- tidy：更新/细化 go.mod 文件，添加丢失的模块，并移除无用的模块。默认情况下，Go 不会移除 go.mod 文件中的无用依赖。当依赖包不再使用了，可以使用go mod  tidy 命令来清除它。它会check go.mod 中所有依赖的 pkg 并下载到 `$GOPATH/pkg/mod/`下。
+- downlowd：下载 go.mod 文件中记录的所有依赖包到`$GOPATH/pkg/mod/` 下。
+- vendor：将所有依赖包存到当前目录下的 vendor  目录下，将 `$GOPATH/pkg/mod/`下的依赖包复制到本地 vendor/ 目录下。
+- edit：编辑 go.mod 文件。
+- graph：查看现有的依赖结构。
+- verify：检查当前模块的依赖是否已经存储在本地下载的源代码缓存中，以及检查下载后是否有修改。
+- why：查看为什么需要依赖某模块。
 
 ## Lab
 

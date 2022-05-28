@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/marmotedu/errors"
-	code "github.com/marmotedu/sample-code"
+
+	"github.com/rebirthmonkey/go/80_standards/20_coding/40_error/errcode"
+	"github.com/rebirthmonkey/pkg/errors"
 )
 
 func main() {
@@ -32,24 +33,22 @@ func main() {
 		fmt.Println("====================> %#+v <====================")
 		fmt.Printf("%#+v\n\n", err)
 
-		// do some business process based on the error type
-		if errors.IsCode(err, code.ErrEncodingFailed) {
-			fmt.Println("this is a ErrEncodingFailed error")
-		}
-
-		if errors.IsCode(err, code.ErrDatabase) {
+		if errors.IsCode(err, errcode.ErrDatabase) {
 			fmt.Println("this is a ErrDatabase error")
 		}
 
-		// we can also find the cause error
-		fmt.Println(errors.Cause(err))
+		if errors.IsCode(err, errcode.ErrEncodingFailed) {
+			fmt.Println("this is a ErrEncodingFailed error")
+		}
+
+		fmt.Println("the cause error is:", errors.Cause(err))
 	}
 }
 
 func bindUser() error {
 	if err := getUser(); err != nil {
 		// Step3: Wrap the error with a new error message and a new error code if needed.
-		return errors.WrapC(err, code.ErrEncodingFailed, "encoding user failed.")
+		return errors.WrapC(err, errcode.ErrEncodingFailed, "encoding user failed.")
 	}
 	return nil
 }
@@ -57,13 +56,12 @@ func bindUser() error {
 func getUser() error {
 	if err := queryDatabase(); err != nil {
 		// Step2: Wrap the error with a new error message.
-		return errors.Wrap(err, "get user failed.")
+		return errors.Wrap(err, "getUser() failed.")
 	}
 	return nil
 }
 
 func queryDatabase() error {
 	// Step1. Create error with specified error code.
-	// return errors.WithCode(code.ErrDatabase, "user 'XXX' not found.")
-	return errors.WithCode(code.ErrDatabase, "user 'XXX' not found.")
+	return errors.WithCode(errcode.ErrDatabase, "user 'XXX' not found.")
 }

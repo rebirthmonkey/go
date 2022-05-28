@@ -1,7 +1,3 @@
-// Copyright 2022 WuKong <rebirthmonkey@foxmail.com>. All rights reserved.
-// Use of this source code is governed by a Apache 2.0 style
-// license that can be found in the LICENSE file.
-
 // this example comes initially from github.com/rebirthmonkey/pkg/log/examples
 package main
 
@@ -13,7 +9,7 @@ import (
 )
 
 var (
-	helpFlag bool
+	helpFlag   bool
 	levelFlag  string
 	formatFlag string
 )

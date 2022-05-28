@@ -8,10 +8,10 @@ import (
 
 func main() {
 	if err := funcA(); err != nil {
-		log.Fatalln("main call func got failed:", err)
+		log.Fatalln("main() call funcA failed:", err)
 		return
 	}
-	log.Println("call func success")
+	log.Println("call main() success")
 }
 
 func funcA() error {
@@ -19,9 +19,11 @@ func funcA() error {
 		return errors.Wrap(err, "funcA call funcB failed")
 	}
 
-	return errors.New("funcA called error")
+	return errors.Errorf("%s error", "funcA")
+	//return errors.New("funcA called error")
 }
 
 func funcB() error {
-	return errors.New("funcB called error")
+	//return errors.New("funcB error")
+	return errors.Errorf("%s error", "funcB")
 }

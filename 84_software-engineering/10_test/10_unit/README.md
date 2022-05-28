@@ -105,3 +105,31 @@ $ go test -race -cover  -coverprofile=./coverage.out -timeout=10m -short -v ./..
 $ go tool cover -func ./coverage.out
 ```
 
+
+
+## Lab
+
+- [单元测试](10_hello/equal_test.go)：单元测试
+
+```shell
+go test
+```
+
+- [单元测试](12_math-test/math_test.go)：单元测试
+
+```shell
+go test
+```
+
+- [自动生成测试文件](90_gotests/math_test.go)：单元测试
+
+```shell
+gotests -all -w .
+# 在 math_test.go 中不全数据，添加测试内容
+go test
+```
+
+
+
+
+

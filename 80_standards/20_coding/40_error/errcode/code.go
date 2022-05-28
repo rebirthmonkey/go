@@ -1,4 +1,4 @@
-package errorcode
+package errcode
 
 // 通用: 基本错误
 // Code must start with 1xxxxx
@@ -79,7 +79,6 @@ const (
 	ErrDecodingYaml
 )
 
-
 func init() {
 	register(ErrSuccess, 200, "OK")
 	register(ErrUnknown, 500, "Internal server error")
@@ -104,4 +103,3 @@ func init() {
 	register(ErrEncodingYaml, 500, "Yaml data could not be encoded")
 	register(ErrDecodingYaml, 500, "Yaml data could not be decoded")
 }
-
