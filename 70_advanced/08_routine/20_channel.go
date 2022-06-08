@@ -18,7 +18,7 @@ func main() {
 		}
 	}()
 
-	time.Sleep(time.Second * 3)
+	time.Sleep(time.Second * 2)
 
 	msg := <-messages
 	fmt.Println(msg)

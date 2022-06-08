@@ -96,7 +96,17 @@ go run example.go
 ```
 
 ### rebirthmonky/pkg/log
-是个可在生产环境使用的 log 包
+是个可在生产环境使用的 log 包，需要设置的配置参数为：
+
+- `writers`：输出位置，有两个可选项 —— file 和 stdout。选择 file 会将日志记录到 `logger_file` 指定的日志文件中，选择 stdout 会将日志输出到标准输出，当然也可以两者同时选择
+- `logger_level`：日志级别，DEBUG、INFO、WARN、ERROR、FATAL
+- `logger_file`：日志文件
+- `log_format_text`：日志的输出格式，JSON 或者 plaintext，`true` 会输出成非 JSON 格式，`false` 会输出成 JSON 格式
+- `rollingPolicy`：rotate 依据，可选的有 daily 和 size。如果选 daily 则根据天进行转存，如果是 size 则根据大小进行转存
+- `log_rotate_date`：rotate 转存时间，配 合`rollingPolicy: daily` 使用
+- `log_rotate_size`：rotate 转存大小，配合 `rollingPolicy: size` 使用
+- `log_backup_count`：当日志文件达到转存标准时，log 系统会将该日志文件进行压缩备份，这里指定了备份文件的最大个数
+
 - [example1.go](30_rebirthmonkey-log/example1.go)
 - [example2.go](30_rebirthmonkey-log/example2.go)
 
@@ -105,3 +115,4 @@ go run example1.go
 go run example2.go
 go run exmaple2.go -l warn
 ```
+

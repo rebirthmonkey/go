@@ -7,11 +7,11 @@ import (
 
 func running() {
 	var times int
-	
-	for { // 构建一个无限循环
+
+	for {
 		times++
 		fmt.Println("tick", times)
-		time.Sleep(time.Second) // 延时1秒
+		time.Sleep(time.Second)
 	}
 }
 

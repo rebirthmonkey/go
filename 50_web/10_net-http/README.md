@@ -133,7 +133,7 @@ curl http://127.0.0.1:8080
 ```shell
 go run 12_handler.go
 curl http://127.0.0.1:8080/view
-``` 
+```
 
 - [Handler with Interface](14_handler-interface.go)
 ```shell

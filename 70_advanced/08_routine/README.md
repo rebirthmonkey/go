@@ -1,4 +1,4 @@
-# Go 并发
+# 并发
 
 ## Goroutine协程
 
@@ -6,9 +6,14 @@ Go 的高并发其实是由 goroutine 实现的，Goroutine 可以被认为是�
 
 ## Channel
 
-一个 channel 相当于一个先进先出（FIFO）的队列。也就是说，通道中的各个元素值都是严格地按照发送的顺序排列的，先被发送通道的元素值一定会先被接收。元素值的发送和接收都需要用到操作符 <-，一个左尖括号紧接着一个减号形象地代表了元素值的传输方向。元素值从外界进入通道时会被复制。更具体地说，进入通道的并不是在接收操作符右边的那个元素值，而是它的副本。
+channel 相当于一个 FIFO 队列，通道中的各个元素值都是严格地按照发送的顺序排列，先被发送通道的元素值一定会先被接收。元素值的发送和接收都需要用到操作符 <-，一个左尖括号紧接着一个减号形象地代表了元素值的传输方向。元素值从外界进入通道时会被复制，也就是进入通道的并不是在接收操作符右边的那个元素值，而是它的副本。
 
-channel 是一种 Go 语言结构，它通过传递特定元素类型的值来为两个 goroutines 提供同步执行和交流数据的机制 。可以将 `channel`视为管道， `goroutine`可以从管道发送和接收来自其他 `goroutine`的信息。 <-  标识符表示了 channel 的传输方向，接收或者发送。
+### 通讯原理
+
+`goroutine`可以从管道发送和接收来自其他 `goroutine`的信息，channel 通过传递特定元素类型的值来为两个 goroutines 提供同步执行和交流数据的机制 。一般情况下：
+
+- 当一个 goroutine 向 channel 发送信息后，它会处于阻塞状态，直到 channel 中的信息被读取。
+- 当一个 goroutine 向 channel 读取信息后，如果 channel 中没有信息，则它也会处于阻塞状态，直到有另一个 goroutine 向其中发送信息。
 
 ### 状态
 
@@ -22,20 +27,18 @@ channel 存在 3 种状态：
 
 channel 可进行 3 种操作：
 
-1. 读
-2. 写
+1. 读：`work := <-c`
+2. 写：`ic <- 3`
 3. 关闭：close() 的作用是保证不能再向 channel 中发送值。 channel 被关闭后，仍然是可以从中接收值的。
-
-### 发送/接收
 
 通过 channel 发送值，可使用 <- 作为二元运算符。通过 channel 接收值，可使用它作为一元运算符。
 
 ```go
 ic <- 3       // 向channel中发送3
-work := <-wc  // 从channel中接收指针到work
+work := <- ic  // 从channel中接收指针到work
 ```
 
-#### Range
+### 循环读/ Range
 
 
 伴有 range 分句的 for 语句会连续读取通过 channel 发送的值，直到 channel 被关闭。
@@ -55,15 +58,17 @@ wc := make(chan *Work, 10)  // 带缓冲工作的 channel
 
 **无缓冲通道**的特点是，发送的数据需要被读取后，发送才会完成（解除阻塞）。它阻塞场景：
 
+- 写了 channel 但无人读：通道中无数据，向通道写数据，但无 goroutine 读取。
 - 读空 channel：通道中无数据，但执行读通道。
-- 写了 channel 但无人读：通道中无数据，向通道写数据，但无协程读取。
 
 #### 有缓冲
 
-**有缓存通道**的特点是，有缓存时可以向通道中写入数据后直接返回，缓存中有数据时可以从通道中读到数据直接返回，这时有缓存通道是不会阻塞的。如果是带缓冲的，只有当值被拷贝到缓冲区且缓冲区已满时，发送者才会阻塞直到有接收者从中接收。接收者会一直阻塞直到 channel 中有值可被接收。它阻塞的场景是：
+有缓存时，当向通道中写入数据后，如果通道未满，则可以直接返回。当向通道读取数据时，当缓存中有数据时，可以从通道中读到数据直接返回，这时有缓存通道是不会阻塞的。
 
-- 读空 channel：通道的缓存无数据，但执行读通道。
-- 写满 channle：通道的缓存已经占满，向通道写数据，但无协程读。
+它阻塞的场景是：
+
+- 读空 channel：channel 的缓存无数据，但执行读通道，接收者会一直阻塞直到 channel 中有值可被接收。
+- 写满 channel：channel 的缓存已经占满，但向通道写数据，发送者才会阻塞直到有接收者从中接收。
 
 ### select
 
@@ -73,7 +78,7 @@ select 是执行选择操作的一个结构，它里面有一组 case 语句。�
 
 ## 锁
 
-当多个 goroutine 同时进行处理的时候，就会遇到同时抢占一个资源的情况，所以希望某个 goroutine 等待另一个 goroutine 处理完某一个步骤之后才能继续。sync 包就是为了让 goroutine 同步而出现的，当然还可以使用channel实现。
+当多个 goroutine 同时进行处理的时候，就会遇到同时抢占一个资源的情况，所以希望某个 goroutine 等待另一个 goroutine 处理完某一个步骤之后才能继续。sync 就是为了让 goroutine 同步而出现的，是 channel 的一种代替方案。
 
 ### 锁
 
@@ -105,56 +110,56 @@ fmt.Println()
 
 
 ## Lab
-- [goroutine](10_goroutine.go)
+- [goroutine](10_goroutine.go)：goroutine 持续循环，main() 等待外部输入然后中止整个进程
 ```shell
 go run 10_goroutine.go
 ```
 
-- [goroutine](12_goroutine-anonym.go)
+- [goroutine](12_goroutine-anonym.go)：同上，只是 goroutine 通过一个匿名函数来实现
 ```shell
 go run 12_goroutine-anonym.go 
 ```
 
-- [channel](20_channel.go)
+- [channel](20_channel.go)：当 goroutine 写入 channel 后，因为没有读取操作，所以 goroutine 处于阻塞状态。直到 channel 被读取后，整个 goroutine 才开始循环。
 ```shell
 go run 20_channel.go 
 ```
 
-- [确保 goroutine 完成](21_channnel.go)：main 函数中起了一个 goroutine，通过非缓冲队列的使用，能够保证在 goroutine 执行结束之前 main 函数不会提前退出
+- [确保 goroutine 完成](21_channnel.go)：main 函数中起了一个 goroutine，通过 channel 确保在 goroutine 执行结束之前 main 函数不会提前退出。这里缓冲与非缓冲 channel 都可以起到相同的效果。
 
 ```shell
 go run 21_channnel.go
 ```
 
-- [channel range](22_channel-range.go)：通过 for range 处理 channel 中的所有消息
+- [channel range](22_channel-range.go)：通过 for range 循环处理 channel 中的所有消息。
 ```shell
 go run 22_channel-range.go
 ```
 
-- [channel selelct](26_channel-select.go)：通过 select 自动选择先结束的 goroutine 来处理
+- [channel selelct](26_channel-select.go)：当有多个 channel 时，通过 select 自动选择先获得信息的 channel 来处理。
 ```shell
 go run 26_channel-select.go
 ```
 
-- [多核并行](30_multi-process.go)：不展示任何结果，goroutine还没开始，main就会退出
+- [多核并行](30_multi-process.go)：不展示任何结果，goroutine 还没开始，main 就会退出。
 
 ```shell
 go run 30_multi-process.go
 ```
 
-- [多核并行](31_multi-process.go)：每次执行的结果都不相同，在多个routine还没执行完成的情况下，因为routine 9完成了，所以main就会退出
+- [多核并行](31_multi-process.go)：每次执行的结果都不相同，在多个 goroutine 还没执行完成的情况下，因为 goroutine 9 完成了，所以 main 就会退出。
 
 ```shell
 go run 31_multi-process.go
 ```
 
-- [多核并行](32_multi-process-channel.go)：通过channel来确认10个routine都已完成
+- [多核并行](32_multi-process-channel.go)：需要读 channel 10 次，童儿通过 channel 来确认 10 个 routine 都已完成。
 
 ```shell
 go run 32_multi-process-channel.go
 ```
 
-- [多核并行](33_multi-process-wg.go)：通过 waitGroup 来确认 10 个 routine 都已完成
+- [多核并行](33_multi-process-wg.go)：通过 waitGroup 来确认 10 个 routine 都已完成。
 
 ```shell
 go run 33_multi-process-wg.go

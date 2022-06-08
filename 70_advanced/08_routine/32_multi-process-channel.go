@@ -10,21 +10,19 @@ import (
 
 func main() {
 
-	// 使用多核
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	c := make(chan bool, 10)
 	for i := 0; i < 10; i++ {
-		go Go3(c, i)
+		go worker4(c, i)
 	}
 
-	// 设置一个缓存长度为10 的channel
+	// 设置一个缓存长度为10的channel
 	for i := 0; i < 10; i++ {
 		<-c
 	}
-
 }
 
-func Go3(c chan bool, index int) {
+func worker4(c chan bool, index int) {
 	a := 1
 	for i := 0; i < 100000000; i++ {
 		a += i

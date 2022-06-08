@@ -22,5 +22,5 @@ func main() {
 		fmt.Println("rang:", v)
 	}
 
-	fmt.Println("Hey ...!")
+	fmt.Println("Finish ...!")
 }

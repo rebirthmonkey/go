@@ -23,71 +23,59 @@ Installation: `go get -u github.com/gin-gonic/gin`
 
 ## 核心概念
 
-### Context
+在 Gin 的处理过程中，需要读取请求参数（消息体和 HTTP Header），经过业务处理后返回指定格式的消息。apiserver 也展示了如何进行参数的读取和返回，下面展示了如何读取和返回参数：
 
-gin.Context，封装了 request 和 response
+### HTTP Request 处理
 
-#### Request
+**读取 HTTP 信息：** 在开发中需要读取的参数通常为：HTTP Header、路径参数、URL参数、消息体，读取这些参数可以直接使用 `Gin` 框架自带的函数：
 
-##### Header
+- `Param()`：返回 URL 的参数值，例如
 
-- Get：c.GetHeader()/c.Request.Header.Get(XRequestIDKey)
-- Set：c.Request.Header.Set(XRequestIDKey, rid)
+```go
+ router.GET("/user/:id", func(c *gin.Context) {
+     // a GET request to /user/john
+     id := c.Param("id") // id == "john"
+ })
+```
 
+- `Query()`：读取 URL 中的地址参数，例如
 
-##### Param()/API 参数
+```go
+   // GET /path?id=1234&name=Manu&value=
+   c.Query("id") == "1234"
+   c.Query("name") == "Manu"
+   c.Query("value") == ""
+   c.Query("wtf") == ""
+```
 
-在 URL 的路径中获取变量
+- `DefaultQuery()`：类似 `Query()`，但是如果 key 不存在，会返回默认值，例如
 
+```go
+ //GET /?name=Manu&lastname=
+ c.DefaultQuery("name", "unknown") == "Manu"
+ c.DefaultQuery("id", "none") == "none"
+ c.DefaultQuery("lastname", "none") == ""
+```
 
+- `Bind()`：检查 `Content-Type` 类型，将消息体作为指定的格式解析到 Go struct 变量中。通常采用的媒体类型是 JSON，所以 `Bind()` 是按 JSON 格式解析的。
+- `GetHeader()`：获取 HTTP 头。
 
-##### Query()/ URL 参数
+### HTTP Response 处理
 
-在 URL 路径后的 `?key1=value2&key2=value2` 中获取变量
+**返回HTTP消息：** 因为要返回指定的格式，apiserver 封装了自己的返回函数，通过统一的返回函数 `SendResponse` 来格式化返回。
 
+```go
+func SendResponse(c *gin.Context, err error, data interface{}) {
+    code, message := errno.DecodeErr(err)
 
-
-##### FormPost()
-
-POST 请求 Body 中的变量
-
-
-
-##### Bind
-
-###### ShouldBindJson()
-
-将 Request 的 Body 绑定到指定的结构体变量
-
-###### c.ShouldBindUri()
-
-将 Request URL 中的 param 绑定到指定的结构体变量
-
-###### c.ShouldBindQuery()
-
-
-
-###### c.ShouldBind()：表单
-
-
-
-###### c.ShouldBindHead()
-
-
-
-
-
-#### Respons
-
-##### Header
-
-- Set：c.Writer.Header().Set(XRequestIDKey, rid)
-
-##### Writer.
-
-- Status()：返回的 HTTP 状态码
-
-
+    // always return http.StatusOK
+    c.JSON(http.StatusOK, Response{
+        Code:    code,
+        Message: message,
+        Data:    data,
+    })
+}
+```
 
 ##### String()
 
@@ -95,18 +83,54 @@ POST 请求 Body 中的变量
 
 将 String 作为 Response 返回
 
-
-
 ##### JSON()
 
 将 gin.H 结构体转化为 JSON 作为 Response 返回
 
+### Context
 
+context.Context 是 Go 中独特的涉及，可以用来用来设置截止日期、同步信号，传递请求相关值的结构体，与 Goroutine 有比较密切的关系。在 web 程序中，每个 Request 都需要开启一个 goroutine 做一些事情，这些 goroutine 又可能会开启其他的 goroutine 去访问后端资源：比如数据库、RPC 服务等。它们需要访问一些共享的资源，比如用户身份信息、认证token、请求截止时间等，这时候可以通过 Context 来跟踪这些 goroutine，并且通过 Context 来控制它们，这就是 Go 提供的 Context。
 
-#### Context Key-Value
+#### Context 定义
 
-- Get：c.Get(key)
-- Set：c.Writer.Header().Set(XRequestIDKey, rid)
+```go
+type Context interface {
+    Deadline() (deadline time.Time, ok bool)
+    Done() <-chan struct{}
+    Err() error
+    Value(key interface{}) interface{}
+}
+```
+
+1. Deadline方法：获取设置的截止时间。第一个返回值是截止时间，到了这个时间点，Context 会自动发起取消请求； 第二个返回值 ok==false 时表示没有设置截止时间，如果需要取消的话，需要调用取消函数进行取消。
+2. Done方法：返回一个只读的 chan，类型为 struct{}。在 goroutine 中，如果该方法返回的 chan 可以读取，则意味着 parent context 已经发起了取消请求。通过 Done 方法收到这个信号后，就应该做清理操作，然后退出goroutine，释放资源。之后，Err 方法会返回一个错误，告知为什么 Context 被取消。
+3. Err方法：返回取消的错误原因，因为什么 Context 被取消。
+4. Value方法：获取该 Context 上绑定的值，是一个键值对，通过一个Key才可以获取对应的值，这个值一般是线程安全的。
+
+#### 默认上下文
+
+context 包中最常用的方法还是 context.Background()、context.TODO()，这两个方法都会返回预先初始化好的私有变量 background 和 todo， 它们会在同一个 Go 程序中被复用：
+
+```go
+func Background() Context {
+ return background
+}
+
+func TODO() Context {
+ return todo
+}
+```
+
+这两个私有变量都是通过 new(emptyCtx) 语句初始化的，它们是指向私有结构体 context.emptyCtx 的指针。context.Background 是上下文的默认值，所有其他的上下文都应该从它衍生（Derived）出来。context.TODO 应该只在不确定应该使用哪种上下文时使用；在多数情况下，如果当前函数没有上下文作为入参，都会使用 context.Background 作为起始的上下文向下传递。
+
+#### 使用原则
+
+- 不要把 Context 放在结构体中，要以参数的方式传递，parent Context 一般为Background。
+- 应该要把 Context 作为第一个参数传递给入口请求和出口请求链路上的每一个函数，放在第一位，变量名建议都统一，如 ctx。
+- 给一个函数方法传递 Context 的时候，不要传递nil，否则在tarce追踪的时候，就会断了连接。
+- Context 的 Value 相关方法应该传递必须的数据，不要什么数据都使用这个传递。
+- Context 是线程安全的，可以放心的在多个 goroutine 中传递。
+- 可以把一个 Context 对象传递给任意个数的 gorotuine，对它执行取消操作时，所有 goroutine 都会接收到取消信号。
 
 
 
@@ -129,6 +153,24 @@ POST 请求 Body 中的变量
 
 
 ## Middleware
+
+Go 的 `net/http` 设计的一大特点是特别容易构建中间件，Gin 框架也提供了类似的中间件。
+
+在 gin 中，可以通过如下方法使用 middleware：
+
+```go
+g := gin.New()
+g.Use(middleware.AuthMiddleware())
+```
+
+其中 `middleware.AuthMiddleware()` 是 `func(*gin.Context)` 类型的函数。中间件只对注册过的路由函数起作用。
+
+在 gin 中可以设置 3 种类型的 middleware：
+
+- 全局中间件：注册中间件的过程之前设置的路由，将不会受注册的中间件所影响。只有注册了中间件之后代码的路由函数规则，才会被中间件装饰。
+- 单个路由中间件：需要在注册路由时注册中间件
+  `r.GET("/benchmark", MyBenchLogger(), benchEndpoint)`
+- 群组中间件：只要在群组路由上注册中间件函数即可。
 
 ### Next()
 

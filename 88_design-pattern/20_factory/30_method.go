@@ -4,14 +4,14 @@ import "fmt"
 
 type Person3 struct {
 	name string
-	age int
+	age  int
 }
 
 func NewPersonFactory(age int) func(name string) Person3 {
 	return func(name string) Person3 {
 		return Person3{
 			name: name,
-			age: age,
+			age:  age,
 		}
 	}
 }
@@ -19,7 +19,7 @@ func NewPersonFactory(age int) func(name string) Person3 {
 func main() {
 	babyFactory := NewPersonFactory(1)
 	baby := babyFactory("john")
-	fmt.Println("the new baby created by the BabyFactory is", baby)
+	fmt.Println("the new baby created by the BabyFactory is:", baby)
 
 	teenagerFactory := NewPersonFactory(16)
 	teen := teenagerFactory("jill")

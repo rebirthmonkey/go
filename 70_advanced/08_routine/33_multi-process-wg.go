@@ -10,7 +10,6 @@ import (
 // 当使用多个CPU核数时，任务分配是不定的，
 func main() {
 
-	// 使用多核
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	// sync
@@ -18,13 +17,13 @@ func main() {
 	wg.Add(10)
 
 	for i := 0; i < 10; i++ {
-		go Go4(&wg, i)
+		go worker5(&wg, i)
 	}
 
 	wg.Wait()
 }
 
-func Go4(wg *sync.WaitGroup, index int) {
+func worker5(wg *sync.WaitGroup, index int) {
 	a := 1
 	for i := 0; i < 100000000; i++ {
 		a += i
