@@ -6,12 +6,12 @@ import (
 )
 
 func main() {
-	router := gin.Default()
+	ginEngine := gin.Default()
 
-	router.GET("/user/:name", func(c *gin.Context) {
+	ginEngine.GET("/users/:name", func(c *gin.Context) {
 		name := c.Param("name")
 		c.String(http.StatusOK, "Hello %s", name)
 	})
 
-	router.Run(":8080")
+	ginEngine.Run(":8080")
 }

@@ -121,7 +121,31 @@ func (mux *ServeMux) Handler(r *Request) (h Handler, pattern string)
 func (mux *ServeMux) ServeHTTP(w ResponseWriter, r *Request)
 ```
 
+## Lab
 
+- [Handler](10_handler.go)
+```shell
+go run 10_handler.go
+curl http://127.0.0.1:8080
+```
+
+- [Handler](12_handler.go)
+```shell
+go run 12_handler.go
+curl http://127.0.0.1:8080/view
+```
+
+- [Handler with Interface](14_handler-interface.go)
+```shell
+go run 14_handler-interface.go
+curl http://127.0.0.1:8080/view
+```
+
+- [Handler as Reverse Proxy](20_reverse-proxy.go)
+```shell
+go run 20_reverse-proxy.go
+curl http://127.0.0.1:8080
+```
 
 ## Ref
 

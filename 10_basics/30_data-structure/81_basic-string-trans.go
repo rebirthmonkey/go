@@ -5,13 +5,13 @@ import (
 )
 
 func main() {
-	// String to Int
+	// Int to String
 	var i1 int = 5
 	var s1 string
 	s1 = strconv.Itoa(i1)
 	println("the string is: ", s1)
 
-	// Int to String
+	// String to Int
 	var s2 string = "5"
 	var i2 int
 	i2, _ = strconv.Atoi(s2)

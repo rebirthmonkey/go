@@ -2,14 +2,15 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func main() {
-	router := gin.Default()
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{  // 输出json结果给调用方
+	ginEngine := gin.Default()
+	ginEngine.GET("/pingHandler", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{ // 输出json结果给调用方
 			"message": "pong",
 		})
 	})
-	router.Run(":8080")
+	ginEngine.Run(":8080")
 }

@@ -6,29 +6,29 @@ import (
 	"net/http"
 )
 
-type Page struct {
+type Page3 struct {
 	Title string
 	Body  []byte
 }
 
-func loadPage(title string) (*Page, error) {
+func loadPage3(title string) (*Page3, error) {
 	filename := title + ".txt"
 	body, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
-	return &Page{Title: title, Body: body}, nil
+	return &Page3{Title: title, Body: body}, nil
 }
 
-type viewHandler struct{}
+type viewHandler3 struct{}
 
-func (viewHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (viewHandler3) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	title := r.URL.Path[len("/view/"):]
-	p, _ := loadPage(title)
+	p, _ := loadPage3(title)
 	fmt.Fprintf(w, "<h1>%s</h1><div>%s</div>", p.Title, p.Body)
 }
 
 func main() {
-	http.Handle("/view/", viewHandler{})
+	http.Handle("/view/", viewHandler3{})
 	http.ListenAndServe(":8080", nil)
 }

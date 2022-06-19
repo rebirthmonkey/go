@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-var block = "package"
+var block string = "package"
 
 func main() {
 	block := "function"

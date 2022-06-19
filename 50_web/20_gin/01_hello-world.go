@@ -5,10 +5,10 @@ import (
 	"net/http"
 )
 
-func main(){
-	router := gin.Default()
-	router.GET("/", func(c *gin.Context) {
+func main() {
+	ginEngine := gin.Default()
+	ginEngine.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "Hello World")
 	})
-	router.Run(":8080")
+	ginEngine.Run(":8080")
 }
