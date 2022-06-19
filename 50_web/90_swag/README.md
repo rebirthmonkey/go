@@ -18,7 +18,7 @@ go mod download
 swag init -g cmd/main.go
 ```
 
-!!! checl cmd/main.go, `import _ "wukong/go/50_web/20_gin/90_swag/docs"`
+!!! check cmd/main.go, `import _ "wukong/go/50_web/20_gin/90_swag/docs"`
 
 ### run & check
 ```shell
