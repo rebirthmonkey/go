@@ -32,9 +32,7 @@ REST 风格虽然适用于很多传输协议，但在实际开发中，REST 由�
 
 RPC 的调用过程如下：
 
-
-
-![img](https://km.woa.com/gkm/api/img/cos-file-url?url=https%3A%2F%2Fkm-pro-1258638997.cos.ap-guangzhou.myqcloud.com%2Ffiles%2Fphotos%2Fpictures%2F%2F20190104%2F%2F1546612596_1.png&is_redirect=1)
+<img src="figures/image-20220723172511517.png" alt="image-20220723172511517" style="zoom:50%;" />
 
 1. Client 通过本地调用，调用 Client Stub
 2. Client Stub 将参数打包（也叫 Marshalling）成一个消息，然后发送这个消息
@@ -94,11 +92,11 @@ HTTP 具有以下 5 种参数类型：
 
 ### 核心功能
 
-<img src="figures/1a6d38450cdd0e115e505ab30113602e.jpg" alt="img" style="zoom: 33%;" />
+![image-20220723172644378](figures/image-20220723172644378.png)
 
 - 路由匹配：Web 服务最核心的功能是路由匹配，其实就是根据（HTTP方法、请求路径）匹配到处理这个请求的函数，最终由该函数处理这次请求，并返回结果。一次 HTTP 请求经过路由匹配，最终将请求交由 Delete(c *gin.Context) 函数来处理。变量 c 中存放了这次请求的参数，在 Delete 函数中，可以进行参数解析、参数校验、逻辑处理，最终返回结果。
 
-<img src="figures/1f5yydeffb32732e7d0e23a0a9cd369d.jpg" alt="img" style="zoom:33%;" />
+<img src="figures/image-20220723172737300.png" alt="image-20220723172737300" style="zoom:50%;" />
 
 - 路由分组：对于大型系统，可能会有很多个 API 接口，API 接口随着需求的更新迭代，可能会有多个版本，为了便于管理，需要对路由进行分组。
 - 一进程多服务：有时候，需要在一个服务进程中，同时开启 HTTP 服务的 80 端口和 HTTPS 的 443 端口，这样就可以做到：对内的服务，访问 80 端口，简化服务访问复杂度；对外的服务，访问更为安全的 HTTPS 服务。显然，我们没必要为相同功能启动多个服务进程，所以这时候就需要 Web 服务能够支持一进程多服务的功能。
