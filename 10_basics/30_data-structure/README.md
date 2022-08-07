@@ -493,7 +493,27 @@ interface->struct
 - [字符串String转换](81_basic-string-trans.go)
 - [Interface-Struct转换](85_interface-trans.go)
 
+## 非结构化
+
+无法预知数据结构的数据类型属于非结构化范畴，在Go中，无法通过构建预定的struct数据结构来序列化或反序列化，在 Go 中，一般通过如下数据结构来解决：
+
+```go
+var result map[string]interface{}
+```
+
+其中 `interface{}` 是 Go 中的通用类型，可以转换为任何类型。在 Go 中，可以通过断言来进行类型转换：
+
+```go
+if description, ok := result["description"].(string); ok {
+  fmt.Println(description)
+}
+```
+
+
+
+
 
 ## Ref
+
 1. [Golang 之 interface接口全面理解](https://blog.csdn.net/Webben/article/details/110448404?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0.queryctr&spm=1001.2101.3001.4242.1&utm_relevant_index=2)
 
