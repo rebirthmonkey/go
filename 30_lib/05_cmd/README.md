@@ -196,7 +196,25 @@ go run example2.go version
 go run example2.go hello xxx
 ```
 
+## Option & Config
 
+### 基本概念
 
+- Option：Option 结构体一般用于存储启动时需要的信息，它的主要来源是 Arg、Flag 以及配置文件 Config-file（虽然被称为配置文件，但是确切的应该是选项文件 option-file）。Option 不会存储在 runtime 的数据结构，只是在启动时使用。
+  - RecommendedOption：所必须的默认选项值
+- Config：在 runtime 启动时，Option 就会转换成 Config，用于在运行中使用。它包含可运行的数据结构，属于 runtime 对象。
+  - completeConfig：已经补充所有所需值的完整 config
+  - ExtraConfig：多个 runtime 所共享的信息
 
+### 操作流程
+
+- Option.Complete()：为 Option 补充默认值
+- Option.Validate()：对 Option 进行校验
+- Option.Config()：将 Option 结构体转换为 Config 结构体
+  - 创建默认 config：`config := apiserver.NewRecommendedConfig(apiserver.Codecs)`
+  - 将 Option 设置到 Config：`option.ApplyTo(config, apiserver.Scheme)`
+- Config.Complete()：为 Config 补充默认值，从而将 Config 转换成 completeConfig
+- completeConfig.New()：把完整的 completeConfig 变成一个 runtime `server := completeConfig.New()`
+- server.PrepareRun()：对接 OpenAPI 以及其他 API 的安装操作
+- server.Run()：启动 server
 
