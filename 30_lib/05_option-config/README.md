@@ -262,3 +262,6 @@ preparedAPIServer：完成初始化后、可启动的结构体，位于 internal
 go run cmd/apiserver.go -c configs/config.yaml
 ```
 
+#### Question
+
+介绍 Cobra Command 加载的 flat、config-file 的逻辑及顺序？
