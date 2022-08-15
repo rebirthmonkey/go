@@ -9,4 +9,5 @@
     "RoutingKey": "RK.WALLDATA"
   },
   "Port": 8888,
+  "healthz": true
 }

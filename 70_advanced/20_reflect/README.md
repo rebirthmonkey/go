@@ -49,6 +49,10 @@ newPtrVal := reflect.New(varType)
 - 反射开发中最常用的可能就是reflect.DeepEqual
 - 
 
+## Lab
+
+- [TypeOf](10_typeof.go)
+
 
 
 ## Ref

@@ -8,8 +8,9 @@ import (
 )
 
 func main() {
-	var version string
 	flagSet := pflag.NewFlagSet("test", pflag.ContinueOnError)
+
+	var version string
 	flagSet.StringVar(&version, "version", "abc", "Print version information and quit.")
 	flagSet.Parse(os.Args[1:])
 

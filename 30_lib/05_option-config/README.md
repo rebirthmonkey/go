@@ -37,7 +37,7 @@ go run example2.go # 未输入参数，则采用默认
 - [命令行多flag解析](20_flag/10_flag/example3.go)
 
 ```shell
-go run example2.go -d dd -l ll -w true
+go run example2.go -d dd -l ll -w=false
 go run example3.go x y z # 未输入flag，则采用默认
 ```
 
@@ -86,7 +86,7 @@ pflag.BoolVarP(&version, "version", "v", true, "Print version information and qu
 - [pflag解析](20_flag/20_pflag/example.go)
 
 ```shell
-go run example.go -n nnn -a 88 -g female -o false
+go run example.go -n nnn -a 88 -g female -o=false
 ```
 
 - [获取非选项参数](20_flag/20_pflag/example2.go)
@@ -136,7 +136,7 @@ Viper 配置读取顺序：
 - 命令行 flag
 - 环境变量
 - 配置文件
-- 配置中心：ETCD/Consul
+- 配置中心：Etcd/Consul
 - 默认值
 
 从上面这些特性来看，Viper 毫无疑问是非常强大的，而且 Viper 用起来也很方便，在初始化配置文件后，读取配置只需要调用 `viper.GetString()`、`viper.GetInt()` 和 `viper.GetBool()` 等函数即可。
@@ -171,13 +171,13 @@ Viper 支持 Pflag 包，能够绑定 key 到 Flag：
 
 ## Cobra
 
-Cobra 为程序创建子命令，既是一个可以创建 CLI 应用程序的库，也是一个可以生成应用和命令文件的程序。有许多大型项目都是用 Cobra 来构建应用程序的，如 Kubernetes、Docker、etcd、Rkt、Hugo 等。Cobra 建立在 commands、arguments 和 flags 结构之上，同时与 Viper 库配合使用。一个好的应用程序应该是易懂的，用户可以清晰地知道如何去使用这个应用程序。
+Cobra 为程序**创建子命令**，既是一个可以创建 CLI 应用程序的库，也是一个可以生成应用和命令文件的程序。有许多大型项目都是用 Cobra 来构建应用程序的，如 Kubernetes、Docker、Etcd、Rkt、Hugo 等。Cobra 建立在 commands、arguments 和 flags 结构之上，同时与 Viper 库配合使用。一个好的应用程序应该是易懂的，用户可以清晰地知道如何去使用这个应用程序。
 
 应用程序通常遵循如下模式：`APP COMMAND ARG --FLAG`，如：`git clone URL  --bare`
 
 - COMMAND：clone 是一个命令
-- ARG：URL是一个非选项参数
-- FLAG：bare是一个选项参数
+- ARG：URL 是一个非选项参数
+- FLAG：bare 是一个选项参数
 
 ### Lab
 
@@ -200,21 +200,65 @@ go run example2.go hello xxx
 
 ### 基本概念
 
-- Option：Option 结构体一般用于存储启动时需要的信息，它的主要来源是 Arg、Flag 以及配置文件 Config-file（虽然被称为配置文件，但是确切的应该是选项文件 option-file）。Option 不会存储在 runtime 的数据结构，只是在启动时使用。
-  - RecommendedOption：所必须的默认选项值
-- Config：在 runtime 启动时，Option 就会转换成 Config，用于在运行中使用。它包含可运行的数据结构，属于 runtime 对象。
-  - completeConfig：已经补充所有所需值的完整 config
-  - ExtraConfig：多个 runtime 所共享的信息
+#### options
 
-### 操作流程
+options 结构体一般用于存储启动时需要的信息，它的主要来源是 Arg、Flag 以及配置文件 Config-file（虽然被称为 config-file，但是确切的应该是选项文件 option-file）。Option 不会存储在 runtime 的数据结构，只是在启动时使用。
 
-- Option.Complete()：为 Option 补充默认值
-- Option.Validate()：对 Option 进行校验
-- Option.Config()：将 Option 结构体转换为 Config 结构体
-  - 创建默认 config：`config := apiserver.NewRecommendedConfig(apiserver.Codecs)`
-  - 将 Option 设置到 Config：`option.ApplyTo(config, apiserver.Scheme)`
-- Config.Complete()：为 Config 补充默认值，从而将 Config 转换成 completeConfig
-- completeConfig.New()：把完整的 completeConfig 变成一个 runtime `server := completeConfig.New()`
-- server.PrepareRun()：对接 OpenAPI 以及其他 API 的安装操作
-- server.Run()：启动 server
+Options：完整的 option 的结构体，包含 server、HTTPS、DB、Log 等的 option，有时也被称为 generic options。一般位于 internal/apiserver/options 包中，它用到的其他组件的 Options 结构体位于 internal/pkg/options/ 包中。
+
+RecommendedOption：所必须的默认选项值
+
+- NewOptions()：创建 Options 结构体
+- Options.Flags()/AddFlags()：为命令行添加针对 server、db、logs 等的 flag，并集成到 Options 中
+- Options.Complete()：为 Options 补充缺省值
+- Options.Validate()：给 Options 做校验
+- Options.ApplyTo(Config)：将 Options 结构体转换为 Config 结构体
+
+#### config
+
+针对某一个 app，在 app runtime 启动时，Options 就会被转换成 Config，用于在运行中给 app/server 使用。它包含可运行的数据结构，属于 runtime 对象，一般位于 internal/apiserver/config 包中。
+
+Config：该结构体初期结构与 Options 基本相同
+
+CompleteConfig：已经补充所有所需值的完整 Config
+
+ExtraConfig：多个 runtime 所共享的信息
+
+- NewConfig()：创建默认 config，如 `config := apiserver.NewRecommendedConfig(apiserver.Codecs)`
+- Option.ApplyTo(config, apiserver.Scheme)：将 Option 设置到 Config，如 `Option.ApplyTo(config, apiserver.Scheme)`。
+- Config.CreateConfigFromOptions(Options)：可以用本函数合并以上 2 步，将 Options 直接转成 Config。
+- Config.Complete()：为 Config 补充默认值，从而将 Config 转换成 CompleteConfig
+
+#### app/server
+
+app 是一个虚拟的概念，而 server 是 runtime 的结构体
+
+App：App 结构体，位于 pkg/app 包中。
+
+##### Command
+
+cobra.Command：App 自带 Cobra 的 Command 结构体，用于处理 flag、option、config-file 等。
+
+##### Server
+
+apiServer：apiServer 结构体，位于 internal/apiserver/server.go
+
+preparedAPIServer：完成初始化后、可启动的结构体，位于 internal/apiserver/server.go
+
+- completeConfig.New()：把完整的 completeConfig 变成一个 runtime App/server，如`server := completeConfig.New()` 或 createAPIServer(Config)
+- server.PrepareRun()：对 server 进行初始化操作，如 OpenAPI 以及其他 API 的安装操作，如 apiServer.PrepareRun()
+- server.Run()：启动 server，运行 preparedAPIServer：preparedAPIServer.Run()
+
+### Lab
+
+基于 options、config 创建 app
+
+- apiserver/run.go/Run(Config)：基于 Config 创建 Server
+- 创建一个 App 结构体：NewApp()，配置/补全缺省 Options，创建 cmd
+  - WithRunFunc()：用于基于 Options 创建 Config，调用了 Config.CreateConfigFromOptions(Options)，并逐步出发创建 apiServer
+- 运行 App：Run()
+
+```shell
+go run cmd/apiserver.go -c configs/config.yaml
+```
 
