@@ -282,13 +282,6 @@ apiServer 结构体用于包含各种类型的 server，**是整个App核心的�
 
 ### Lab
 
-基于 options、config 创建 app
-
-- apiserver/run.go/Run(Config)：基于 Config 创建 Server
-- 创建一个 App 结构体：NewApp()，配置/补全缺省 Options，创建 cmd
-  - WithRunFunc()：用于基于 Options 创建 Config，调用了 Config.CreateConfigFromOptions(Options)，并逐步出发创建 apiServer
-- 运行 App：Run()
-
 ```shell
 go run cmd/apiserver.go -c configs/config.yaml
 ```

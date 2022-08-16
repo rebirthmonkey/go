@@ -121,6 +121,7 @@ func (a *App) buildCommand() {
 	cmd.Flags().AddFlagSet(namedFlagSets.FlagSet("global"))
 
 	a.cmd = &cmd
+
 }
 
 // Run is used to launch the application.
@@ -144,6 +145,7 @@ func (a *App) runCommand(cmd *cobra.Command, args []string) error {
 	}
 
 	if !a.noConfig {
+		fmt.Println("viper bind", viper.Get("healthz"))
 		if err := viper.BindPFlags(cmd.Flags()); err != nil {
 			return err
 		}
@@ -151,6 +153,7 @@ func (a *App) runCommand(cmd *cobra.Command, args []string) error {
 		if err := viper.Unmarshal(a.options); err != nil {
 			return err
 		}
+		fmt.Println("options", a.options)
 	}
 
 	// run application

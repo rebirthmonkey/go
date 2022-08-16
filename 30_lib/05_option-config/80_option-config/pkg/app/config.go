@@ -22,6 +22,7 @@ func init() {
 // addConfigFlag adds flags for a specific server to the specified FlagSet
 // object.
 func addConfigFlag(basename string, fs *pflag.FlagSet) {
+
 	fs.AddFlag(pflag.Lookup("config"))
 
 	viper.AutomaticEnv()
@@ -41,10 +42,12 @@ func addConfigFlag(basename string, fs *pflag.FlagSet) {
 
 			viper.SetConfigName(basename)
 		}
+		fmt.Println("cfgFile", cfgFile)
 
 		if err := viper.ReadInConfig(); err != nil {
 			_, _ = fmt.Fprintf(os.Stderr, "Error: failed to read configuration file(%s): %v\n", cfgFile, err)
 			os.Exit(1)
 		}
+
 	})
 }

@@ -1,1 +1,2 @@
-"healthz": false
+server:
+  healthz: true
