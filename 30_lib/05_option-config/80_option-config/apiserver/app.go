@@ -8,10 +8,10 @@ import (
 
 func NewApp(basename string) *app.App {
 	opts := options.NewOptions()
-	application := app.NewApp("demo APIServer",
+	application := app.NewApp("demo app",
 		basename,
 		app.WithOptions(opts),
-		app.WithDescription("demo APIServer description"),
+		app.WithDescription("demo app description"),
 		app.WithRunFunc(run(opts)),
 	)
 

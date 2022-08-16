@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"github.com/spf13/viper"
 	"os"
 
 	"github.com/fatih/color"
@@ -79,8 +80,12 @@ func (a *App) buildCommand() {
 		Use:   FormatBaseName(a.basename),
 		Short: a.name,
 		Long:  a.description,
-		Args:  a.args,
+		// stop printing usage when the command errors
+		SilenceUsage:  true,
+		SilenceErrors: true,
+		Args:          a.args,
 	}
+	// cmd.SetUsageTemplate(usageTemplate)
 	cmd.SetOut(os.Stdout)
 	cmd.SetErr(os.Stderr)
 	cmd.Flags().SortFlags = true
@@ -114,6 +119,7 @@ func (a *App) buildCommand() {
 	globalflag.AddGlobalFlags(namedFlagSets.FlagSet("global"), cmd.Name())
 	// add new global flagset to cmd FlagSet
 	cmd.Flags().AddFlagSet(namedFlagSets.FlagSet("global"))
+
 	a.cmd = &cmd
 }
 
@@ -132,6 +138,20 @@ func (a *App) Command() *cobra.Command {
 
 func (a *App) runCommand(cmd *cobra.Command, args []string) error {
 	cliflag.PrintFlags(cmd.Flags())
+	if !a.noVersion {
+		// display application version information
+		verflag.PrintAndExitIfRequested()
+	}
+
+	if !a.noConfig {
+		if err := viper.BindPFlags(cmd.Flags()); err != nil {
+			return err
+		}
+
+		if err := viper.Unmarshal(a.options); err != nil {
+			return err
+		}
+	}
 
 	// run application
 	if a.runFunc != nil {

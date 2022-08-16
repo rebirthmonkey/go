@@ -383,8 +383,6 @@ curl http://127.0.0.1:8080/home  # check the cookie value
 - 每个请求有多个session，即使使用不同的后端也是如此。
 - 自定义session后端的接口和基础结构：可以使用通用API检索并批量保存来自不同商店的session。
 
-
-
 #### Async
 
 
@@ -394,6 +392,10 @@ curl http://127.0.0.1:8080/home  # check the cookie value
 curl http://127.0.0.1:8080/sync
 curl http://127.0.0.1:8080/async
 ```
+
+### Framework
+
+
 
 ## Ref
 

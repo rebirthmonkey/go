@@ -34,13 +34,13 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 }
 
 func (s *apiServer) PrepareRun() preparedAPIServer {
-	fmt.Println("[API Server] PrepareRun")
+	fmt.Println("[APIServer] PrepareRun")
 
 	return preparedAPIServer{s}
 }
 
 func (s preparedAPIServer) Run() error {
-	fmt.Println("[API Server] Run")
+	fmt.Println("[PreparedAPIServer] Run")
 
 	return s.genericAPIServer.Run()
 }
