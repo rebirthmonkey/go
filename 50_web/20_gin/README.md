@@ -393,7 +393,16 @@ curl http://127.0.0.1:8080/sync
 curl http://127.0.0.1:8080/async
 ```
 
-### Framework
+### Insecure Gin Server
+
+
+
+```shell
+go run cmd/apiserver.go -c configs/config.yaml
+curl http://127.0.0.1:8080/v1/users/
+```
+
+
 
 
 
