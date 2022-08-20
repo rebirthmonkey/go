@@ -1,31 +1,25 @@
 package apiserver
 
 import (
-	"github.com/rebirthmonkey/go/30_lib/05_option-config/80_option-config/apiserver/config"
-	"github.com/rebirthmonkey/go/30_lib/05_option-config/80_option-config/apiserver/options"
+	"github.com/rebirthmonkey/go/30_lib/05_option-config/80_option-config/apiserver/server"
 	"github.com/rebirthmonkey/go/30_lib/05_option-config/80_option-config/pkg/app"
 )
 
 func NewApp(basename string) *app.App {
-	opts := options.NewOptions()
-	application := app.NewApp("demo app",
+	opts := server.NewOptions()
+	application := app.NewApp("apiserver",
 		basename,
 		app.WithOptions(opts),
-		app.WithDescription("demo app description"),
+		app.WithDescription("apiserver description"),
 		app.WithRunFunc(run(opts)),
 	)
 
 	return application
 }
 
-func run(opts *options.Options) app.RunFunc {
+func run(opts *server.Options) app.RunFunc {
 	return func(basename string) error {
-		cfg, err := config.CreateConfigFromOptions(opts)
-		if err != nil {
-			return err
-		}
-
-		server, err := createAPIServer(cfg)
+		server, err := server.NewServer(opts)
 		if err != nil {
 			return err
 		}
