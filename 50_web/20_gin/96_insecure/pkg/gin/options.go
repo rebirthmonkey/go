@@ -19,11 +19,6 @@ func NewOptions() *Options {
 	return &opt
 }
 
-// Complete set default Options.
-func (o *Options) Complete() error {
-	return nil
-}
-
 // Validate checks Options and return a slice of found errs.
 func (o *Options) Validate() []error {
 	var errs []error
@@ -38,7 +33,7 @@ func (o *Options) Validate() []error {
 func (o *Options) ApplyTo(c *Config) error {
 	o.ServerOptions.ApplyTo(c)
 	o.InsecureOptions.ApplyTo(c)
-	
+
 	return nil
 }
 

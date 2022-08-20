@@ -61,15 +61,6 @@ func (s *Server) Run() error {
 		return nil
 	})
 
-	//// Ping the server to make sure the router is working.
-	//ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	//defer cancel()
-	//if s.healthz {
-	//	if err := s.ping(ctx); err != nil {
-	//		return err
-	//	}
-	//}
-
 	if err := eg.Wait(); err != nil {
 		log.Fatal(err.Error())
 	}
@@ -77,7 +68,7 @@ func (s *Server) Run() error {
 	return nil
 }
 
-func initGinServer(s *Server) {
+func (s *Server) initGinServer() {
 	fmt.Println("[GinServer] Init")
 
 	s.Setup()
@@ -113,14 +104,12 @@ func (s *Server) InstallMiddlewares() {
 
 // InstallAPIs install generic apis.
 func (s *Server) InstallAPIs() {
-	// install healthz handler
 	if s.healthz {
 		s.GET("/healthz", func(c *gin.Context) {
 			c.String(http.StatusOK, "OK")
 		})
 	}
 
-	// install version handler
 	s.GET("/version", func(c *gin.Context) {
 		c.String(http.StatusOK, "Version 0.1")
 	})

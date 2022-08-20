@@ -49,7 +49,5 @@ func (s PreparedServer) Run() error {
 }
 
 func buildGinConfig(cfg *Config) (ginConfig *gin.Config, lastErr error) {
-	ginConfig = gin.NewConfig()
-
 	return cfg.GinConfig, nil
 }

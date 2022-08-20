@@ -47,13 +47,13 @@ func (c CompletedConfig) New() (*Server, error) {
 	s := &Server{
 		middlewares: c.Middlewares,
 		healthz:     c.Healthz,
-		
+
 		Engine: gin.New(),
 
 		Insecure: c.Insecure,
 	}
 
-	initGinServer(s)
+	s.initGinServer()
 
 	return s, nil
 }
