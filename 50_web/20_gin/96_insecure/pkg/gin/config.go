@@ -35,8 +35,8 @@ func NewConfig() *Config {
 
 // Complete fills in any fields not set that are required to have valid data and can be derived
 // from other fields. If you're going to `ApplyOptions`, do that first. It's mutating the receiver.
-func (c *Config) Complete() CompletedConfig {
-	return CompletedConfig{c}
+func (c *Config) Complete() *CompletedConfig {
+	return &CompletedConfig{c}
 }
 
 // New returns a new instance of GenericAPIServer from the given config.
@@ -45,15 +45,15 @@ func (c CompletedConfig) New() (*Server, error) {
 	gin.SetMode(c.Mode)
 
 	s := &Server{
-		middlewares: c.Middlewares,
-		healthz:     c.Healthz,
+		Healthz:     c.Healthz,
+		Middlewares: c.Middlewares,
 
 		Engine: gin.New(),
 
 		Insecure: c.Insecure,
 	}
 
-	s.initGinServer()
+	s.init()
 
 	return s, nil
 }

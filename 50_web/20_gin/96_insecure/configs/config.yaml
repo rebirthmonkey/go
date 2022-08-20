@@ -1,11 +1,12 @@
-# insecure Gin server 配置
-server:
-  mode: debug # server mode: release, debug, test，默认 release
-  healthz: true # 是否开启健康检查，如果开启会安装 /healthz 路由，默认 true
-  middlewares: recovery,logger,secure,nocache,cors,dump # 加载的 gin 中间件列表，多个中间件，逗号(,)隔开
-  max-ping-count: 3 # http 服务启动后，自检尝试次数，默认 3
+# gin
+gin:
+  server: # server 配置
+    mode: debug # server mode: release, debug, test，默认 release
+    healthz: true # 是否开启健康检查，如果开启会安装 /healthz 路由，默认 true
+    middlewares: recovery,logger,secure,nocache,cors,dump # 加载的 gin 中间件列表，多个中间件，逗号(,)隔开
+    max-ping-count: 3 # http 服务启动后，自检尝试次数，默认 3
 
-# HTTP 配置
-insecure:
-  bind-address: 127.0.0.1 # 绑定的不安全 IP 地址，设置为 0.0.0.0 表示使用全部网络接口，默认为 127.0.0.1
-  bind-port: 8080 # 提供非安全认证的监听端口，默认为 8080
+  # HTTP 配置
+  insecure:
+    bind-address: 127.0.0.1 # 绑定的不安全 IP 地址，设置为 0.0.0.0 表示使用全部网络接口，默认为 127.0.0.1
+    bind-port: 8080 # 提供非安全认证的监听端口，默认为 8080

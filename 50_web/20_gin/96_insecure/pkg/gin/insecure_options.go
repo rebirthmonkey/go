@@ -18,8 +18,8 @@ type InsecureOptions struct {
 // No one should be using these anymore.
 func NewInsecureOptions() *InsecureOptions {
 	return &InsecureOptions{
-		BindAddress: "127.0.0.1",
-		BindPort:    8080,
+		//BindAddress: "127.0.0.1",
+		//BindPort:    8080,
 	}
 }
 

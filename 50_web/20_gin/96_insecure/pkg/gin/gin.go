@@ -10,12 +10,11 @@ import (
 )
 
 type Server struct {
-	middlewares []string
-	healthz     bool
+	Middlewares []string
+	Healthz     bool
 
 	*gin.Engine
 
-	// Insecure holds configuration of the insecure HTTP server.
 	Insecure *InsecureConfig
 
 	insecureServer *http.Server
@@ -25,19 +24,16 @@ type PreparedServer struct {
 	*Server
 }
 
-func (s *Server) PrepareRun() PreparedServer {
-	fmt.Println("[Server] PrepareRun")
+func (s *Server) PrepareRun() *PreparedServer {
+	fmt.Println("[GinServer] PrepareRun")
 
-	return PreparedServer{s}
+	return &PreparedServer{s}
 }
 
 // Run spawns the http server. It only returns when the port cannot be listened on initially.
-func (s *Server) Run() error {
-	fmt.Println("[Server] Run")
-	s.Insecure.Address = "127.0.0.1:8080"
-	fmt.Println("[Server] Run", s.Insecure.Address)
+func (s *PreparedServer) Run() error {
+	fmt.Println("[GinServer] Run")
 
-	// For scalability, use custom HTTP configuration mode here
 	s.insecureServer = &http.Server{
 		Addr:    s.Insecure.Address,
 		Handler: s,
@@ -45,8 +41,6 @@ func (s *Server) Run() error {
 
 	var eg errgroup.Group
 
-	// Initializing the server in a goroutine so that
-	// it won't block the graceful shutdown handling below
 	eg.Go(func() error {
 		log.Infof("Start to listening the incoming requests on http address: %s", s.Insecure.Address)
 
@@ -68,7 +62,7 @@ func (s *Server) Run() error {
 	return nil
 }
 
-func (s *Server) initGinServer() {
+func (s *Server) init() {
 	fmt.Println("[GinServer] Init")
 
 	s.Setup()
@@ -104,7 +98,7 @@ func (s *Server) InstallMiddlewares() {
 
 // InstallAPIs install generic apis.
 func (s *Server) InstallAPIs() {
-	if s.healthz {
+	if s.Healthz {
 		s.GET("/healthz", func(c *gin.Context) {
 			c.String(http.StatusOK, "OK")
 		})

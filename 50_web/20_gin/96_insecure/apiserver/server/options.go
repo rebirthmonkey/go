@@ -6,16 +6,14 @@ import (
 )
 
 type Options struct {
-	GinOptions *gin.Options
+	GinOptions *gin.Options `json:"gin"   mapstructure:"gin"`
 }
 
 // NewOptions creates a new Options object with default parameters.
 func NewOptions() *Options {
-	opt := Options{
+	return &Options{
 		GinOptions: gin.NewOptions(),
 	}
-
-	return &opt
 }
 
 // Validate checks Options and return a slice of found errs.
@@ -29,14 +27,14 @@ func (o *Options) Validate() []error {
 
 // ApplyTo applies the run options to the method receiver and returns self.
 func (o *Options) ApplyTo(c *Config) error {
-	o.GinOptions.ApplyTo(c.GinConfig)
+	err := o.GinOptions.ApplyTo(c.GinConfig)
 
-	return nil
+	return err
 }
 
 // Flags returns flags for a specific APIServer by section name.
 func (o *Options) Flags() (fss cliflag.NamedFlagSets) {
-	o.GinOptions.Flags()
+	o.GinOptions.AddFlags()
 
 	return fss
 }

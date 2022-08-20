@@ -11,12 +11,10 @@ type Options struct {
 
 // NewOptions creates a new Options object with default parameters.
 func NewOptions() *Options {
-	opt := Options{
+	return &Options{
 		ServerOptions:   NewServerOptions(),
 		InsecureOptions: NewInsecureOptions(),
 	}
-
-	return &opt
 }
 
 // Validate checks Options and return a slice of found errs.
@@ -37,10 +35,10 @@ func (o *Options) ApplyTo(c *Config) error {
 	return nil
 }
 
-// Flags returns flags for a specific APIServer by section name.
-func (o *Options) Flags() (fss cliflag.NamedFlagSets) {
-	o.ServerOptions.AddFlags(fss.FlagSet("gin server"))
-	o.InsecureOptions.AddFlags(fss.FlagSet("insecure server"))
+// AddFlags returns flags for a specific APIServer by section name.
+func (o *Options) AddFlags() (fss cliflag.NamedFlagSets) {
+	o.ServerOptions.AddFlags(fss.FlagSet("server"))
+	o.InsecureOptions.AddFlags(fss.FlagSet("insecure"))
 
 	return fss
 }

@@ -12,42 +12,29 @@ type Server struct {
 }
 
 type PreparedServer struct {
-	*Server
+	preparedGinServer *gin.PreparedServer
 }
 
-func CreateServer(cfg *Config) (*Server, error) {
-	ginConfig, err := buildGinConfig(cfg)
-	if err != nil {
-		return nil, err
-	}
+func NewServer(opts *Options) (*Server, error) {
+	config := NewConfig()
+	opts.ApplyTo(config)
+	serverInstance, err := config.Complete().New()
 
-	ginServer, err := ginConfig.Complete().New()
-	if err != nil {
-		return nil, err
-	}
-
-	server := &Server{
-		ginServer: ginServer,
-	}
-
-	return server, nil
+	return serverInstance, err
 }
 
 func (s *Server) PrepareRun() PreparedServer {
 	fmt.Println("[Server] PrepareRun")
 
-	s.ginServer.PrepareRun()
 	ginInstance.InitRouter(s.ginServer.Engine)
 
-	return PreparedServer{s}
+	return PreparedServer{
+		preparedGinServer: s.ginServer.PrepareRun(),
+	}
 }
 
 func (s PreparedServer) Run() error {
 	fmt.Println("[PreparedServer] Run")
 
-	return s.ginServer.Run()
-}
-
-func buildGinConfig(cfg *Config) (ginConfig *gin.Config, lastErr error) {
-	return cfg.GinConfig, nil
+	return s.preparedGinServer.Run()
 }

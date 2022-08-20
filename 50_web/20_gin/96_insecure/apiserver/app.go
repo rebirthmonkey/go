@@ -7,10 +7,10 @@ import (
 
 func NewApp(basename string) *app.App {
 	opts := server.NewOptions()
-	application := app.NewApp("demo app",
+	application := app.NewApp("apiserver",
 		basename,
 		app.WithOptions(opts),
-		app.WithDescription("demo app description"),
+		app.WithDescription("apiserver description"),
 		app.WithRunFunc(run(opts)),
 	)
 
@@ -19,15 +19,20 @@ func NewApp(basename string) *app.App {
 
 func run(opts *server.Options) app.RunFunc {
 	return func(basename string) error {
-		cfg, err := server.CreateConfigFromOptions(opts)
+		server, err := server.NewServer(opts)
 		if err != nil {
 			return err
 		}
 
-		server, err := server.CreateServer(cfg)
-		if err != nil {
-			return err
-		}
+		//cfg, err := server.CreateConfigFromOptions(opts)
+		//if err != nil {
+		//	return err
+		//}
+		//
+		//server, err := server.CreateServer(cfg)
+		//if err != nil {
+		//	return err
+		//}
 
 		return server.PrepareRun().Run()
 	}
