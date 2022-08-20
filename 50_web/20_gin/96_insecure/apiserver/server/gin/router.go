@@ -7,6 +7,7 @@ import (
 	userCtl "github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/apiserver/user/controller/v1"
 	userRepo "github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/apiserver/user/repo"
 	userRepoFake "github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/apiserver/user/repo/fake"
+	"github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/pkg/gin/middleware"
 )
 
 func InitRouter(g *gin.Engine) {
@@ -15,19 +16,11 @@ func InitRouter(g *gin.Engine) {
 }
 
 func installRouterMiddleware(g *gin.Engine) {
+	log.Info("[GIN Server] registry LoggerMiddleware")
+	g.Use(middleware.LoggerMiddleware())
 }
 
 func installController(g *gin.Engine) *gin.Engine {
-	//v1 := g.Group("/v1")
-	//{
-	//	userv1 := v1.Group("/users")
-	//	{
-	//		userv1.GET("/", func(c *gin.Context) {
-	//			c.String(http.StatusOK, "GET users")
-	//		})
-	//	}
-	//}
-
 	v1 := g.Group("/v1")
 	{
 		log.Info("[GIN Server] registry userHandler")
