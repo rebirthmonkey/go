@@ -22,7 +22,7 @@ func (u *controller) Update(c *gin.Context) {
 		return
 	}
 
-	user, err := u.srv.GetUserService().Get(c.Param("name"))
+	user, err := u.srv.NewUserService().Get(c.Param("name"))
 	if err != nil {
 		util.WriteResponse(c, err, nil)
 
@@ -35,7 +35,7 @@ func (u *controller) Update(c *gin.Context) {
 	user.Extend = m.Extend
 
 	// Save changed fields.
-	if err := u.srv.GetUserService().Update(user); err != nil {
+	if err := u.srv.NewUserService().Update(user); err != nil {
 		util.WriteResponse(c, err, nil)
 
 		return

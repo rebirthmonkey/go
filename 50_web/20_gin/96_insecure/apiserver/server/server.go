@@ -3,8 +3,9 @@ package server
 import (
 	"fmt"
 
-	ginInstance "github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/apiserver/server/gin"
 	"github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/pkg/gin"
+
+	ginInstance "github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/apiserver/server/gin"
 )
 
 type Server struct {

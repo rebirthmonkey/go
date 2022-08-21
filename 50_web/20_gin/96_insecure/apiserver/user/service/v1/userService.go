@@ -32,23 +32,23 @@ func newUserService(repo repo.Repo) UserService {
 
 func (u *userService) Create(user *model.User) error {
 	user.LoginedAt = time.Now()
-	return u.repo.GetUserRepo().Create(user)
+	return u.repo.UserRepo().Create(user)
 }
 
 func (u *userService) Delete(username string) error {
-	return u.repo.GetUserRepo().Delete(username)
+	return u.repo.UserRepo().Delete(username)
 }
 
 func (u *userService) Update(user *model.User) error {
-	return u.repo.GetUserRepo().Update(user)
+	return u.repo.UserRepo().Update(user)
 }
 
 func (u *userService) Get(username string) (*model.User, error) {
-	return u.repo.GetUserRepo().Get(username)
+	return u.repo.UserRepo().Get(username)
 }
 
 func (u *userService) List() (*model.UserList, error) {
-	users, err := u.repo.GetUserRepo().List()
+	users, err := u.repo.UserRepo().List()
 	if err != nil {
 		return nil, err
 	}

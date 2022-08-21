@@ -13,7 +13,7 @@ import (
 func (u *controller) Delete(c *gin.Context) {
 	log.L(c).Info("[GIN Server] userController: delete")
 
-	if err := u.srv.GetUserService().Delete(c.Param("name")); err != nil {
+	if err := u.srv.NewUserService().Delete(c.Param("name")); err != nil {
 		util.WriteResponse(c, err, nil)
 
 		return

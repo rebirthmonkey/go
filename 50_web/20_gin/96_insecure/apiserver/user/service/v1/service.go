@@ -9,7 +9,7 @@ import (
 )
 
 type Service interface {
-	GetUserService() UserService
+	NewUserService() UserService
 }
 
 type service struct {
@@ -19,11 +19,9 @@ type service struct {
 var _ Service = (*service)(nil)
 
 func NewService(repo repo.Repo) Service {
-	return &service{
-		repo: repo,
-	}
+	return &service{repo}
 }
 
-func (s *service) GetUserService() UserService {
+func (s *service) NewUserService() UserService {
 	return newUserService(s.repo)
 }

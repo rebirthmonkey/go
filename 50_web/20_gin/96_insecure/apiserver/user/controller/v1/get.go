@@ -13,7 +13,7 @@ import (
 func (u *controller) Get(c *gin.Context) {
 	log.L(c).Info("[GIN Server] userController: get")
 
-	user, err := u.srv.GetUserService().Get(c.Param("name"))
+	user, err := u.srv.NewUserService().Get(c.Param("name"))
 	if err != nil {
 		util.WriteResponse(c, err, nil)
 

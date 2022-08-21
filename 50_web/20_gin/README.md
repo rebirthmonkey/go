@@ -178,6 +178,12 @@ g.Use(middleware.AuthMiddleware())
 
 
 
+## Ctl-Svr-Repo
+
+controller 存放请求处理相关，service 存放具体的业务逻辑处理。controller 主要用来做请求参数解析、校验，参数返回，如果是简单的业务可以放在 controller 中。因为这样，也仍然能够比较清晰的看到这个请求的处理流程。但是如果是比较复杂的业务，需要放在 service 中，因为如果放在 controller 中，请求参数的处理、校验还有业务逻辑混在一起，一个是不好维护，另一个是不好阅读。
+
+
+
 ## Lab
 
 ### Basics
