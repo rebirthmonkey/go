@@ -415,7 +415,7 @@ go run cmd/apiserver.go -c configs/config.yaml
 
 ```shell
 curl -X POST -H "Content-Type: application/json" \
--d '{"metadata":{"name":"user0", "password":"admin"},"description":"admin user"}' \
+-d '{"metadata":{"name":"user99", "password":"admin"},"description":"admin user"}' \
 http://127.0.0.1:8080/v1/users
 ```
 
@@ -428,7 +428,15 @@ curl -X GET http://127.0.0.1:8080/v1/users
 ##### get
 
 ```shell
-curl -X GET http://127.0.0.1:8080/v1/users/user0
+curl -X GET http://127.0.0.1:8080/v1/users/user99
+```
+
+##### update
+
+```shell
+curl -X PUT -H "Content-Type: application/json" \
+-d '{"metadata":{"name":"user99"},"nickname":"xxx"}' \
+http://127.0.0.1:8080/v1/users/user99
 ```
 
 ##### delete
@@ -436,16 +444,10 @@ curl -X GET http://127.0.0.1:8080/v1/users/user0
 不带JWT
 
 ```shell
-curl -X DELETE http://127.0.0.1:8080/v1/users/user0
+curl -X DELETE http://127.0.0.1:8080/v1/users/user99
 ```
 
-##### update
 
-```shell
-curl -X PUT -H "Content-Type: application/json" \
--d '{"metadata":{"name":"user0"},"nickname":"xxx"}' \
-http://127.0.0.1:8080/v1/users/user0
-```
 
 ### Secure Server
 

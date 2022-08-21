@@ -7,9 +7,11 @@ package v1
 import (
 	"time"
 
+	"github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/pkg/metamodel"
+	"golang.org/x/crypto/bcrypt"
+
 	model "github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/apiserver/user/model/v1"
 	"github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/apiserver/user/repo"
-	"github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/pkg/metamodel"
 )
 
 type UserService interface {
@@ -31,7 +33,11 @@ func newUserService(repo repo.Repo) UserService {
 }
 
 func (u *userService) Create(user *model.User) error {
+	hashedBytes, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	user.Password = string(hashedBytes)
+	user.Status = 1
 	user.LoginedAt = time.Now()
+
 	return u.repo.UserRepo().Create(user)
 }
 
@@ -40,7 +46,17 @@ func (u *userService) Delete(username string) error {
 }
 
 func (u *userService) Update(user *model.User) error {
-	return u.repo.UserRepo().Update(user)
+	updateUser, err := u.Get(user.Name)
+	if err != nil {
+		return err
+	}
+
+	updateUser.Nickname = user.Nickname
+	updateUser.Email = user.Email
+	updateUser.Phone = user.Phone
+	updateUser.Extend = user.Extend
+
+	return u.repo.UserRepo().Update(updateUser)
 }
 
 func (u *userService) Get(username string) (*model.User, error) {

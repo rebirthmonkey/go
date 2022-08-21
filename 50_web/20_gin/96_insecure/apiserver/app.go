@@ -24,16 +24,6 @@ func run(opts *server.Options) app.RunFunc {
 			return err
 		}
 
-		//cfg, err := server.CreateConfigFromOptions(opts)
-		//if err != nil {
-		//	return err
-		//}
-		//
-		//server, err := server.CreateServer(cfg)
-		//if err != nil {
-		//	return err
-		//}
-
 		return server.PrepareRun().Run()
 	}
 }
