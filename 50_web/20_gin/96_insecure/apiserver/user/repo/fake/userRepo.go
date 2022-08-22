@@ -4,10 +4,11 @@ import (
 	"fmt"
 
 	"github.com/pkg/errors"
+	"github.com/rebirthmonkey/go/pkg/metamodel"
+
 	"github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/apiserver/user/model/v1"
 	model "github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/apiserver/user/model/v1"
 	userRepoInterface "github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/apiserver/user/repo"
-	"github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/pkg/metamodel"
 )
 
 type userRepo struct {

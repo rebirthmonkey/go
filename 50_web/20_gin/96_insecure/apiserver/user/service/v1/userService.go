@@ -1,13 +1,9 @@
-// Copyright 2022 Wukong SUN <rebirthmonkey@gmail.com>. All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
-
 package v1
 
 import (
 	"time"
 
-	"github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/pkg/metamodel"
+	"github.com/rebirthmonkey/go/pkg/metamodel"
 	"golang.org/x/crypto/bcrypt"
 
 	model "github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/apiserver/user/model/v1"

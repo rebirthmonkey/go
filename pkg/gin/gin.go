@@ -3,10 +3,10 @@ package gin
 import (
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/rebirthmonkey/pkg/log"
-	"golang.org/x/sync/errgroup"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"golang.org/x/sync/errgroup"
 )
 
 type Server struct {
@@ -48,15 +48,15 @@ func (s *PreparedServer) Run() error {
 	var eg errgroup.Group
 
 	eg.Go(func() error {
-		log.Infof("Start to listening the incoming requests on http address: %s", s.Insecure.Address)
+		fmt.Printf("[GinServer] Start to listening the incoming requests on http address: %s", s.Insecure.Address)
 
 		if err := s.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			log.Fatal(err.Error())
+			fmt.Println(err.Error())
 
 			return err
 		}
 
-		log.Infof("Server on %s stopped", s.Insecure.Address)
+		fmt.Printf("[GinServer] Server on %s stopped", s.Insecure.Address)
 
 		return nil
 	})
@@ -67,21 +67,21 @@ func (s *PreparedServer) Run() error {
 			return nil
 		}
 
-		log.Infof("Start to listening the incoming requests on https address: %s", s.Secure.Address)
+		fmt.Printf("[GinServer] Start to listening the incoming requests on https address: %s", s.Secure.Address)
 
 		if err := s.secureServer.ListenAndServeTLS(cert, key); err != nil {
-			log.Fatal(err.Error())
+			fmt.Println(err.Error())
 
 			return err
 		}
 
-		log.Infof("Server on %s stopped", s.Secure.Address)
+		fmt.Printf("[GinServer] Server on %s stopped", s.Secure.Address)
 
 		return nil
 	})
 
 	if err := eg.Wait(); err != nil {
-		log.Fatal(err.Error())
+		fmt.Println(err.Error())
 	}
 
 	return nil
@@ -98,14 +98,14 @@ func (s *Server) init() {
 // Setup do some setup work for gin engine.
 func (s *Server) Setup() {
 	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
-		log.Infof("%-6s %-s --> %s (%d handlers)", httpMethod, absolutePath, handlerName, nuHandlers)
+		fmt.Printf("%-6s %-s --> %s (%d handlers)", httpMethod, absolutePath, handlerName, nuHandlers)
 	}
 }
 
 // InstallMiddlewares install generic middlewares.
 func (s *Server) InstallMiddlewares() {
 	// necessary middlewares
-	s.Use(gin.BasicAuth(gin.Accounts{"foo": "bar", "aaa": "bbb"}))
+	//s.Use(gin.BasicAuth(gin.Accounts{"foo": "bar", "aaa": "bbb"}))
 
 	//// install custom middlewares
 	//for _, m := range s.middlewares {

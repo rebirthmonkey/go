@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rebirthmonkey/pkg/log"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -50,13 +49,13 @@ func (s *PreparedServer) Run() error {
 			return err
 		}
 
-		log.Infof("[GinServer] Server on %s stopped", s.Insecure.Address)
+		fmt.Printf("[GinServer] Server on %s stopped", s.Insecure.Address)
 
 		return nil
 	})
 
 	if err := eg.Wait(); err != nil {
-		log.Fatal(err.Error())
+		fmt.Println(err.Error())
 	}
 
 	return nil

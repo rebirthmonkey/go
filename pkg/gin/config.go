@@ -9,6 +9,7 @@ type InsecureConfig struct {
 	Address string
 }
 
+// SecureConfig holds configuration of the secure https server.
 type SecureConfig struct {
 	Address  string
 	CertFile string

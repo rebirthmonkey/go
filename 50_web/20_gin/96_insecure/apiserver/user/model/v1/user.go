@@ -3,7 +3,7 @@ package v1
 import (
 	"time"
 
-	"github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/pkg/metamodel"
+	"github.com/rebirthmonkey/go/pkg/metamodel"
 )
 
 type User struct {

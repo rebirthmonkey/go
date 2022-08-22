@@ -1,16 +1,14 @@
-// Copyright 2022 Wukong SUN <rebirthmonkey@gmail.com>. All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
-
 package fake
 
 import (
+	"fmt"
+
+	"github.com/pkg/errors"
+	"github.com/rebirthmonkey/go/pkg/metamodel"
+
 	"github.com/rebirthmonkey/go/50_web/20_gin/97_secure/apiserver/user/model/v1"
 	model "github.com/rebirthmonkey/go/50_web/20_gin/97_secure/apiserver/user/model/v1"
 	userRepoInterface "github.com/rebirthmonkey/go/50_web/20_gin/97_secure/apiserver/user/repo"
-	"github.com/rebirthmonkey/go/50_web/20_gin/97_secure/pkg/metamodel"
-	"github.com/rebirthmonkey/go/50_web/20_gin/97_secure/pkg/reflect"
-	"github.com/rebirthmonkey/pkg/errors"
 )
 
 type userRepo struct {
@@ -19,17 +17,27 @@ type userRepo struct {
 
 var _ userRepoInterface.UserRepo = (*userRepo)(nil)
 
-func newUserRepo(dbEngine []*v1.User) userRepoInterface.UserRepo {
-	return &userRepo{dbEngine}
+func newUserRepo() userRepoInterface.UserRepo {
+
+	users := make([]*v1.User, 0)
+	for i := 1; i <= 10; i++ {
+		users = append(users, &v1.User{
+			ObjectMeta: metamodel.ObjectMeta{
+				Name: fmt.Sprintf("user%d", i),
+				ID:   uint64(i),
+			},
+			Nickname: fmt.Sprintf("user%d", i),
+			Password: fmt.Sprintf("User%d@2020", i),
+			Email:    fmt.Sprintf("user%d@qq.com", i),
+		})
+	}
+
+	return &userRepo{
+		dbEngine: users,
+	}
 }
 
 func (u *userRepo) Create(user *model.User) error {
-	for _, u := range u.dbEngine {
-		if u.Name == user.Name {
-			return errors.WithCode(88, "record already exist")
-		}
-	}
-
 	if len(u.dbEngine) > 0 {
 		user.ID = u.dbEngine[len(u.dbEngine)-1].ID + 1
 	}
@@ -39,29 +47,23 @@ func (u *userRepo) Create(user *model.User) error {
 }
 
 func (u *userRepo) Delete(username string) error {
-	users := u.dbEngine
-	u.dbEngine = make([]*v1.User, 0)
-	for _, user := range users {
-		if user.Name == username {
-			continue
-		}
+	newUsers := make([]*v1.User, 0)
 
-		u.dbEngine = append(u.dbEngine, user)
+	for i := 0; i < len(u.dbEngine); i++ {
+		if u.dbEngine[i].Name == username {
+			newUsers = append(u.dbEngine[:i], u.dbEngine[i+1:]...)
+			break
+		}
 	}
 
+	u.dbEngine = newUsers
 	return nil
 }
 
 func (u *userRepo) Update(user *model.User) error {
-	for _, u := range u.dbEngine {
-		if u.Name == user.Name {
-			if _, err := reflect.CopyObj(user, u, nil); err != nil {
-				return errors.Wrap(err, "copy user failed")
-			}
-		}
-	}
+	u.Delete(user.Name)
 
-	return nil
+	return u.Create(user)
 }
 
 func (u *userRepo) Get(username string) (*model.User, error) {
@@ -71,7 +73,7 @@ func (u *userRepo) Get(username string) (*model.User, error) {
 		}
 	}
 
-	return nil, errors.WithCode(88, "record not found")
+	return nil, errors.New("record not found")
 
 }
 

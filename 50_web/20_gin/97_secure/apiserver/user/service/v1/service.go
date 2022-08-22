@@ -1,7 +1,3 @@
-// Copyright 2022 Wukong SUN <rebirthmonkey@gmail.com>. All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
-
 package v1
 
 import (
@@ -9,7 +5,7 @@ import (
 )
 
 type Service interface {
-	GetUserService() UserService
+	NewUserService() UserService
 }
 
 type service struct {
@@ -19,11 +15,9 @@ type service struct {
 var _ Service = (*service)(nil)
 
 func NewService(repo repo.Repo) Service {
-	return &service{
-		repo: repo,
-	}
+	return &service{repo}
 }
 
-func (s *service) GetUserService() UserService {
+func (s *service) NewUserService() UserService {
 	return newUserService(s.repo)
 }

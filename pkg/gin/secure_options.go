@@ -2,9 +2,10 @@ package gin
 
 import (
 	"fmt"
-	"github.com/spf13/pflag"
 	"net"
 	"strconv"
+
+	"github.com/spf13/pflag"
 )
 
 type SecureOptions struct {
@@ -21,7 +22,7 @@ type SecureOptions struct {
 func NewSecureOptions() *SecureOptions {
 	return &SecureOptions{
 		//BindAddress: "127.0.0.1",
-		//BindPort:    8080,
+		//BindPort:    8443,
 	}
 }
 
@@ -34,7 +35,7 @@ func (o *SecureOptions) Validate() []error {
 		errors = append(
 			errors,
 			fmt.Errorf(
-				"--insecure.bind-port %v must be between 0 and 65535, inclusive. 0 for turning off insecure (HTTP) port",
+				"--secure.bind-port %v must be between 0 and 65535, inclusive. 0 for turning off secure (HTTPS) port",
 				o.BindPort,
 			),
 		)
@@ -62,7 +63,7 @@ func (o *SecureOptions) AddFlags(fs *pflag.FlagSet) {
 		"(set to 0.0.0.0 for all IPv4 interfaces and :: for all IPv6 interfaces).")
 
 	fs.IntVar(&o.BindPort, "secure.bind-port", o.BindPort, ""+
-		"The port on which to serve unsecured, unauthenticated access. It is assumed "+
+		"The port on which to serve secured, unauthenticated access. It is assumed "+
 		"that firewall rules are set up such that this port is not reachable from outside of "+
 		"the deployed machine and that port 443 on the iam public address is proxied to this "+
 		"port. This is performed by nginx in the default setup. Set to zero to disable.")

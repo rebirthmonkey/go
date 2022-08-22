@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/rebirthmonkey/go/50_web/20_gin/97_secure/pkg/gin"
+	"github.com/rebirthmonkey/go/pkg/gin"
 )
 
 type Config struct {
