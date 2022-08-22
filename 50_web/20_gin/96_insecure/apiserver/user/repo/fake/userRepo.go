@@ -4,12 +4,10 @@ import (
 	"fmt"
 
 	"github.com/pkg/errors"
-	"github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/pkg/metamodel"
-	"github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/pkg/reflect"
-
 	"github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/apiserver/user/model/v1"
 	model "github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/apiserver/user/model/v1"
 	userRepoInterface "github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/apiserver/user/repo"
+	"github.com/rebirthmonkey/go/50_web/20_gin/96_insecure/pkg/metamodel"
 )
 
 type userRepo struct {
@@ -48,27 +46,23 @@ func (u *userRepo) Create(user *model.User) error {
 }
 
 func (u *userRepo) Delete(username string) error {
-	for _, user := range u.dbEngine {
-		if user.Name == username {
-			continue
-		}
+	newUsers := make([]*v1.User, 0)
 
-		u.dbEngine = append(u.dbEngine, user)
+	for i := 0; i < len(u.dbEngine); i++ {
+		if u.dbEngine[i].Name == username {
+			newUsers = append(u.dbEngine[:i], u.dbEngine[i+1:]...)
+			break
+		}
 	}
 
+	u.dbEngine = newUsers
 	return nil
 }
 
 func (u *userRepo) Update(user *model.User) error {
-	for _, u := range u.dbEngine {
-		if u.Name == user.Name {
-			if _, err := reflect.CopyObj(user, u, nil); err != nil {
-				return err
-			}
-		}
-	}
+	u.Delete(user.Name)
 
-	return nil
+	return u.Create(user)
 }
 
 func (u *userRepo) Get(username string) (*model.User, error) {
