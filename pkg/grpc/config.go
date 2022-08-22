@@ -1,7 +1,6 @@
 package grpc
 
 import (
-	"fmt"
 	"google.golang.org/grpc"
 )
 
@@ -19,8 +18,6 @@ func NewConfig() *Config {
 }
 
 func (c *Config) Complete() *CompletedConfig {
-	fmt.Println("xxxxxxxxxxxxxxxxxxxxxx grpc config Address is:", c.Address)
-
 	return &CompletedConfig{c}
 }
 

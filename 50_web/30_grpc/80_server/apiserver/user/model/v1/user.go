@@ -1,13 +1,9 @@
-// Copyright 2022 Wukong SUN <rebirthmonkey@gmail.com>. All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
-
 package v1
 
 import (
 	"time"
 
-	"github.com/rebirthmonkey/go/50_web/30_grpc/80_server/pkg/metamodel"
+	"github.com/rebirthmonkey/go/pkg/metamodel"
 )
 
 type User struct {
@@ -23,7 +19,6 @@ type User struct {
 	LoginedAt   time.Time `json:"loginedAt,omitempty" gorm:"column:loginedAt"`
 }
 
-// UserList is the whole list of all users which have been stored in storage.
 type UserList struct {
 	// Standard list metadata.
 	// +optional

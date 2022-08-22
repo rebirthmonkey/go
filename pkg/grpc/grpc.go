@@ -5,16 +5,14 @@ import (
 	"golang.org/x/sync/errgroup"
 	"net"
 
-	"google.golang.org/grpc"
-
 	"github.com/rebirthmonkey/pkg/log"
+	"google.golang.org/grpc"
 )
 
 type Server struct {
 	Address string
 
 	*grpc.Server
-	//*productInfoHandler
 }
 
 type PreparedServer struct {
@@ -40,7 +38,6 @@ func (s *PreparedServer) Run() error {
 	eg.Go(func() error {
 		log.Infof("[GrpcServer] Start to listening on http address: %s", s.Address)
 
-		//if err := productInfoHandler.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		if err := s.Serve(listen); err != nil {
 			log.Fatalf("failed to start grpc productInfoHandler: %s", err.Error())
 
@@ -61,8 +58,4 @@ func (s *PreparedServer) Run() error {
 
 func (s *Server) init() {
 	fmt.Println("[GrpcServer] Init")
-
-	//log.Info("[GRPC Server] registry productInfoHandler")
-	//pb.RegisterProductInfoServer(s.Server, s.productInfoHandler)
-
 }

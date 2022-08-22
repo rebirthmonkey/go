@@ -2,9 +2,10 @@ package grpc
 
 import (
 	"fmt"
-	"github.com/spf13/pflag"
 	"net"
 	"strconv"
+
+	"github.com/spf13/pflag"
 )
 
 type Options struct {
@@ -41,7 +42,7 @@ func (o *Options) ApplyTo(c *Config) error {
 
 func (o *Options) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&o.BindAddress, "grpc.bind-address", o.BindAddress, ""+
-		"The IP address on which to serve the --grpc.bind-port "+
+		"The IP address on which to grpc the --grpc.bind-port "+
 		"(set to 0.0.0.0 for all IPv4 interfaces and :: for all IPv6 interfaces).")
 
 	fs.IntVar(&o.BindPort, "grpc.bind-port", o.BindPort, ""+

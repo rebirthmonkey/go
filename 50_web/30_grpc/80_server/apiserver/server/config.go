@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/rebirthmonkey/go/50_web/30_grpc/80_server/pkg/gin"
-	"github.com/rebirthmonkey/go/50_web/30_grpc/80_server/pkg/grpc"
+	"github.com/rebirthmonkey/go/pkg/gin"
+	"github.com/rebirthmonkey/go/pkg/grpc"
 )
 
 type Config struct {

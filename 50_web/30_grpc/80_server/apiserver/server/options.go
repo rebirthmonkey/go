@@ -2,8 +2,8 @@ package server
 
 import (
 	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
-	"github.com/rebirthmonkey/go/50_web/30_grpc/80_server/pkg/gin"
-	"github.com/rebirthmonkey/go/50_web/30_grpc/80_server/pkg/grpc"
+	"github.com/rebirthmonkey/go/pkg/gin"
+	"github.com/rebirthmonkey/go/pkg/grpc"
 )
 
 type Options struct {

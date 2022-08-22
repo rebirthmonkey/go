@@ -2,12 +2,13 @@ package server
 
 import (
 	"fmt"
-	ginInstance "github.com/rebirthmonkey/go/50_web/30_grpc/80_server/apiserver/server/gin"
-	"github.com/rebirthmonkey/go/50_web/30_grpc/80_server/pkg/gin"
+
+	"github.com/rebirthmonkey/go/pkg/gin"
+	"github.com/rebirthmonkey/go/pkg/grpc"
 	"golang.org/x/sync/errgroup"
 
+	ginInstance "github.com/rebirthmonkey/go/50_web/30_grpc/80_server/apiserver/server/gin"
 	grpcInstance "github.com/rebirthmonkey/go/50_web/30_grpc/80_server/apiserver/server/grpc"
-	"github.com/rebirthmonkey/go/50_web/30_grpc/80_server/pkg/grpc"
 )
 
 type Server struct {
