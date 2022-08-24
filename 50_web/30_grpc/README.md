@@ -79,7 +79,7 @@ service Cache{
 用于存储由 message 定义、创建的数据结构
 
 #### xxx_grpc.pb.go
-用于存储由 service 定义、创建的 interface、struct、method等。该文件采用标准的 Go 包结构，内部包括（以 ProductInfo 为例）
+用于存储由 service 定义、创建的 interface、struct、method 等。该文件采用标准的 Go 包结构，内部包括（以 ProductInfo 为例）
 
 ##### client 端
   - ProductInfoClient interface：定义 client 端的 interface
@@ -227,7 +227,7 @@ go run client/main.go
   - An interface type for servers to implement, also with the methods defined in the `RouteGuide` service.
 
 ```shell
-$ protoc --go_out=. --go_opt=paths=source_relative \
+protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     route_guide.proto
 ```
@@ -237,4 +237,24 @@ $ protoc --go_out=. --go_opt=paths=source_relative \
 
 
 #### 创建 client 端
+
+
+
+### Server
+
+#### 创建 PB 文件
+
+```shell
+cd apiserver/model/v1
+protoc --go_out=. --go_opt=paths=source_relative \
+    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
+    --experimental_allow_proto3_optional \
+    user.proto
+```
+
+
+
+
+
+
 
