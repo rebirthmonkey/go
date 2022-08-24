@@ -21,8 +21,3 @@ func NewController(repo repo.Repo) *controller {
 		srv: srv.NewService(repo),
 	}
 }
-
-func (c *controller) mustEmbedUnimplementedUserServer() {
-	//TODO implement me
-	panic("implement me")
-}

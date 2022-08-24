@@ -26,7 +26,7 @@ func installController(g *gin.Engine) *gin.Engine {
 		fmt.Println("[GINServer] registry userHandler")
 		userv1 := v1.Group("/users")
 		{
-			userRepoClient, _ := userRepoFake.NewRepo()
+			userRepoClient, _ := userRepoFake.Repo()
 			userController := userCtl.NewController(userRepoClient)
 
 			userv1.POST("", userController.Create)
