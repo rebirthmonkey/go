@@ -16,10 +16,20 @@ gin:
     bind-address: 127.0.0.1 # HTTPS 安全模式的 IP 地址，默认为 0.0.0.0
     bind-port: 8443 # 使用 HTTPS 安全模式的端口号，设置为 0 表示不启用 HTTPS，默认为 8443
     tls:
-      cert-file: /Users/ruan/workspace/go/50_web/30_grpc/80_server/configs/cert/server.pem # 包含 x509 证书的文件路径，用 HTTPS 认证
-      private-key-file: /Users/ruan/workspace/go/50_web/30_grpc/80_server/configs/cert/server.key # TLS 私钥
+      cert-file: /Users/ruan/workspace/go/60_paas/20_db/10_mysql/80_server/configs/cert/server.pem # 包含 x509 证书的文件路径，用 HTTPS 认证
+      private-key-file: /Users/ruan/workspace/go/60_paas/20_db/10_mysql/80_server/configs/cert/server.key # TLS 私钥
 
 # GRPC 服务配置
 grpc:
   bind-address: 127.0.0.1 # grpc 安全模式的 IP 地址，默认 0.0.0.0
   bind-port: 8081 # grpc 安全模式的端口号，默认 8081
+
+# MySQL 数据库相关配置
+mysql:
+  host: 127.0.0.1:3306 # MySQL 机器 ip 和端口，默认 127.0.0.1:3306
+  username: root # MySQL 用户名(建议授权最小权限集)
+  password: Heruan1214++ # MySQL 用户密码
+  database: iam # iam 系统所用的数据库名
+
+
+

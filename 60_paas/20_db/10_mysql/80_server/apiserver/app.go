@@ -3,7 +3,7 @@ package apiserver
 import (
 	"github.com/rebirthmonkey/go/pkg/app"
 
-	"github.com/rebirthmonkey/go/50_web/30_grpc/80_server/apiserver/server"
+	"github.com/rebirthmonkey/go/60_paas/20_db/10_mysql/80_server/apiserver/server"
 )
 
 func NewApp(basename string) *app.App {

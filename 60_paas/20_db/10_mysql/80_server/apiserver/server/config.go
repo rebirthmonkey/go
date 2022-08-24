@@ -3,36 +3,47 @@ package server
 import (
 	"github.com/rebirthmonkey/go/pkg/gin"
 	"github.com/rebirthmonkey/go/pkg/grpc"
+	"github.com/rebirthmonkey/go/pkg/mysql"
 )
 
 type Config struct {
-	GinConfig  *gin.Config
-	GrpcConfig *grpc.Config
+	MysqlConfig *mysql.Config
+	GinConfig   *gin.Config
+	GrpcConfig  *grpc.Config
 }
 
 type CompletedConfig struct {
-	CompletedGinConfig  *gin.CompletedConfig
-	CompletedGrpcConfig *grpc.CompletedConfig
+	CompletedMysqlConfig *mysql.CompletedConfig
+	CompletedGinConfig   *gin.CompletedConfig
+	CompletedGrpcConfig  *grpc.CompletedConfig
 }
 
 func NewConfig() *Config {
 	return &Config{
-		GinConfig:  gin.NewConfig(),
-		GrpcConfig: grpc.NewConfig(),
+		MysqlConfig: mysql.NewConfig(),
+		GinConfig:   gin.NewConfig(),
+		GrpcConfig:  grpc.NewConfig(),
 	}
 }
 
 func (c *Config) Complete() *CompletedConfig {
+	completedMysqlConfig := c.MysqlConfig.Complete()
 	completedGinConfig := c.GinConfig.Complete()
 	completedGrpcConfig := c.GrpcConfig.Complete()
 
 	return &CompletedConfig{
-		CompletedGinConfig:  completedGinConfig,
-		CompletedGrpcConfig: completedGrpcConfig,
+		CompletedMysqlConfig: completedMysqlConfig,
+		CompletedGinConfig:   completedGinConfig,
+		CompletedGrpcConfig:  completedGrpcConfig,
 	}
 }
 
 func (c *CompletedConfig) New() (*Server, error) {
+	mysqlServer, err := c.CompletedMysqlConfig.New()
+	if err != nil {
+		return nil, err
+	}
+
 	ginServer, err := c.CompletedGinConfig.New()
 	if err != nil {
 		return nil, err
@@ -44,8 +55,9 @@ func (c *CompletedConfig) New() (*Server, error) {
 	}
 
 	server := &Server{
-		ginServer:  ginServer,
-		grpcServer: grpcServer,
+		mysqlServer: mysqlServer,
+		ginServer:   ginServer,
+		grpcServer:  grpcServer,
 	}
 
 	return server, nil
