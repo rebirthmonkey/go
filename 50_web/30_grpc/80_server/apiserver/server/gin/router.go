@@ -2,11 +2,11 @@ package gin
 
 import (
 	"fmt"
-	
+
 	"github.com/gin-gonic/gin"
 	"github.com/rebirthmonkey/go/pkg/gin/middleware"
 
-	userCtl "github.com/rebirthmonkey/go/50_web/30_grpc/80_server/apiserver/user/controller/v1"
+	userCtl "github.com/rebirthmonkey/go/50_web/30_grpc/80_server/apiserver/user/controller/gin/v1"
 	userRepoFake "github.com/rebirthmonkey/go/50_web/30_grpc/80_server/apiserver/user/repo/fake"
 )
 

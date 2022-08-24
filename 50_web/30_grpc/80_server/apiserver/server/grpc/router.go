@@ -1,9 +1,9 @@
 package grpc
 
 import (
-	"github.com/rebirthmonkey/go/50_web/30_grpc/80_server/apiserver/user/controller/grpc/v1"
 	"google.golang.org/grpc"
 
+	"github.com/rebirthmonkey/go/50_web/30_grpc/80_server/apiserver/user/controller/grpc/v1"
 	userRepoFake "github.com/rebirthmonkey/go/50_web/30_grpc/80_server/apiserver/user/repo/fake"
 )
 

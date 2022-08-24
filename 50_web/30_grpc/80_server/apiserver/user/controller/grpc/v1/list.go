@@ -16,13 +16,10 @@ func (c *controller) ListUsers(ctx context.Context, r *ListUsersRequest) (*ListU
 	items := make([]*UserInfo, 0)
 	for _, user := range users.Items {
 		items = append(items, &UserInfo{
-			Status:      user.Status,
-			Nickname:    user.Nickname,
-			Password:    user.Password,
-			Email:       user.Email,
-			Phone:       user.Phone,
-			TotalPolicy: user.TotalPolicy,
-			LoginedAt:   user.LoginedAt.Format("2006-01-02 15:04:05"),
+			Nickname:  user.Nickname,
+			Email:     user.Email,
+			Phone:     user.Phone,
+			LoginedAt: user.LoginedAt.Format("2006-01-02 15:04:05"),
 		})
 	}
 
