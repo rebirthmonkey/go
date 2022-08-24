@@ -16,11 +16,12 @@ type controller struct {
 	UnimplementedUserServer
 }
 
-func NewController(repo repo.Repo) Controller {
+func NewController(repo repo.Repo) *controller {
 	return &controller{
 		srv: srv.NewService(repo),
 	}
 }
+
 func (c *controller) mustEmbedUnimplementedUserServer() {
 	//TODO implement me
 	panic("implement me")
