@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/rebirthmonkey/go/80_standards/40_error/errcode"
+	"github.com/rebirthmonkey/go/80_standards/20_error/errcode"
 	"github.com/rebirthmonkey/pkg/errors"
 	"github.com/rebirthmonkey/pkg/gin/util"
 	"github.com/rebirthmonkey/pkg/log"

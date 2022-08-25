@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/rebirthmonkey/go/80_standards/40_error/errcode"
+	"github.com/rebirthmonkey/go/80_standards/20_error/errcode"
 
 	"github.com/rebirthmonkey/pkg/errors"
 )
