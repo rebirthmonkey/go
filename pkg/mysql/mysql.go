@@ -2,8 +2,6 @@ package mysql
 
 import (
 	"fmt"
-
-	"gorm.io/gorm"
 )
 
 type Server struct {
@@ -11,8 +9,6 @@ type Server struct {
 	Username string
 	Password string
 	Database string
-
-	db *gorm.DB
 }
 
 type PreparedServer struct {

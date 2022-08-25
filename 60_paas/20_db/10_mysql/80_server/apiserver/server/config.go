@@ -4,6 +4,7 @@ import (
 	"github.com/rebirthmonkey/go/pkg/gin"
 	"github.com/rebirthmonkey/go/pkg/grpc"
 	"github.com/rebirthmonkey/go/pkg/mysql"
+	"sync"
 )
 
 type Config struct {
@@ -18,6 +19,11 @@ type CompletedConfig struct {
 	CompletedGrpcConfig  *grpc.CompletedConfig
 }
 
+var (
+	config     CompletedConfig
+	onceConfig sync.Once
+)
+
 func NewConfig() *Config {
 	return &Config{
 		MysqlConfig: mysql.NewConfig(),
@@ -27,15 +33,16 @@ func NewConfig() *Config {
 }
 
 func (c *Config) Complete() *CompletedConfig {
-	completedMysqlConfig := c.MysqlConfig.Complete()
-	completedGinConfig := c.GinConfig.Complete()
-	completedGrpcConfig := c.GrpcConfig.Complete()
 
-	return &CompletedConfig{
-		CompletedMysqlConfig: completedMysqlConfig,
-		CompletedGinConfig:   completedGinConfig,
-		CompletedGrpcConfig:  completedGrpcConfig,
-	}
+	onceConfig.Do(func() {
+		config = CompletedConfig{
+			CompletedMysqlConfig: c.MysqlConfig.Complete(),
+			CompletedGinConfig:   c.GinConfig.Complete(),
+			CompletedGrpcConfig:  c.GrpcConfig.Complete(),
+		}
+	})
+
+	return &config
 }
 
 func (c *CompletedConfig) New() (*Server, error) {

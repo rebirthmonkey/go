@@ -7,9 +7,6 @@ import (
 	"github.com/rebirthmonkey/go/pkg/grpc"
 	"github.com/rebirthmonkey/go/pkg/mysql"
 	"golang.org/x/sync/errgroup"
-
-	ginInstance "github.com/rebirthmonkey/go/60_paas/20_db/10_mysql/80_server/apiserver/server/gin"
-	grpcInstance "github.com/rebirthmonkey/go/60_paas/20_db/10_mysql/80_server/apiserver/server/grpc"
 )
 
 type Server struct {
@@ -35,8 +32,8 @@ func NewServer(opts *Options) (*Server, error) {
 func (s *Server) PrepareRun() PreparedServer {
 	fmt.Println("[Server] PrepareRun")
 
-	ginInstance.Init(s.ginServer.Engine)
-	grpcInstance.Init(s.grpcServer.Server)
+	InitGin(s.ginServer.Engine)
+	InitGrpc(s.grpcServer.Server)
 
 	return PreparedServer{
 		preparedMysqlServer: s.mysqlServer.PrepareRun(),

@@ -5,6 +5,7 @@ import (
 	"github.com/rebirthmonkey/go/pkg/gin"
 	"github.com/rebirthmonkey/go/pkg/grpc"
 	"github.com/rebirthmonkey/go/pkg/mysql"
+	"sync"
 )
 
 type Options struct {
@@ -13,13 +14,22 @@ type Options struct {
 	GrpcOptions  *grpc.Options  `json:"grpc"   mapstructure:"grpc"`
 }
 
+var (
+	opt  Options
+	once sync.Once
+)
+
 // NewOptions creates a new Options object with default parameters.
 func NewOptions() *Options {
-	return &Options{
-		MysqlOptions: mysql.NewOptions(),
-		GinOptions:   gin.NewOptions(),
-		GrpcOptions:  grpc.NewOptions(),
-	}
+	once.Do(func() {
+		opt = Options{
+			MysqlOptions: mysql.NewOptions(),
+			GinOptions:   gin.NewOptions(),
+			GrpcOptions:  grpc.NewOptions(),
+		}
+	})
+
+	return &opt
 }
 
 // Validate checks Options and return a slice of found errs.

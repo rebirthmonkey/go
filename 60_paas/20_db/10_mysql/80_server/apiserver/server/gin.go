@@ -1,4 +1,4 @@
-package gin
+package server
 
 import (
 	"fmt"
@@ -7,10 +7,10 @@ import (
 	"github.com/rebirthmonkey/go/pkg/gin/middleware"
 
 	userCtl "github.com/rebirthmonkey/go/60_paas/20_db/10_mysql/80_server/apiserver/user/controller/gin/v1"
-	userRepoFake "github.com/rebirthmonkey/go/60_paas/20_db/10_mysql/80_server/apiserver/user/repo/fake"
+	userRepoMysql "github.com/rebirthmonkey/go/60_paas/20_db/10_mysql/80_server/apiserver/user/repo/mysql"
 )
 
-func Init(g *gin.Engine) {
+func InitGin(g *gin.Engine) {
 	installRouterMiddleware(g)
 	installController(g)
 }
@@ -26,7 +26,8 @@ func installController(g *gin.Engine) *gin.Engine {
 		fmt.Println("[GINServer] registry userHandler")
 		userv1 := v1.Group("/users")
 		{
-			userRepoClient, _ := userRepoFake.Repo()
+			//userRepoClient, _ := userRepoFake.Repo()
+			userRepoClient, _ := userRepoMysql.Repo(config.CompletedMysqlConfig)
 			userController := userCtl.NewController(userRepoClient)
 
 			userv1.POST("", userController.Create)

@@ -1,16 +1,17 @@
 package mysql
 
 import (
-	"github.com/rebirthmonkey/pkg/errors"
-	"github.com/rebirthmonkey/pkg/log"
-	"gorm.io/gorm"
+	"fmt"
 	"regexp"
 
-	policyRepo "github.com/rebirthmonkey/iam/internal/auth/policy/repo"
-	secretRepo "github.com/rebirthmonkey/iam/internal/auth/secret/repo"
-	model "github.com/rebirthmonkey/iam/internal/auth/user/model/v1"
-	userRepoInterface "github.com/rebirthmonkey/iam/internal/auth/user/repo"
-	"github.com/rebirthmonkey/iam/internal/pkg/errcode"
+	"github.com/rebirthmonkey/go/pkg/mysql"
+	"github.com/rebirthmonkey/pkg/errors"
+	"github.com/rebirthmonkey/pkg/log"
+	mysqlDriver "gorm.io/driver/mysql"
+	"gorm.io/gorm"
+
+	model "github.com/rebirthmonkey/go/60_paas/20_db/10_mysql/80_server/apiserver/user/model/v1"
+	userRepoInterface "github.com/rebirthmonkey/go/60_paas/20_db/10_mysql/80_server/apiserver/user/repo"
 )
 
 type userRepo struct {
@@ -19,8 +20,31 @@ type userRepo struct {
 
 var _ userRepoInterface.UserRepo = (*userRepo)(nil)
 
-func newUserRepo(dbEngine *gorm.DB) userRepoInterface.UserRepo {
-	return &userRepo{dbEngine}
+func newUserRepo(cfg *mysql.CompletedConfig) userRepoInterface.UserRepo {
+	dsn := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
+		cfg.Username,
+		cfg.Password,
+		cfg.Host,
+		cfg.Database,
+		true,
+		"Local")
+
+	db, err := gorm.Open(mysqlDriver.Open(dsn), &gorm.Config{})
+	if err != nil {
+		fmt.Printf("%+v", err)
+		return nil
+	}
+
+	return &userRepo{dbEngine: db}
+}
+
+func (u *userRepo) close() error {
+	dbEngine, err := u.dbEngine.DB()
+	if err != nil {
+		return err
+	}
+
+	return dbEngine.Close()
 }
 
 func (u *userRepo) Create(user *model.User) error {
@@ -34,10 +58,10 @@ func (u *userRepo) Create(user *model.User) error {
 	err := u.dbEngine.Create(&user).Error
 	if err != nil {
 		if match, _ := regexp.MatchString("Duplicate entry", err.Error()); match {
-			return errors.WithCode(errcode.ErrUserAlreadyExist, err.Error())
+			return err
 		}
 
-		return errors.WithCode(errcode.ErrDatabase, err.Error())
+		return err
 	}
 
 	return nil
@@ -51,16 +75,12 @@ func (u *userRepo) Delete(username string) error {
 		return nil
 	}
 
-	_ = policyRepo.GetRepo().GetPolicyRepo().DeleteByUser(username)
-
-	_ = secretRepo.GetRepo().GetSecretRepo().DeleteByUser(username)
-
 	if err := u.dbEngine.Where("name = ?", username).Delete(&model.User{}).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return errors.WithCode(errcode.ErrUserNotFound, err.Error())
+			return err
 		}
 
-		return errors.WithCode(errcode.ErrDatabase, err.Error())
+		return err
 	}
 
 	return nil
@@ -68,7 +88,7 @@ func (u *userRepo) Delete(username string) error {
 
 func (u *userRepo) Update(user *model.User) error {
 	if err := u.dbEngine.Save(user).Error; err != nil {
-		return errors.WithCode(errcode.ErrDatabase, err.Error())
+		return err
 	}
 
 	return nil
@@ -79,9 +99,9 @@ func (u *userRepo) Get(username string) (*model.User, error) {
 	err := u.dbEngine.Where("name = ?", username).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.WithCode(errcode.ErrUserNotFound, err.Error())
+			return nil, err
 		}
-		return nil, errors.WithCode(errcode.ErrDatabase, err.Error())
+		return nil, err
 	}
 
 	return user, nil
@@ -98,7 +118,7 @@ func (u *userRepo) List() (*model.UserList, error) {
 		Count(&ret.TotalCount)
 
 	if d.Error != nil {
-		return nil, errors.WithCode(errcode.ErrDatabase, d.Error.Error())
+		return nil, d.Error
 	}
 
 	return ret, nil
