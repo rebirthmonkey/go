@@ -23,7 +23,6 @@ type User struct {
 }
 
 type UserList struct {
-	// Standard list metadata.
 	// +optional
 	metamodel.ListMeta `json:",inline"`
 

@@ -5,8 +5,6 @@ import (
 	"regexp"
 
 	"github.com/rebirthmonkey/go/pkg/mysql"
-	"github.com/rebirthmonkey/pkg/errors"
-	"github.com/rebirthmonkey/pkg/log"
 	mysqlDriver "gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
@@ -51,7 +49,7 @@ func (u *userRepo) Create(user *model.User) error {
 	tmpUser := model.User{}
 	u.dbEngine.Where("name = ?", user.Name).Find(&tmpUser)
 	if tmpUser.Name != "" {
-		log.Warn("the created user already exists.")
+		fmt.Println("the created user already exists.")
 		return nil
 	}
 
@@ -71,15 +69,11 @@ func (u *userRepo) Delete(username string) error {
 	tmpUser := model.User{}
 	u.dbEngine.Where("name = ?", username).Find(&tmpUser)
 	if tmpUser.Name == "" {
-		log.Warn("the deleted user does not exist.")
+		fmt.Println("the deleted user does not exist.")
 		return nil
 	}
 
 	if err := u.dbEngine.Where("name = ?", username).Delete(&model.User{}).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return err
-		}
-
 		return err
 	}
 
@@ -98,9 +92,6 @@ func (u *userRepo) Get(username string) (*model.User, error) {
 	user := &model.User{}
 	err := u.dbEngine.Where("name = ?", username).First(&user).Error
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, err
-		}
 		return nil, err
 	}
 

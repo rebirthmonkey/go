@@ -46,11 +46,6 @@ func (c *Config) Complete() *CompletedConfig {
 }
 
 func (c *CompletedConfig) New() (*Server, error) {
-	mysqlServer, err := c.CompletedMysqlConfig.New()
-	if err != nil {
-		return nil, err
-	}
-
 	ginServer, err := c.CompletedGinConfig.New()
 	if err != nil {
 		return nil, err
@@ -62,9 +57,8 @@ func (c *CompletedConfig) New() (*Server, error) {
 	}
 
 	server := &Server{
-		mysqlServer: mysqlServer,
-		ginServer:   ginServer,
-		grpcServer:  grpcServer,
+		ginServer:  ginServer,
+		grpcServer: grpcServer,
 	}
 
 	return server, nil

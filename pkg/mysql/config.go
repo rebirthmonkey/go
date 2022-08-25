@@ -26,13 +26,7 @@ func (c *Config) Complete() *CompletedConfig {
 
 func (c CompletedConfig) New() (*Server, error) {
 
-	s := &Server{
-		Host:     c.Host,
-		Username: c.Username,
-		Password: c.Password,
-		Database: c.Database,
-		//db:       db,
-	}
+	s := &Server{}
 
 	s.init()
 

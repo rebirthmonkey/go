@@ -16,14 +16,14 @@ func InitGin(g *gin.Engine) {
 }
 
 func installRouterMiddleware(g *gin.Engine) {
-	fmt.Println("[GINServer] registry LoggerMiddleware")
+	fmt.Println("[GinServer] registry LoggerMiddleware")
 	g.Use(middleware.LoggerMiddleware())
 }
 
 func installController(g *gin.Engine) *gin.Engine {
 	v1 := g.Group("/v1")
 	{
-		fmt.Println("[GINServer] registry userHandler")
+		fmt.Println("[GinServer] registry userHandler")
 		userv1 := v1.Group("/users")
 		{
 			//userRepoClient, _ := userRepoFake.Repo()

@@ -19,10 +19,10 @@ var (
 
 var _ userRepoInterface.Repo = (*repo)(nil)
 
-func Repo(config *mysql.CompletedConfig) (userRepoInterface.Repo, error) {
+func Repo(cfg *mysql.CompletedConfig) (userRepoInterface.Repo, error) {
 	once.Do(func() {
 		r = repo{
-			userRepo: newUserRepo(config),
+			userRepo: newUserRepo(cfg),
 		}
 	})
 

@@ -4,12 +4,7 @@ import (
 	"fmt"
 )
 
-type Server struct {
-	Host     string
-	Username string
-	Password string
-	Database string
-}
+type Server struct{}
 
 type PreparedServer struct {
 	*Server
