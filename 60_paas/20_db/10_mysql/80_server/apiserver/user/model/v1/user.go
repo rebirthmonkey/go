@@ -3,7 +3,10 @@ package v1
 import (
 	"time"
 
+	"github.com/marmotedu/component-base/pkg/auth"
+	"github.com/marmotedu/component-base/pkg/util/idutil"
 	"github.com/rebirthmonkey/go/pkg/metamodel"
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -25,4 +28,23 @@ type UserList struct {
 	metamodel.ListMeta `json:",inline"`
 
 	Items []*User `json:"items"`
+}
+
+// TableName maps to mysql table name.
+func (u *User) TableName() string {
+	return "user"
+}
+
+// Compare with the plain text password. Returns true if it's the same as the encrypted one (in the `User` struct).
+func (u *User) Compare(pwd string) (err error) {
+	err = auth.Compare(u.Password, pwd)
+
+	return
+}
+
+// AfterCreate run after create database record.
+func (u *User) AfterCreate(tx *gorm.DB) error {
+	u.InstanceID = idutil.GetInstanceID(u.ID, "user-")
+
+	return tx.Save(u).Error
 }

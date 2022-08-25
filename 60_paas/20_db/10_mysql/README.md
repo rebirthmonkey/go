@@ -111,6 +111,8 @@ go run 12_gorm-model.go -H 127.0.0.1:3306 -u root -p P@ssw0rd -d test
 
 
 
+Gorm 默认的 Table Name 都是复数，在设计数据结构是，得加上TableName() 函数来改为单数。
+
 
 
 ## Ref
