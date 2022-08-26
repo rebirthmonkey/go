@@ -1,15 +1,18 @@
-// this example comes initially from github.com/rebirthmonkey/go/pkg/log/examples
+// Copyright 2022 WuKong <rebirthmonkey@foxmail.com>. All rights reserved.
+// Use of this source code is governed by a Apache 2.0 style
+// license that can be found in the LICENSE file.
+
 package main
 
 import (
 	"context"
 	"flag"
 
-	"github.com/rebirthmonkey/go/pkg/log"
+	"github.com/rebirthmonkey/pkg/log"
 )
 
 var (
-	helpFlag   bool
+	helpFlag bool
 	levelFlag  string
 	formatFlag string
 )

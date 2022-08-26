@@ -1,11 +1,10 @@
 package grpc
 
 import (
-	"fmt"
 	"golang.org/x/sync/errgroup"
 	"net"
 
-	"github.com/rebirthmonkey/pkg/log"
+	"github.com/rebirthmonkey/go/pkg/log"
 	"google.golang.org/grpc"
 )
 
@@ -20,31 +19,31 @@ type PreparedServer struct {
 }
 
 func (s *Server) PrepareRun() *PreparedServer {
-	fmt.Println("[GrpcServer] PrepareRun")
+	log.Info("[GrpcServer] PrepareRun")
 
 	return &PreparedServer{s}
 }
 
 func (s *PreparedServer) Run() error {
-	fmt.Println("[GrpcServer] Run")
+	log.Info("[GrpcServer] Run")
 
 	listen, err := net.Listen("tcp", s.Address)
 	if err != nil {
-		fmt.Printf("failed to listen: %s", err.Error())
+		log.Infof("failed to listen: %s", err.Error())
 	}
 
 	var eg errgroup.Group
 
 	eg.Go(func() error {
-		fmt.Printf("[GrpcServer] Start to listening on http address: %s", s.Address)
+		log.Infof("[GrpcServer] Start to listening on http address: %s", s.Address)
 
 		if err := s.Serve(listen); err != nil {
-			fmt.Printf("failed to start grpc productInfoHandler: %s", err.Error())
+			log.Infof("failed to start grpc productInfoHandler: %s", err.Error())
 
 			return err
 		}
 
-		fmt.Printf("Server on %s stopped", s.Address)
+		log.Infof("Server on %s stopped", s.Address)
 
 		return nil
 	})
@@ -57,5 +56,5 @@ func (s *PreparedServer) Run() error {
 }
 
 func (s *Server) init() {
-	fmt.Println("[GrpcServer] Init")
+	log.Info("[GrpcServer] Init")
 }

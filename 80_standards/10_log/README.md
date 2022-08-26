@@ -95,7 +95,7 @@ wklog 是一个简单的 log 包实现，demo 中主要展示了 WithLevel() 和
 go run example.go
 ```
 
-### rebirthmonky/pkg/log
+### rebirthmonky/go/pkg/log
 是个可在生产环境使用的 log 包，需要设置的配置参数为：
 
 - `writers`：输出位置，有两个可选项 —— file 和 stdout。选择 file 会将日志记录到 `logger_file` 指定的日志文件中，选择 stdout 会将日志输出到标准输出，当然也可以两者同时选择
@@ -116,3 +116,8 @@ go run example2.go
 go run exmaple2.go -l warn
 ```
 
+### Server
+
+把原先例子中所有 `fmt.Print()` 都通过 log 的形式输出，方便后续在生产环境联调。
+
+其中，在 Gin 框架中，最标准的日志打印方式是通过 log.L(c).Info()  ，其中 c 里面包含了 requestid user 这些信息，传到 log 包中可以解析出来，作为日志的公共字段打印出来，从而丰富日志的信息。

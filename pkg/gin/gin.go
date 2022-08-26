@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rebirthmonkey/go/pkg/log"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -27,13 +28,13 @@ type PreparedServer struct {
 }
 
 func (s *Server) PrepareRun() *PreparedServer {
-	fmt.Println("[GinServer] PrepareRun")
+	log.Info("[GinServer] PrepareRun")
 
 	return &PreparedServer{s}
 }
 
 func (s *PreparedServer) Run() error {
-	fmt.Println("[GinServer] Run")
+	log.Info("[GinServer] Run")
 
 	s.insecureServer = &http.Server{
 		Addr:    s.Insecure.Address,
@@ -48,7 +49,7 @@ func (s *PreparedServer) Run() error {
 	var eg errgroup.Group
 
 	eg.Go(func() error {
-		fmt.Printf("[GinServer] Start to listening the incoming requests on http address: %s", s.Insecure.Address)
+		log.Infof("[GinServer] Start to listening the incoming requests on http address: %s", s.Insecure.Address)
 
 		if err := s.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			fmt.Println(err.Error())
@@ -56,7 +57,7 @@ func (s *PreparedServer) Run() error {
 			return err
 		}
 
-		fmt.Printf("[GinServer] Server on %s stopped", s.Insecure.Address)
+		log.Infof("[GinServer] Server on %s stopped", s.Insecure.Address)
 
 		return nil
 	})
@@ -67,28 +68,28 @@ func (s *PreparedServer) Run() error {
 			return nil
 		}
 
-		fmt.Printf("[GinServer] Start to listening the incoming requests on https address: %s", s.Secure.Address)
+		log.Infof("[GinServer] Start to listening the incoming requests on https address: %s", s.Secure.Address)
 
 		if err := s.secureServer.ListenAndServeTLS(cert, key); err != nil {
-			fmt.Println(err.Error())
+			log.Info(err.Error())
 
 			return err
 		}
 
-		fmt.Printf("[GinServer] Server on %s stopped", s.Secure.Address)
+		log.Infof("[GinServer] Server on %s stopped", s.Secure.Address)
 
 		return nil
 	})
 
 	if err := eg.Wait(); err != nil {
-		fmt.Println(err.Error())
+		log.Info(err.Error())
 	}
 
 	return nil
 }
 
 func (s *Server) init() {
-	fmt.Println("[GinServer] Init")
+	log.Info("[GinServer] Init")
 
 	s.Setup()
 	s.InstallMiddlewares()
@@ -98,7 +99,7 @@ func (s *Server) init() {
 // Setup do some setup work for gin engine.
 func (s *Server) Setup() {
 	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
-		fmt.Printf("%-6s %-s --> %s (%d handlers)", httpMethod, absolutePath, handlerName, nuHandlers)
+		log.Infof("%-6s %-s --> %s (%d handlers)", httpMethod, absolutePath, handlerName, nuHandlers)
 	}
 }
 

@@ -1,8 +1,8 @@
-// this example comes initially from github.com/rebirthmonkey/pkg/log/examples
+// this example comes initially from github.com/rebirthmonkey/go/pkg/log/examples
 package main
 
 import (
-	"github.com/rebirthmonkey/pkg/log"
+	"github.com/rebirthmonkey/go/pkg/log"
 )
 
 func main() {

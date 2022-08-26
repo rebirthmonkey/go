@@ -23,12 +23,3 @@ func NewConfig() *Config {
 func (c *Config) Complete() *CompletedConfig {
 	return &CompletedConfig{c}
 }
-
-func (c CompletedConfig) New() (*Server, error) {
-
-	s := &Server{}
-
-	s.init()
-
-	return s, nil
-}
