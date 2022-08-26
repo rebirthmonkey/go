@@ -1,10 +1,11 @@
 package server
 
 import (
+	"sync"
+
 	"github.com/rebirthmonkey/go/pkg/gin"
 	"github.com/rebirthmonkey/go/pkg/grpc"
 	"github.com/rebirthmonkey/go/pkg/mysql"
-	"sync"
 )
 
 type Config struct {

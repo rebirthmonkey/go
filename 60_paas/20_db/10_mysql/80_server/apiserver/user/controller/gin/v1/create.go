@@ -10,7 +10,7 @@ import (
 )
 
 func (u *controller) Create(c *gin.Context) {
-	fmt.Println("[GINServer] userController: create")
+	fmt.Println("[GinServer] userController: create")
 
 	var user model.User
 

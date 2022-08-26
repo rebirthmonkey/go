@@ -1,11 +1,12 @@
 package server
 
 import (
+	"sync"
+
 	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
 	"github.com/rebirthmonkey/go/pkg/gin"
 	"github.com/rebirthmonkey/go/pkg/grpc"
 	"github.com/rebirthmonkey/go/pkg/mysql"
-	"sync"
 )
 
 type Options struct {

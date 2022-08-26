@@ -8,7 +8,7 @@ import (
 )
 
 func (u *controller) Delete(c *gin.Context) {
-	fmt.Println("[GINServer] userController: delete")
+	fmt.Println("[GinServer] userController: delete")
 
 	if err := u.srv.NewUserService().Delete(c.Param("name")); err != nil {
 		c.JSON(http.StatusBadRequest, err)

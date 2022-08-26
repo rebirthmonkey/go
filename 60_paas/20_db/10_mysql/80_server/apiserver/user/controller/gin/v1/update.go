@@ -10,7 +10,7 @@ import (
 )
 
 func (u *controller) Update(c *gin.Context) {
-	fmt.Println("[GINServer] userController: update")
+	fmt.Println("[GinServer] userController: update")
 
 	var user model.User
 

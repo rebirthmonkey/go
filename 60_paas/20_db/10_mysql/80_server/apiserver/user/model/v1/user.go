@@ -3,9 +3,9 @@ package v1
 import (
 	"time"
 
-	"github.com/marmotedu/component-base/pkg/auth"
-	"github.com/marmotedu/component-base/pkg/util/idutil"
+	"github.com/rebirthmonkey/go/pkg/auth"
 	"github.com/rebirthmonkey/go/pkg/metamodel"
+	"github.com/rebirthmonkey/go/pkg/util/idutil"
 	"gorm.io/gorm"
 )
 

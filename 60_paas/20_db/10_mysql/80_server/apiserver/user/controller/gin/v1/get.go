@@ -8,7 +8,7 @@ import (
 )
 
 func (u *controller) Get(c *gin.Context) {
-	fmt.Println("[GINServer] userController: get")
+	fmt.Println("[GinServer] userController: get")
 
 	user, err := u.srv.NewUserService().Get(c.Param("name"))
 	if err != nil {
