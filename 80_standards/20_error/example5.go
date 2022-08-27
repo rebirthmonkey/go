@@ -2,14 +2,14 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/rebirthmonkey/go/80_standards/20_error/errcode"
-	"github.com/rebirthmonkey/pkg/errors"
-	"github.com/rebirthmonkey/pkg/gin/util"
-	"github.com/rebirthmonkey/pkg/log"
+	"github.com/rebirthmonkey/go/pkg/errcode"
+	"github.com/rebirthmonkey/go/pkg/errors"
+	"github.com/rebirthmonkey/go/pkg/gin/util"
+	"github.com/rebirthmonkey/go/pkg/log"
 )
 
 func pingHandler(ctx *gin.Context) {
-	log.Info("pingHandler() called.")
+	log.L(ctx).Info("pingHandler() called.")
 
 	// Simulate an external error.
 	err := errors.Errorf("auth error")

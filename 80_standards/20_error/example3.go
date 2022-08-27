@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/rebirthmonkey/go/80_standards/20_error/errcode"
 
-	"github.com/rebirthmonkey/pkg/errors"
+	"github.com/rebirthmonkey/go/pkg/errcode"
+	"github.com/rebirthmonkey/go/pkg/errors"
 )
 
 func main() {
@@ -48,7 +48,7 @@ func main() {
 func bindUser() error {
 	if err := getUser(); err != nil {
 		// Step3: Wrap the error with a new error message and a new error code if needed.
-		return errors.WrapC(err, errcode.ErrEncodingFailed, "encoding user failed.")
+		return errors.WrapC(err, errcode.ErrEncodingFailed, "Encoding user failed.")
 	}
 	return nil
 }
@@ -63,5 +63,5 @@ func getUser() error {
 
 func queryDatabase() error {
 	// Step1. Create error with specified error code.
-	return errors.WithCode(errcode.ErrDatabase, "user 'XXX' not found.")
+	return errors.WithCode(errcode.ErrDatabase, "user 'XXX' not found")
 }

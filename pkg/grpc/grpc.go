@@ -29,7 +29,7 @@ func (s *PreparedServer) Run() error {
 
 	listen, err := net.Listen("tcp", s.Address)
 	if err != nil {
-		log.Infof("failed to listen: %s", err.Error())
+		log.Fatalf("failed to listen: %s", err.Error())
 	}
 
 	var eg errgroup.Group
@@ -38,7 +38,7 @@ func (s *PreparedServer) Run() error {
 		log.Infof("[GrpcServer] Start to listening on http address: %s", s.Address)
 
 		if err := s.Serve(listen); err != nil {
-			log.Infof("failed to start grpc productInfoHandler: %s", err.Error())
+			log.Fatalf("failed to start grpc server: %s", err.Error())
 
 			return err
 		}

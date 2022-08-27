@@ -2,7 +2,7 @@ package errcode
 
 import (
 	"github.com/novalagung/gubrak"
-	"github.com/rebirthmonkey/pkg/errors"
+	"github.com/rebirthmonkey/go/pkg/errors"
 )
 
 // ErrCode implements `github.com/rebirthmonkey/pkg/errors` Coder interface.

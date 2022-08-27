@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/rebirthmonkey/pkg/errors"
-	"github.com/rebirthmonkey/pkg/log"
+	"github.com/rebirthmonkey/go/pkg/errors"
+	"github.com/rebirthmonkey/go/pkg/log"
 )
 
 func main() {

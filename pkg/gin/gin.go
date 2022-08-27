@@ -2,7 +2,6 @@ package gin
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -52,7 +51,7 @@ func (s *PreparedServer) Run() error {
 		log.Infof("[GinServer] Start to listening the incoming requests on http address: %s", s.Insecure.Address)
 
 		if err := s.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			fmt.Println(err.Error())
+			log.Fatalf("failed to start Gin HTTP server: %s", err.Error())
 
 			return err
 		}
@@ -71,7 +70,7 @@ func (s *PreparedServer) Run() error {
 		log.Infof("[GinServer] Start to listening the incoming requests on https address: %s", s.Secure.Address)
 
 		if err := s.secureServer.ListenAndServeTLS(cert, key); err != nil {
-			log.Info(err.Error())
+			log.Fatalf("failed to start Gin HTTPS server: %s", err.Error())
 
 			return err
 		}

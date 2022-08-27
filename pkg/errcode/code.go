@@ -48,7 +48,7 @@ const (
 	// ErrPasswordIncorrect - 401: Password was incorrect.
 	ErrPasswordIncorrect
 
-	// PermissionDenied - 403: Permission denied.
+	// ErrPermissionDenied - 403: Permission denied.
 	ErrPermissionDenied
 )
 
@@ -79,6 +79,15 @@ const (
 	ErrDecodingYaml
 )
 
+// server: record errors.
+const (
+	// ErrRecordNotFound - 404: User not found.
+	ErrRecordNotFound int = iota + 110001
+
+	// ErrRecordAlreadyExist - 400: User already exist.
+	ErrRecordAlreadyExist
+)
+
 func init() {
 	register(ErrSuccess, 200, "OK")
 	register(ErrUnknown, 500, "Internal server error")
@@ -102,4 +111,6 @@ func init() {
 	register(ErrInvalidYaml, 500, "Data is not valid Yaml")
 	register(ErrEncodingYaml, 500, "Yaml data could not be encoded")
 	register(ErrDecodingYaml, 500, "Yaml data could not be decoded")
+	register(ErrRecordNotFound, 404, "User not found")
+	register(ErrRecordAlreadyExist, 400, "User already exist")
 }
