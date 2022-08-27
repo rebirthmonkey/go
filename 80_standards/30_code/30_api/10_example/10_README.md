@@ -5,7 +5,7 @@ IAM API 接口文档，相关参考文档如下：
 - [更新历史](20_CHANGELOG.md)
 - API 接口文件：
     - [数据结构](30_struct.md)
-    - [认证相关接口](38_authentication.md)
+    - [认证相关接口](31_authentication.md)
     - [用户相关接口](32_user.md)
     - [密钥相关接口](34_secret.md)
     - [授权策略相关接口](36_policy.md)
@@ -15,11 +15,11 @@ IAM API 接口文档，相关参考文档如下：
 
 ### 认证相关接口
 
-| 接口名称                                         | 接口功能  |
-| ------------------------------------------------ | --------- |
-| [POST /login](38_authentication.md#1-用户登录)    | 用户登录  |
-| [POST /logout](38_authentication.md#2-用户登出)   | 用户登出  |
-| [POST /refresh](38_authentication.md#2-刷新Token) | 刷新Token |
+| 接口名称                                            | 接口功能  |
+|-------------------------------------------------| --------- |
+| [POST /login](31_authentication.md#1-用户登录)      | 用户登录  |
+| [POST /logout](31_authentication.md#2-用户登出)     | 用户登出  |
+| [POST /refresh](31_authentication.md#2-刷新Token) | 刷新Token |
 
 ### 用户相关接口
 
