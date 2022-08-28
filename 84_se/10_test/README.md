@@ -345,3 +345,28 @@ go test
 go test -bench=".*"
 ```
 
+### Server
+
+#### 单元测试
+
+- 在 [Service]() 内添加单元测试
+- 运行单元测试
+
+```shell
+cd apiserver/user/service/v1
+go test
+```
+
+#### 接口测试
+
+- 添加接口测试脚本到[此处](80_server/test/api)
+- 运行接口测试脚本
+
+```shell
+./test/api/test.sh api::test::user
+```
+
+
+
+
+

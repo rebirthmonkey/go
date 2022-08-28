@@ -13,5 +13,3 @@ func TestEqual(t *testing.T) {
 		t.Errorf("equal(%d, %d) should be %v, but is:%v\n", a, b, shouldBe, real)
 	}
 }
-
-// go test
