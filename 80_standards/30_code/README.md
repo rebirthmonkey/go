@@ -1401,7 +1401,32 @@ HTTP 状态码包括：
 
 #### 添加doc.go
 
+##### 安装
 
+```shell
+go get -v golang.org/x/tools/cmd/godoc
+go install -v golang.org/x/tools/cmd/godoc
+```
+
+##### Pkg
+
+- 为每个 pkg 添加 `doc.go` 注释
+- 通过 `go doc .` 命令展示本 pkg 的注释
+
+```shell
+cd apiserver/user/repo
+go doc .
+```
+
+##### Type/Interface/Func
+
+- 在每个 type/interface/func 上添加 `// func-name ...` 注释
+- 通过 `go doc func-name` 展示该 type/interface/func 的详细注释
+
+```shell
+cd apiserver/user/repo
+go doc SetClient
+```
 
 ### 代码规范
 
@@ -1423,7 +1448,8 @@ HTTP 状态码包括：
 ##### Install
 
 ```shell
-go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.41.1
+go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.46
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.46
 golangci-lint version # 输出 golangci-lint 版本号，说明安装成功
 golangci-lint -h # 查看其用法
 ```
@@ -1434,11 +1460,9 @@ run 命令执行 golangci-lint 对代码进行检查，是 golangci-lint 最为�
 
 - `golangci-lint run`：对当前目录及子目录下的所有 Go 文件进行静态代码检查
 - `golangci-lint run dir1 dir2/... dir3/file1.go`：对指定的 Go 文件或者指定目录下的 Go 文件进行静态代码检查
-- `golangci-lint -c .golangci.yaml ./...`：指定配置文件。golangci-lint 默认会从当前目录一层层往上寻找配置文件名 **.golangci.yaml**、**.golangci.toml**、**.golangci.json** 直到根（/）目录。如果找到，就以找到的配置文件作为本次运行的配置文件，所以为了防止读取到未知的配置文件，可以用 --no-config 参数使 golangci-lint 不读取任何配置文件。
+- `golangci-lint run -c .golangci.yaml ./...`：指定配置文件。golangci-lint 默认会从当前目录一层层往上寻找配置文件名 **.golangci.yaml**、**.golangci.toml**、**.golangci.json** 直到根（/）目录。如果找到，就以找到的配置文件作为本次运行的配置文件，所以为了防止读取到未知的配置文件，可以用 --no-config 参数使 golangci-lint 不读取任何配置文件。
 - `golangci-lint run --no-config --disable-all -E errcheck ./...`：指定 linter。
 - `golangci-lint run --no-config -D godot,errcheck`：禁用某些 linter
-
-
 
 ### 版本规范
 
@@ -1460,6 +1484,27 @@ run 命令执行 golangci-lint 对代码进行检查，是 golangci-lint 最为�
 - [LICENSE 文件](LICENSE)
 
 #### addlicense
+
+##### Install
+
+```shell
+go get -u github.com/marmotedu/addlicense
+go install github.com/marmotedu/addlicense
+```
+
+##### Check
+
+```shell
+addlicense --check -f ./scripts/boilerplate.txt . --skip-dirs=third_party
+```
+
+##### Add License
+
+```shell
+addlicense -v -f ./scripts/boilerplate.txt . --skip-dirs=third_party
+```
+
+
 
 
 

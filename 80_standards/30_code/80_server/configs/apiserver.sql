@@ -1,3 +1,7 @@
+-- Copyright 2022 Wukong SUN <rebirthmonkey@gmail.com>. All rights reserved.
+-- Use of this source code is governed by a MIT style
+-- license that can be found in the LICENSE file.
+
 CREATE DATABASE  IF NOT EXISTS `iam` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `iam`;
 

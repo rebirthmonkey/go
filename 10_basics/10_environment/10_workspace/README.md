@@ -8,8 +8,8 @@ Go 的 workspace 被定义在 $GOPATH 工作目录下，其结构有三个子目
 
 Go 的编译模式为：
 
-- go get 获取的代码会放在 `$GOPATH/src` 下面
-- go build 如果依赖第三方 pkg，会在 `$GOROOT/src` 和 `$GOPATH/src` 下面按照 import path 去搜索 pkg
+- go get 获取的代码会放在 `$GOPATH/src` 下。如果采用 mod 模式，则会安装在 mod 的目录下。
+- go install：针对 go get 已经下载的包，把它安装到 bin/ 目录下，从而可以执行
 
 ## src/
 

@@ -1,3 +1,7 @@
+# Copyright 2022 Wukong SUN <rebirthmonkey@gmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
+# license that can be found in the LICENSE file.
+
 # This file contains all available configuration options
 # with their default values.
 
@@ -81,18 +85,6 @@ output:
 
 # all available settings of specific linters
 linters-settings:
-  bidichk:
-    # The following configurations check for all mentioned invisible unicode
-    # runes. It can be omitted because all runes are enabled by default.
-    left-to-right-embedding: true
-    right-to-left-embedding: true
-    pop-directional-formatting: true
-    left-to-right-override: true
-    right-to-left-override: true
-    left-to-right-isolate: true
-    right-to-left-isolate: true
-    first-strong-isolate: true
-    pop-directional-isolate: true
   dogsled:
     # checks assignments with too many blank identifiers; default is 2
     max-blank-identifiers: 2
@@ -716,7 +708,6 @@ linters:
     - asciicheck
     - bodyclose
     - cyclop
-    - deadcode
     - depguard
     - dogsled
     - dupl
@@ -764,25 +755,16 @@ linters:
     - rowserrcheck
     - sqlclosecheck
     - staticcheck
-    - structcheck
     - stylecheck
     - thelper
     - tparallel
     - unconvert
     - unparam
     - unused
-    - varcheck
     - wastedassign
     - whitespace
-    - bidichk
     - wastedassign
-    - golint
-    - execinquery
-    - nosprintfhostport
-    - grouper
-    - decorder
-    - errchkjson
-    - maintidx
+    - revive
       #- containedctx
       #- tagliatelle
       #- nonamedreturns
