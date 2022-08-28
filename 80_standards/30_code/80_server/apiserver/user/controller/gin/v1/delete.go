@@ -10,6 +10,8 @@ import (
 	"github.com/rebirthmonkey/go/pkg/log"
 )
 
+// Delete deletes an user by the user identifier.
+// Only administrator can call this function.
 func (u *controller) Delete(c *gin.Context) {
 	log.L(c).Info("[GinServer] userController: delete")
 

@@ -19,12 +19,14 @@ import (
 	userRepoInterface "github.com/rebirthmonkey/go/80_standards/30_code/80_server/apiserver/user/repo"
 )
 
+// userRepo stores the user's info.
 type userRepo struct {
 	dbEngine *gorm.DB
 }
 
 var _ userRepoInterface.UserRepo = (*userRepo)(nil)
 
+// newUserRepo creates and returns a user storage.
 func newUserRepo(cfg *mysql.CompletedConfig) userRepoInterface.UserRepo {
 	dsn := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
 		cfg.Username,
@@ -43,6 +45,7 @@ func newUserRepo(cfg *mysql.CompletedConfig) userRepoInterface.UserRepo {
 	return &userRepo{dbEngine: db}
 }
 
+// close closes the repo's DB engine.
 func (u *userRepo) close() error {
 	dbEngine, err := u.dbEngine.DB()
 	if err != nil {
@@ -52,6 +55,7 @@ func (u *userRepo) close() error {
 	return dbEngine.Close()
 }
 
+// Create creates a new user account.
 func (u *userRepo) Create(user *model.User) error {
 	tmpUser := model.User{}
 	u.dbEngine.Where("name = ?", user.Name).Find(&tmpUser)
@@ -74,6 +78,7 @@ func (u *userRepo) Create(user *model.User) error {
 	return nil
 }
 
+// Delete deletes the user by the user identifier.
 func (u *userRepo) Delete(username string) error {
 	tmpUser := model.User{}
 	u.dbEngine.Where("name = ?", username).Find(&tmpUser)
@@ -90,6 +95,7 @@ func (u *userRepo) Delete(username string) error {
 	return nil
 }
 
+// Update updates a user account information.
 func (u *userRepo) Update(user *model.User) error {
 	tmpUser := model.User{}
 	u.dbEngine.Where("name = ?", user.Name).Find(&tmpUser)
@@ -106,6 +112,7 @@ func (u *userRepo) Update(user *model.User) error {
 	return nil
 }
 
+// Get returns a user's info by the user identifier.
 func (u *userRepo) Get(username string) (*model.User, error) {
 	user := &model.User{}
 	err := u.dbEngine.Where("name = ?", username).First(&user).Error
@@ -120,6 +127,7 @@ func (u *userRepo) Get(username string) (*model.User, error) {
 	return user, nil
 }
 
+// List returns all the related users.
 func (u *userRepo) List() (*model.UserList, error) {
 	ret := &model.UserList{}
 

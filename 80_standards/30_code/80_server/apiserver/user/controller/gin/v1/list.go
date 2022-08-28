@@ -10,6 +10,8 @@ import (
 	"github.com/rebirthmonkey/go/pkg/log"
 )
 
+// List lists the users in the storage.
+// Only administrator can call this function.
 func (u *controller) List(c *gin.Context) {
 	log.L(c).Info("[GinServer] userController: list")
 

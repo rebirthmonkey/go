@@ -13,16 +13,19 @@ import (
 	userRepoMysql "github.com/rebirthmonkey/go/80_standards/30_code/80_server/apiserver/user/repo/mysql"
 )
 
+// InitGin initializes the Gin server
 func InitGin(g *gin.Engine) {
 	installRouterMiddleware(g)
 	installController(g)
 }
 
+// installRouterMiddleware installs Gin server middlewares
 func installRouterMiddleware(g *gin.Engine) {
 	log.Info("[GinServer] registry LoggerMiddleware")
 	g.Use(middleware.LoggerMiddleware())
 }
 
+// installController installs Gin handlers
 func installController(g *gin.Engine) *gin.Engine {
 	v1 := g.Group("/v1")
 	{

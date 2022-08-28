@@ -14,6 +14,7 @@ import (
 	model "github.com/rebirthmonkey/go/80_standards/30_code/80_server/apiserver/user/model/v1"
 )
 
+// Update updates a user's info by the user identifier.
 func (u *controller) Update(c *gin.Context) {
 	log.L(c).Info("[GinServer] userController: update")
 

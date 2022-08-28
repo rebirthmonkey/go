@@ -16,12 +16,14 @@ import (
 	userRepoInterface "github.com/rebirthmonkey/go/80_standards/30_code/80_server/apiserver/user/repo"
 )
 
+// userRepo stores the user's info.
 type userRepo struct {
 	dbEngine []*v1.User
 }
 
 var _ userRepoInterface.UserRepo = (*userRepo)(nil)
 
+// newUserRepo creates and returns a user storage.
 func newUserRepo() userRepoInterface.UserRepo {
 
 	users := make([]*v1.User, 0)
@@ -42,6 +44,7 @@ func newUserRepo() userRepoInterface.UserRepo {
 	}
 }
 
+// Create creates a new user account.
 func (u *userRepo) Create(user *model.User) error {
 	for _, u := range u.dbEngine {
 		if u.Name == user.Name {
@@ -57,6 +60,7 @@ func (u *userRepo) Create(user *model.User) error {
 	return nil
 }
 
+// Delete deletes the user by the user identifier.
 func (u *userRepo) Delete(username string) error {
 	newUsers := make([]*v1.User, 0)
 
@@ -75,6 +79,7 @@ func (u *userRepo) Delete(username string) error {
 	return nil
 }
 
+// Update updates a user account information.
 func (u *userRepo) Update(user *model.User) error {
 	if err := u.Delete(user.Name); err != nil {
 		return err
@@ -83,6 +88,7 @@ func (u *userRepo) Update(user *model.User) error {
 	return u.Create(user)
 }
 
+// Get returns a user's info by the user identifier.
 func (u *userRepo) Get(username string) (*model.User, error) {
 	for _, u := range u.dbEngine {
 		if u.Name == username {
@@ -93,6 +99,7 @@ func (u *userRepo) Get(username string) (*model.User, error) {
 	return nil, errors.WithCode(errcode.ErrRecordNotFound, "record not found")
 }
 
+// List returns all the related users.
 func (u *userRepo) List() (*model.UserList, error) {
 	users := make([]*v1.User, 0)
 	i := 0

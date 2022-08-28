@@ -5,7 +5,7 @@ import (
 
 	"github.com/golang/mock/gomock"
 
-	spider "github.com/rebirthmonkey/go/84_software-engineering/10_test/10_unit/30_mock/20_example/spider/mock"
+	spider "github.com/rebirthmonkey/go/84_se/10_test/10_unit/30_mock/20_example/spider/mock"
 )
 
 func TestGetGoVersion(t *testing.T) {

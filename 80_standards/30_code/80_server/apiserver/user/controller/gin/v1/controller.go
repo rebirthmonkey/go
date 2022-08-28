@@ -11,6 +11,7 @@ import (
 	srv "github.com/rebirthmonkey/go/80_standards/30_code/80_server/apiserver/user/service/v1"
 )
 
+// Controller creates a user handler interface for user resource.
 type Controller interface {
 	Create(c *gin.Context)
 	Delete(c *gin.Context)
@@ -19,10 +20,12 @@ type Controller interface {
 	List(c *gin.Context)
 }
 
+// controller creates a user handler used to handle request for user resource.
 type controller struct {
 	srv srv.Service
 }
 
+// NewController creates a user handler.
 func NewController(repo repo.Repo) Controller {
 	return &controller{
 		srv: srv.NewService(repo),

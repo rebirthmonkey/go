@@ -13,6 +13,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// User represents a user restful resource. It is also used as data model.
 type User struct {
 	metamodel.ObjectMeta `json:"metadata,omitempty"`
 
@@ -26,6 +27,7 @@ type User struct {
 	LoginedAt   time.Time `json:"loginedAt,omitempty" gorm:"column:loginedAt"`
 }
 
+// UserList is the whole list of all users which have been stored in the storage.
 type UserList struct {
 	// +optional
 	metamodel.ListMeta `json:",inline"`

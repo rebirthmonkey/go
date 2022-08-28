@@ -10,6 +10,7 @@ import (
 	"github.com/rebirthmonkey/go/pkg/log"
 )
 
+// Get gets a user's info by the user identifier.
 func (u *controller) Get(c *gin.Context) {
 	log.L(c).Info("[GinServer] userController: get")
 

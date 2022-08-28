@@ -10,6 +10,7 @@ import (
 	"github.com/rebirthmonkey/go/80_standards/30_code/80_server/apiserver/server"
 )
 
+// NewApp creates an App object with default parameters.
 func NewApp(basename string) *app.App {
 	opts := server.NewOptions()
 	application := app.NewApp("apiserver",
@@ -22,6 +23,7 @@ func NewApp(basename string) *app.App {
 	return application
 }
 
+// run launches the App object.
 func run(opts *server.Options) app.RunFunc {
 	return func(basename string) error {
 		server, err := server.NewServer(opts)

@@ -14,6 +14,7 @@ import (
 	model "github.com/rebirthmonkey/go/80_standards/30_code/80_server/apiserver/user/model/v1"
 )
 
+// Create add new user to the storage.
 func (u *controller) Create(c *gin.Context) {
 	log.L(c).Info("[GinServer] userController: create")
 

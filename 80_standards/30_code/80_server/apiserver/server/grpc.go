@@ -12,6 +12,7 @@ import (
 	userRepoMysql "github.com/rebirthmonkey/go/80_standards/30_code/80_server/apiserver/user/repo/mysql"
 )
 
+// InitGrpc initializes the Grpc server
 func InitGrpc(server *grpc.Server) {
 	log.Info("[GrpcServer] registry userController")
 

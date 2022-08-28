@@ -10,6 +10,7 @@ import (
 	userRepoInterface "github.com/rebirthmonkey/go/80_standards/30_code/80_server/apiserver/user/repo"
 )
 
+// repo defines the APIServer storage.
 type repo struct {
 	userRepo userRepoInterface.UserRepo
 }
@@ -21,6 +22,7 @@ var (
 
 var _ userRepoInterface.Repo = (*repo)(nil)
 
+// Repo creates and returns the store client instance.
 func Repo() (userRepoInterface.Repo, error) {
 	once.Do(func() {
 		r = repo{
@@ -31,10 +33,12 @@ func Repo() (userRepoInterface.Repo, error) {
 	return r, nil
 }
 
+// UserRepo returns the user store client instance.
 func (r repo) UserRepo() userRepoInterface.UserRepo {
 	return r.userRepo
 }
 
+// Close closes the repo.
 func (r repo) Close() error {
 	return nil
 }

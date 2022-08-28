@@ -10,6 +10,7 @@ import (
 	"github.com/rebirthmonkey/go/pkg/log"
 )
 
+// ListUsers lists the users in the storage.
 func (c *controller) ListUsers(ctx context.Context, r *ListUsersRequest) (*ListUsersResponse, error) {
 	log.L(ctx).Info("[GrpcServer] controller: ListUsers")
 

@@ -21,7 +21,7 @@ testing 包需要在编写测试文件、测试函数、测试变量时遵循一
 
 单元测试用例函数以 Test 开头，例如 TestXxx 或 Test_xxx（ Xxx 部分为任意字母数字组合，首字母大写）。函数参数必须是 *testing.T，可以使用该类型来记录错误或测试状态。可以调用 testing.T 的 Error 、Errorf 、FailNow  、Fatal 、FatalIf 方法，来说明测试不通过。调用 Log 、Logf 方法来记录测试信息。
 
-<img src="figures/b374d392abfe62459d2c22e6ff76c0ab.jpg" alt="img" style="zoom:50%;" />
+<img src="figures/image-20220828110018192.png" alt="image-20220828110018192" style="zoom: 33%;" />
 
 go test 命令自动搜集所有的测试文件，也就是格式为 *_test.go 的文件，从中提取全部测试函数并执行。go test 还支持下面三个参数。
 

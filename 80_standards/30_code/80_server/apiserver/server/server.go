@@ -11,16 +11,19 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+// Server is the running structure of the server.
 type Server struct {
 	ginServer  *gin.Server
 	grpcServer *grpc.Server
 }
 
+// PreparedServer is the running structure of the initialized server.
 type PreparedServer struct {
 	preparedGinServer  *gin.PreparedServer
 	preparedGrpcServer *grpc.PreparedServer
 }
 
+// NewServer creates a running server instance
 func NewServer(opts *Options) (*Server, error) {
 	config := NewConfig()
 
@@ -36,6 +39,7 @@ func NewServer(opts *Options) (*Server, error) {
 	return serverInstance, nil
 }
 
+// PrepareRun creates a running server instance after complete initialization.
 func (s *Server) PrepareRun() PreparedServer {
 	log.Info("[Server] PrepareRun")
 
@@ -48,6 +52,7 @@ func (s *Server) PrepareRun() PreparedServer {
 	}
 }
 
+// Run launches the prepared server instance.
 func (s PreparedServer) Run() error {
 	log.Info("[PreparedServer] Run")
 

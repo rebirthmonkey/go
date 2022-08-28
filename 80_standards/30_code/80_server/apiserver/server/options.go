@@ -14,6 +14,7 @@ import (
 	"github.com/rebirthmonkey/go/pkg/mysql"
 )
 
+// Options is the options of a server.
 type Options struct {
 	LogOptions   *log.Options   `json:"log"   mapstructure:"log"`
 	MysqlOptions *mysql.Options `json:"mysql"   mapstructure:"mysql"`

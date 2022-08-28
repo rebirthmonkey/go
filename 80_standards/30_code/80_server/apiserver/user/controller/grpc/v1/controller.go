@@ -11,15 +11,18 @@ import (
 	srv "github.com/rebirthmonkey/go/80_standards/30_code/80_server/apiserver/user/service/v1"
 )
 
+// Controller creates a GRPC user interface for user resource.
 type Controller interface {
 	ListUsers(ctx context.Context, r *ListUsersRequest) (*ListUsersResponse, error)
 }
 
+// controller creates a GRPC user handler used to handle request for user resource.
 type controller struct {
 	srv srv.Service
 	UnimplementedUserServer
 }
 
+// NewController creates a GRPC user handler.
 func NewController(repo repo.Repo) *controller {
 	return &controller{
 		srv: srv.NewService(repo),

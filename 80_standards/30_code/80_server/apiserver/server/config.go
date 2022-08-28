@@ -13,6 +13,7 @@ import (
 	"github.com/rebirthmonkey/go/pkg/mysql"
 )
 
+// Config is the running configuration structure of the server.
 type Config struct {
 	LogConfig   *log.Config
 	MysqlConfig *mysql.Config
@@ -20,6 +21,7 @@ type Config struct {
 	GrpcConfig  *grpc.Config
 }
 
+// CompletedConfig is the complete configuration structure of the server.
 type CompletedConfig struct {
 	CompletedLogConfig   *log.CompletedConfig
 	CompletedMysqlConfig *mysql.CompletedConfig
@@ -32,6 +34,8 @@ var (
 	onceConfig sync.Once
 )
 
+// NewConfig creates a running configuration instance based
+// on a given command line or configuration file option.
 func NewConfig() *Config {
 	return &Config{
 		LogConfig:   log.NewConfig(),
@@ -41,6 +45,7 @@ func NewConfig() *Config {
 	}
 }
 
+// Complete set default Configs.
 func (c *Config) Complete() *CompletedConfig {
 
 	onceConfig.Do(func() {
@@ -55,6 +60,7 @@ func (c *Config) Complete() *CompletedConfig {
 	return &config
 }
 
+// New creates a new server based on the configuration
 func (c *CompletedConfig) New() (*Server, error) {
 	err := c.CompletedLogConfig.New()
 	if err != nil {
