@@ -2,28 +2,25 @@
 .DEFAULT_GOAL := all
 
 .PHONY: all
-all: tidy gen add-copyright format lint cover build
+all: tools tidy clean build
 
 # ==============================================================================
 # Build options
 
-ROOT_PACKAGE=github.com/marmotedu/iam
-VERSION_PACKAGE=github.com/marmotedu/component-base/pkg/version
+ROOT_PACKAGE=github.com/rebirthmonkey/go/84_se/20_build/80_server
+VERSION_PACKAGE=github.com/rebirthmonkey/go/pkg/version
 
 # ==============================================================================
 # Includes
 
 include scripts/make-rules/common.mk # make sure include common.mk at the first include line
-include scripts/make-rules/golang.mk
-include scripts/make-rules/image.mk
-include scripts/make-rules/deploy.mk
-include scripts/make-rules/copyright.mk
-include scripts/make-rules/gen.mk
-include scripts/make-rules/ca.mk
-include scripts/make-rules/release.mk
-include scripts/make-rules/swagger.mk
-include scripts/make-rules/dependencies.mk
 include scripts/make-rules/tools.mk
+include scripts/make-rules/golang.mk
+include scripts/make-rules/docker.mk
+#include scripts/make-rules/deploy.mk
+#include scripts/make-rules/copyright.mk
+#include scripts/make-rules/release.mk
+
 
 # ==============================================================================
 # Usage
@@ -52,16 +49,6 @@ export USAGE_OPTIONS
 # ==============================================================================
 # Targets
 
-## build: Build source code for host platform.
-.PHONY: build
-build:
-	@$(MAKE) go.build
-
-## build.multiarch: Build source code for multiple platforms. See option PLATFORMS.
-.PHONY: build.multiarch
-build.multiarch:
-	@$(MAKE) go.build.multiarch
-
 ## image: Build docker images for host arch.
 .PHONY: image
 image:
@@ -82,10 +69,16 @@ push:
 push.multiarch:
 	@$(MAKE) image.push.multiarch
 
-## deploy: Deploy updated components to development env.
-.PHONY: deploy
-deploy:
-	@$(MAKE) deploy.run
+
+## build: Build source code for host platform.
+.PHONY: build
+build:
+	@$(MAKE) go.build
+
+## build.multiarch: Build source code for multiple platforms. See option PLATFORMS.
+.PHONY: build.multiarch
+build.multiarch:
+	@$(MAKE) go.build.multiarch
 
 ## clean: Remove all files that are created by building.
 .PHONY: clean
@@ -93,92 +86,27 @@ clean:
 	@echo "===========> Cleaning all build output"
 	@-rm -vrf $(OUTPUT_DIR)
 
-## lint: Check syntax and styling of go sources.
-.PHONY: lint
-lint:
-	@$(MAKE) go.lint
+## run: Run the application.
+.PHONY: run
+run:
+	@$(MAKE) go.run
 
 ## test: Run unit test.
 .PHONY: test
 test:
 	@$(MAKE) go.test
 
-## cover: Run unit test and get test coverage.
-.PHONY: cover 
-cover:
-	@$(MAKE) go.test.cover
+## tidy: run go mod tidy
+.PHONY: tidy
+tidy:
+	@$(GO) mod tidy
 
-.PHONY: release.build
-release.build:
-	@$(MAKE) push.multiarch
-
-## release: Release iam
-.PHONY: release
-release:
-	@$(MAKE) release.run
-
-## format: Gofmt (reformat) package sources (exclude vendor dir if existed).
-.PHONY: format
-format: tools.verify.golines tools.verify.goimports
-	@echo "===========> Formating codes"
-	@$(FIND) -type f -name '*.go' | $(XARGS) gofmt -s -w
-	@$(FIND) -type f -name '*.go' | $(XARGS) goimports -w -local $(ROOT_PACKAGE)
-	@$(FIND) -type f -name '*.go' | $(XARGS) golines -w --max-len=120 --reformat-tags --shorten-comments --ignore-generated .
-	@$(GO) mod edit -fmt
-
-## verify-copyright: Verify the boilerplate headers for all files.
-.PHONY: verify-copyright
-verify-copyright:
-	@$(MAKE) copyright.verify
-
-## add-copyright: Ensures source code files have copyright license headers.
-.PHONY: add-copyright
-add-copyright:
-	@$(MAKE) copyright.add
-
-## gen: Generate all necessary files, such as error code files.
-.PHONY: gen
-gen:
-	@$(MAKE) gen.run
-
-## ca: Generate CA files for all iam components.
-.PHONY: ca
-ca:
-	@$(MAKE) gen.ca
-
-## install: Install iam system with all its components.
-.PHONY: install
-install:
-	@$(MAKE) install.install
-
-## swagger: Generate swagger document.
-.PHONY: swagger
-swagger:
-	@$(MAKE) swagger.run
-
-## serve-swagger: Serve swagger spec and docs.
-.PHONY: swagger.serve
-serve-swagger:
-	@$(MAKE) swagger.serve
-
-## dependencies: Install necessary dependencies.
-.PHONY: dependencies
-dependencies:
-	@$(MAKE) dependencies.run
 
 ## tools: install dependent tools.
 .PHONY: tools
 tools:
 	@$(MAKE) tools.install
 
-## check-updates: Check outdated dependencies of the go projects.
-.PHONY: check-updates
-check-updates:
-	@$(MAKE) go.updates
-
-.PHONY: tidy
-tidy:
-	@$(GO) mod tidy
 
 ## help: Show this help info.
 .PHONY: help

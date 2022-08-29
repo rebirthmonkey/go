@@ -1,9 +1,7 @@
 # Lib
 
-## Cmd
-- [Cmd](05_option-config/README.md)
+## Option-Config
+- [Option-Config](05_option-config/README.md)：启动时的 option、config 等配置。
 
 
-## Edit
-- [Edit](07_edit/README.md)
 

@@ -16,6 +16,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/sessions v1.2.1
+	github.com/gosuri/uitable v0.0.4
 	github.com/hyahm/goconfig v0.0.0-20220416013428-af75691b369c
 	github.com/marmotedu/component-base v1.6.2
 	github.com/marmotedu/iam v1.6.2
@@ -67,7 +68,6 @@ require (
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect
-	github.com/gosuri/uitable v0.0.4 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect

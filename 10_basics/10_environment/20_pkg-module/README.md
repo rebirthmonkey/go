@@ -58,8 +58,6 @@ Go 中有 4 种类型的包：
 - 匿名包：只导入而不使用的包。通常情况下，只是想使用导入包产生的副作用，即引用包级别的变量、常量、结构体、接口等，以及执行导入包的init()函数。
 - 内部包：项目内部的包，位于项目目录下。
 
-
-
 ## Module
 
 Go Modules 是 Go 官方推出的一个  Go 包管理方案，基于 vgo 演进而来，具有下面这几个特性：
@@ -88,11 +86,7 @@ Go 依赖包管理工具经历了五个阶段：
 - Dep：对于从 0 构建项目的新用户来说，Glide 功能足够，是个不错的选择。不过，Golang 依赖管理工具混乱的局面最终由官方来终结了：Golang 官方接纳了由社区组织合作开发的 Dep，作为标准，成为了事实上的官方包管理工具。
 - Go  Modules：Go1.11 版本推出了 Go Modules 机制，Go Modules 基于 vgo 演变而来，是 Golang  官方的包管理工具。在 Go1.13 版本，Go 语言将 Go Modules 设置为默认的 Go 管理工具；在 Go1.14 版本，Go  语言官方正式推荐在生产环境使用 Go Modules，并且鼓励所有用户从其他的依赖管理工具迁移过来。至此，Go 终于有了一个稳定的、官方的 Go 包管理工具。
 
-
-
-<img src="figures/348d772b26940f721c6fb907f6833be5.jpg" alt="img" style="zoom:50%;" />
-
-
+<img src="figures/image-20220829150533468.png" alt="image-20220829150533468" style="zoom:50%;" />
 
 ### 原理
 
@@ -269,5 +263,6 @@ go run main.go
 1. [关于Go Modules，看这一篇文章就够了](https://zhuanlan.zhihu.com/p/105556877?utm_source=wechat_session)
 1. [初窥Go module](https://tonybai.com/2018/07/15/hello-go-module/)
 1. [Go 语言全新依赖管理系统 Go Modules 使用详解](https://www.toutiao.com/i6714564564194689543/?tt_from=weixin&utm_campaign=client_share&wxshare_count=1&timestamp=1597249873&app=news_article&utm_source=weixin&utm_medium=toutiao_ios&use_new_style=1&req_id=2020081300311301001405309209375D1B&group_id=6714564564194689543)
-1. 
+
+
 

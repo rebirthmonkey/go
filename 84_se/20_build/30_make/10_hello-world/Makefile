@@ -7,4 +7,4 @@ hello.o: hello.c
 
 .PHONY: clean
 clean:
-	rm hello.o
+	rm hello.o hello

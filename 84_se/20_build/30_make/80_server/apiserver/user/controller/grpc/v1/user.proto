@@ -1,0 +1,42 @@
+// Copyright 2022 Wukong SUN <rebirthmonkey@gmail.com>. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
+syntax = "proto3";
+
+package proto;
+option go_package = "github.com/rebirthmonkey/go/80_standards/10_log/80_server/apiserver/user/controller/grpc/v1";
+
+
+//go:generate protoc -I. --go_out=plugins=grpc:.
+
+
+// User implements a cache rpc service.
+service User{
+	rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {}
+}
+
+// ListUsersRequest defines ListUsers request struct.
+message ListUsersRequest {
+    optional int64 offset = 1;
+    optional int64 limit = 2;
+}
+
+// UserInfo contains user details.
+message UserInfo {
+    int64 status = 1;
+    string Nickname = 2;
+    string Password  = 3;
+    string Email   = 4;
+    string Phone = 5;
+    int64 IsAdmin = 6;
+    string TotalPolicy = 7;
+    string LoginedAt = 8;
+}
+
+// ListUsersResponse defines ListUsers response struct.
+message ListUsersResponse {
+    int64 total_count = 1;
+    repeated  UserInfo items = 2;
+}
+
