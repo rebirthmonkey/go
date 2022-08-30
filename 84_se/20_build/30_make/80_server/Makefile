@@ -7,7 +7,7 @@ all: tools tidy clean build
 # ==============================================================================
 # Build options
 
-ROOT_PACKAGE=github.com/rebirthmonkey/go/84_se/20_build/80_server
+ROOT_PACKAGE=~/workspace/go/84_se/20_build/30_make/80_server
 VERSION_PACKAGE=github.com/rebirthmonkey/go/pkg/version
 
 # ==============================================================================
@@ -16,8 +16,8 @@ VERSION_PACKAGE=github.com/rebirthmonkey/go/pkg/version
 include scripts/make-rules/common.mk # make sure include common.mk at the first include line
 include scripts/make-rules/tools.mk
 include scripts/make-rules/golang.mk
-include scripts/make-rules/docker.mk
-#include scripts/make-rules/deploy.mk
+include scripts/make-rules/image.mk
+include scripts/make-rules/deploy.mk
 #include scripts/make-rules/copyright.mk
 #include scripts/make-rules/release.mk
 
@@ -49,25 +49,25 @@ export USAGE_OPTIONS
 # ==============================================================================
 # Targets
 
+## deploy: Deploy updated components to development env.
+.PHONY: deploy
+deploy: image
+	@$(MAKE) deploy.run
+
+## undeploy: undeploy updated components to development env.
+.PHONY: undeploy
+undeploy:
+	@$(MAKE) deploy.clean
+
 ## image: Build docker images for host arch.
 .PHONY: image
 image:
 	@$(MAKE) image.build
 
-## image.multiarch: Build docker images for multiple platforms. See option PLATFORMS.
-.PHONY: image.multiarch
-image.multiarch:
-	@$(MAKE) image.build.multiarch
-
 ## push: Build docker images for host arch and push images to registry.
 .PHONY: push
 push:
 	@$(MAKE) image.push
-
-## push.multiarch: Build docker images for multiple platforms and push images to registry.
-.PHONY: push.multiarch
-push.multiarch:
-	@$(MAKE) image.push.multiarch
 
 
 ## build: Build source code for host platform.

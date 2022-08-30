@@ -161,10 +161,39 @@ make run
 
 #### Build
 
+Build current platform
+
 ```shell
 make clean
 make build
 make clean
+```
+
+Build multiple platforms
+
+```shell
+make clean
+make build.multiarch
+make clean
+```
+
+#### Docker Image & Run
+
+```shell
+make image
+docker run -d -v /Users/ruan/workspace/go/84_se/20_build/30_make/80_server/configs/:/etc/apiserver/ -p 8080:8080 wukongsun/apiserver-amd64:a46f731
+```
+
+注意：因为运行环境不同，在 Docker 镜像启动时，需要修改 apiserver.yaml 的 3 个参数：
+
+- gin/secure/cert-file
+- gin/secure/ private-key-file
+- mysql/host
+
+#### K8s Run
+
+```
+make deploy
 ```
 
 

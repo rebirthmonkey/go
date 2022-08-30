@@ -7,7 +7,8 @@
 #INSECURE_AUTHZSERVER=${IAM_AUTHZ_SERVER_HOST}:${IAM_AUTHZ_SERVER_INSECURE_BIND_PORT}
 
 API_ROOT=.
-INSECURE_SERVER="127.0.0.1:8080"
+#INSECURE_SERVER="127.0.0.1:8080"
+INSECURE_SERVER="127.0.0.1:30080"
 SECURE_SERVER="127.0.0.1:8443"
 
 Header="-HContent-Type: application/json"
@@ -57,7 +58,6 @@ api::test::user()
 
   api::log::info "$(echo -e '\033[32mcongratulations, /v1/user test passed!\033[0m')"
 }
-
 
 
 if [[ "$*" =~ api::test:: ]];then
