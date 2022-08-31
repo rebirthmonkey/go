@@ -15,9 +15,9 @@ type Product struct {
 	Price uint   `gorm:"column:price"`
 }
 
-// TableName maps to mysql table name, from Product to xxx.
+// TableName maps to mysql table name, from Product to test.
 func (p *Product) TableName() string {
-	return "xxx"
+	return "test"
 }
 
 func main() {

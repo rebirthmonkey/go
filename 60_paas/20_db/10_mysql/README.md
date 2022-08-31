@@ -97,6 +97,11 @@ Gorm 支持两种删除方法：软删除和永久删除：
 
 ### Lab
 
+- Mysql DB 初始化
+```shell
+mysql -h 127.0.0.1 -u root -p < test.sql
+```
+
 - [Gorm](20_gorm/10_gorm.go)
 ```shell
 go run 10_gorm.go -H 127.0.0.1:3306 -u root -p P@ssw0rd -d test
