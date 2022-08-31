@@ -15,3 +15,9 @@
 .idea/
 bin/
 src/
+
+*/.bak
+*/*/.bak
+*/*/*/.bak
+*/*/*/*/.bak/
+

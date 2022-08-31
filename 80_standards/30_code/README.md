@@ -1468,20 +1468,20 @@ run 命令执行 golangci-lint 对代码进行检查，是 golangci-lint 最为�
 
 #### CHANGELOG
 
-- [CHANGELOG](CHANGELOG/)
+- [CHANGELOG](80_server/CHANGELOG)
 
 ### 接口规范
 
 #### 添加接口文档
 
-- [API 定义](api/)：API 定义文档，包含 OpanAPI 3.0 规范
-- [用户 API 接口文档](docs/guide/api)：用于展示对应 REST 资源接口
+- [API 定义](80_server/api)：API 定义文档，包含 OpanAPI 3.0 规范
+- [用户 API 接口文档](80_server/docs/guide/api)：用于展示对应 REST 资源接口
 
 ### 开源规范
 
 #### LICENSE 文件
 
-- [LICENSE 文件](LICENSE)
+- [LICENSE 文件](80_server/LICENSE)
 
 #### addlicense
 
