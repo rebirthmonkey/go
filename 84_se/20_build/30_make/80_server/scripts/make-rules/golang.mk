@@ -68,7 +68,7 @@ go.build.multiarch: go.build.verify $(foreach p,$(PLATFORMS),$(addprefix go.buil
 .PHONY: go.run
 go.run:
 	@echo "===========> Running the application"
-	@$(GO) run cmd/apiserver.go -c configs/config.yaml
+	@$(GO) run cmd/apiserver.go -c configs/apiserver.yaml
 
 
 .PHONY: go.clean
