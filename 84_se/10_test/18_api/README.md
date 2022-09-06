@@ -67,6 +67,9 @@ Thread Stats 是线程统计，包括 Latency 和  Req/Sec。
 
 ```shell
 ./wrk -t10 -c100 -d5s -T5s --latency http://129.204.97.254:8080/v1/users
+
+
+./wrk -t10 -c100 -d5s -T5s --latency http://192.168.34.15:8080/v1/users
 ```
 
 
