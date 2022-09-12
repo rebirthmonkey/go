@@ -27,12 +27,10 @@
 - [PaaS](60_paas/README.md)
 
 
-## Advanced
-
-- [Advanced](70_advanced/README.md)
-
-
-## Standards(Optional)
+## Standards
 
 - [Standards](80_standards/README.md)
 
+## Software Engineering
+
+- [Software Engineering](84_se/README.md)

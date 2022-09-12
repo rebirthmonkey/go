@@ -1391,7 +1391,9 @@ HTTP 状态码包括：
 - 做好推广：如果有条件，可以宣传运营开源项目，让更多的人知道，更多的人用，更多的人贡献代码。例如：在掘金、简书等平台发表文章，创建 QQ、微信交流群等。
 - Git 工作流：选择合适的 Git 工作流，并遵循 GIt 工作流使用规范，例如 Gitflow 工作流。
 
-## Lab
+## apiserver
+
+apiserver 实例前期在代码规范上完全没有按照标准，在新的代码中，在代码规范方面额外做了加强，具体添加内容如下。
 
 ### 目录规范
 
@@ -1503,10 +1505,6 @@ addlicense --check -f ./scripts/boilerplate.txt . --skip-dirs=third_party
 ```shell
 addlicense -v -f ./scripts/boilerplate.txt . --skip-dirs=third_party
 ```
-
-
-
-
 
 ## Ref
 

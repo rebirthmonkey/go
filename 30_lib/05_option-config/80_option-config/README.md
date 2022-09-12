@@ -36,21 +36,43 @@ Options 结构体面向配置文件，而 Config 结构体则更面向 app 运�
 - CompletedConfig.New()：基于完整的 CompleteConfig 创建 runtime app，如`apiserver := completeConfig.New()`
   - 在本例中通过 createAPIServer(Config) 合并以上几步
 
-### app
+## Lab
 
-app 是针对 App 的结构体，它默认包含 Command、APIServer 两部分，位于 pkg/app 包中。
+```shell
+go run cmd/apiserver.go -c configs/config.yaml
+```
 
-#### Command
+### Question
+
+介绍 Cobra Command 加载的 flat、config-file 的逻辑及顺序？
+
+## apiserver 示例
+
+### 简介
+
+从本章开始，穿插着各个 Go 的知识点，会用一个真正的、企业级的 Go 应用 apiserver 进行讲解。一步步展示如何构建该应用，在构建过程中，如何使用现有的各个知识点。
+
+总体来说，整个 apiserver 应用将从实战准备、基础实战、进阶实战等 3 个阶段进行讲解。具体内容包括：
+
+<img src="figures/image-20220912161630008.png" alt="image-20220912161630008" style="zoom:50%;" />
+
+该应用核心是对外提供一个 web service，包括 CRUD 等不同操作。
+
+<img src="figures/image-20220912161704546.png" alt="image-20220912161704546" style="zoom:50%;" />
+
+apiserver 首先是个可启动的 app，app 是针对 App 的结构体，它默认包含 Command、APIServer 两部分，位于 pkg/app 包中。
+
+### Cobra.Command
 
 cobra.Command 是 App 自带 Cobra 的 Command 结构体，用于处理 flag、option、config-file 等。
 
-##### Option 模式
+#### Option 模式
 
 - WithOption()：将 Options 赋值给 App
 - WithRunFunc()：将 回调函数赋值给 App 的启动流程
 - WithDescription()：将 desc 赋值给 App 的 Description
 
-##### buildCommand() 流程
+#### buildCommand() 流程
 
 - 创建 cmd
 - 将 commands[] 添加到 cmd
@@ -59,27 +81,17 @@ cobra.Command 是 App 自带 Cobra 的 Command 结构体，用于处理 flag、o
 - 将 cmd 赋值给 App.cmd
 - App 通过 Run() 调用 App.cmd.Execute()
 
-#### apiServer
-
-##### apiServer
+### apiServer 结构体
 
 apiServer 结构体用于包含各种类型的 server，**是整个App核心的扩展处**，常包含 genericServer、grpcServer 等，本案例包含 genericServer（Gin），它位于 internal/apiserver/server.go。
 
 - CompleteConfig.New()：把完整的 completeConfig 变成一个 runtime App（apiServer）
 - server.PrepareRun()：对 apiserver 进行如 OpenAPI 以及其他 API 的安装等初始化操作，转换为 PreapreAPIServer，如 `preparedapiserver := apiserver.PrepareRun()`
 
-##### preparedAPIServer
+#### preparedAPIServer
 
 完成初始化后 apiServer，它位于 internal/apiserver/server.go。
 
 - preparedapiserver.Run()：运行 preparedapiserver，如 `preparedapiserver.Run()`
 
-## Lab
-
-```shell
-go run cmd/apiserver.go -c configs/config.yaml
-```
-
-#### Question
-
-介绍 Cobra Command 加载的 flat、config-file 的逻辑及顺序？
+## 

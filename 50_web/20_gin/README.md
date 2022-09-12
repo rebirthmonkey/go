@@ -132,8 +132,6 @@ func TODO() Context {
 - Context 是线程安全的，可以放心的在多个 goroutine 中传递。
 - 可以把一个 Context 对象传递给任意个数的 gorotuine，对它执行取消操作时，所有 goroutine 都会接收到取消信号。
 
-
-
 ### 路由
 
 #### Group
@@ -144,13 +142,9 @@ func TODO() Context {
 
 还可以多级嵌套
 
-
-
 #### Redirect
 
 重定向
-
-
 
 ## Middleware
 
@@ -176,13 +170,11 @@ g.Use(middleware.AuthMiddleware())
 
 该函数会先交由后续 middleware、handler 处理完后，再继续处理剩下的代码。
 
-
-
 ## Ctl-Svr-Repo
 
 controller 存放请求处理相关，service 存放具体的业务逻辑处理。controller 主要用来做请求参数解析、校验，参数返回，如果是简单的业务可以放在 controller 中。因为这样，也仍然能够比较清晰的看到这个请求的处理流程。但是如果是比较复杂的业务，需要放在 service 中，因为如果放在 controller 中，请求参数的处理、校验还有业务逻辑混在一起，一个是不好维护，另一个是不好阅读。
 
-
+<img src="figures/image-20220912163110055.png" alt="image-20220912163110055" style="zoom:50%;" />
 
 ## Lab
 
@@ -399,72 +391,19 @@ curl http://127.0.0.1:8080/sync
 curl http://127.0.0.1:8080/async
 ```
 
+## apiserver 示例
+
 ### Insecure Server
 
-
-
-
-#### Run
-
-```shell
-go run cmd/apiserver.go -c configs/config.yaml
-```
-
-#### Test
-##### create
-
-```shell
-curl -X POST -H "Content-Type: application/json" \
--d '{"metadata":{"name":"user99", "password":"admin"},"description":"admin user"}' \
-http://127.0.0.1:8080/v1/users
-```
-
-##### list
-
-```shell
-curl -X GET http://127.0.0.1:8080/v1/users
-```
-
-##### get
-
-```shell
-curl -X GET http://127.0.0.1:8080/v1/users/user99
-```
-
-##### update
-
-```shell
-curl -X PUT -H "Content-Type: application/json" \
--d '{"metadata":{"name":"user99"},"nickname":"xxx"}' \
-http://127.0.0.1:8080/v1/users/user99
-```
-
-##### delete
-
-不带JWT
-
-```shell
-curl -X DELETE http://127.0.0.1:8080/v1/users/user99
-```
-
-
+我们的 apiserver 示例，基于之前的 App Option&Config，本例中需要添加上 Gin 的 HTTP 及 HTTPS 两个 web service。Gin HTTP 服务的介绍[在此](96_insecure/README.md)。
 
 ### Secure Server
 
-与 insecure server 唯一不同之处在于，curl 命令需要加上 --insecure flag
-
-```shell
-curl --insecure -X GET https://127.0.0.1:8443/v1/users
-```
-
-
-
-
+apiserver 的 HTTPS 服务的介绍[在此](97_secure/README.md)。
 
 ## Ref
 
 1. [Golang 微框架 Gin 简介](https://www.jianshu.com/p/a31e4ee25305)
-2. 
 
 
 

@@ -112,13 +112,9 @@ go run 10_gorm.go -H 127.0.0.1:3306 -u root -p P@ssw0rd -d test
 go run 12_gorm-model.go -H 127.0.0.1:3306 -u root -p P@ssw0rd -d test
 ```
 
-## Server
+## apiserver 示例
 
-
-
-Gorm 默认的 Table Name 都是复数，在设计数据结构是，得加上TableName() 函数来改为单数。
-
-
+apiserver 示例后端需要持久化存储，所以采用 MySQL Gorm 作为其持久化存储引擎，具体介绍[在此](80_server/README.md)。
 
 ## Ref
 

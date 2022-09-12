@@ -213,8 +213,6 @@ go run server/main.go
 go run client/main.go
 ```
 
-
-
 ### route-guide
 
 #### 创建proto
@@ -234,41 +232,15 @@ protoc --go_out=. --go_opt=paths=source_relative \
 
 #### 创建 server 端
 
-
+见代码
 
 #### 创建 client 端
 
+见代码
 
+## apiserver 示例
 
-### Server
-
-#### 创建 PB 文件
-
-```shell
-cd apiserver/model/v1
-protoc --go_out=. --go_opt=paths=source_relative \
-    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-    --experimental_allow_proto3_optional \
-    user.proto
-```
-
-#### 运行
-
-```shell
-go run cmd/apiserver.go -c configs/config.yaml
-```
-
-#### Test
-
-```shell
-go run tests/grpc/user_client.go
-curl -X GET http://127.0.0.1:8080/v1/users
-curl -X POST -H "Content-Type: application/json" \
--d '{"metadata":{"name":"user99", "password":"admin"},"description":"admin user"}' \
-http://127.0.0.1:8080/v1/users # create a new user user99
-curl -X GET http://127.0.0.1:8080/v1/users
-go run tests/grpc/user_client.go
-```
+在 apiserver 示例中，初了之前已经加入的 Gin HTTP 和 HTTPS server之外，在本例中，我们会继续加入 GRPC server，具体介绍[在此](80_server/README.md)。
 
 
 

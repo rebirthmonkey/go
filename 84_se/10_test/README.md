@@ -345,9 +345,11 @@ go test
 go test -bench=".*"
 ```
 
-### Server
+## apierver 示例
 
-#### 单元测试
+在章，会为 apiserver 示例添加额外的测试，具体包容“单元测试”和“接口测试”两部分。
+
+### 单元测试
 
 - 在 [Service]() 内添加单元测试
 - 运行单元测试
@@ -357,7 +359,7 @@ cd apiserver/user/service/v1
 go test
 ```
 
-#### 接口测试
+### 接口测试
 
 - 添加接口测试脚本到[此处](80_server/test/api)
 - 运行接口测试脚本

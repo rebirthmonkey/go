@@ -137,9 +137,11 @@ make hello
 make clean
 ```
 
-### Server
+## apiserver 示例
 
-#### 配置环境
+在本章中，会为 apiserver 示例添加 Makefile 自动化构建，具体包括如下内容。
+
+### 配置环境
 
 ```shell
 make help
@@ -147,19 +149,19 @@ make tools # install all the tools on the local host
 make tidy # go mod tidy
 ```
 
-#### Test
+### Test
 
 ```shell
 make test
 ```
 
-#### Run
+### Run
 
 ```shell
 make run
 ```
 
-#### Build
+### Build
 
 Build current platform
 
@@ -177,7 +179,7 @@ make build.multiarch
 make clean
 ```
 
-#### Docker Image & Run
+### Docker Image & Run
 
 ```shell
 make image
@@ -190,15 +192,11 @@ docker run -d -v /Users/ruan/workspace/go/84_se/20_build/30_make/80_server/confi
 - gin/secure/ private-key-file
 - mysql/host
 
-#### K8s Run
+### K8s Run
 
 ```
 make deploy
 ```
-
-
-
-
 
 ## Ref
 
