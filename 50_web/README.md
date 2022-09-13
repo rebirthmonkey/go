@@ -44,7 +44,7 @@ RPC（Remote Procedure  Call）是一种通信协议，该协议允许运行于�
 
 RPC 的调用过程如下：
 
-<img src="figures/image-20220723172511517.png" alt="image-20220723172511517" style="zoom:50%;" />
+<img src="figures/image-20220913091707795.png" alt="image-20220913091707795" style="zoom:50%;" />
 
 1. Client 通过本地调用，调用 Client Stub
 2. Client Stub 将参数打包（也叫 Marshalling）成一个消息，然后发送这个消息
@@ -81,7 +81,7 @@ RPC 相比 REST 的优点主要有 3 点：
 
 更多的时候，REST 和 gRPC 是一种合作的关系，内部系统之间使用 gRPC，对外使用 REST。因为内部系统之间可能调用很频繁，需要 RPC 的高性能支撑。对外用 REST 更易理解，更通用些。当然以现有的服务器性能，如果两个系统间调用不是特别频繁，对性能要求不是非常高，REST 的性能完全可以满足。总体来说，REST 因为规范、易理解、易用，所以适合用在需要对外提供 API 接口的场景中。而 RPC 因为性能比较高、调用方便，更适合用在内部业务中。
 
-<img src="figures/image-20220827155536914.png" alt="image-20220827155536914" style="zoom:12%;" />
+<img src="figures/image-20220913091725992.png" alt="image-20220913091725992" style="zoom:50%;" />
 
 ### 媒体类型选择
 
