@@ -4,8 +4,8 @@ import (
 	"fmt"
 )
 
-func max(x, y int) int {
-	if x > y {
+func max(x int, y int) int {
+	if int(x) > y {
 		return x
 	}
 	return y

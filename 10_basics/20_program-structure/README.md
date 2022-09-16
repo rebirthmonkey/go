@@ -66,8 +66,6 @@ value, ok := interface{}(container).([]string)
 
 ### 常量
 
-
-
 ### 指针
 
 #### 声明
@@ -166,8 +164,7 @@ switch {
   default:
     <statements>
 }
-```
-
+``
 
 ##### Loop
 
@@ -184,11 +181,11 @@ The range keyword is used in for loop to iterate data in data structures (arrays
 
 ```go
 func main() {
-	arr := []int{1, 2, 3}
-	for _, v := range arr {
-		arr = append(arr, v)
-	}
-	fmt.Println(arr)
+  arr := []int{1, 2, 3}
+  for _, v := range arr {
+    arr = append(arr, v)
+  }
+  fmt.Println(arr)
 }
 ```
 
@@ -212,6 +209,7 @@ func main() {
 - 包裹函数return返回
 
 #### Lab
+
 - [Defer](60_defer.go)
 - [Defer](62_defer.go)
 
@@ -234,6 +232,7 @@ func main() {
   - 必须被defer直接调用
 
 #### Lab
+
 - [错误函数](80_error-func.go)
 - [Error Interface实现错误](82_error-interface.go)
 - [Panic简介](84_panic.go)
@@ -258,6 +257,3 @@ f(100) # 调用
 #### 用途
 
 - Callback 回调函数
-
-
-

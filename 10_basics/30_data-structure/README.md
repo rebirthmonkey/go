@@ -44,10 +44,9 @@ var f float32 = 1.2345
 
 复数：complex64、complex128
 
-
 ### Lab
-- [基础数据结构](01_basic.go)
 
+- [基础数据结构](01_basic.go)
 
 ## 复合
 
@@ -75,7 +74,7 @@ arr2 := [...]int{1,2,3} // 会被转化为上一个
 
 #### 访问/赋值
 
-```
+```go
 arr1[3]
 arr2[2] = 3
 ```
@@ -95,14 +94,14 @@ Slice is an abstraction over Array, it actually uses arrays as an underlying str
 
 在每个切片的底层数据结构中，一定会包含一个数组。数组可以被叫做切片的底层数组，而切片也可以被看作是对数组的某个连续片段的引用。切片可以想象成有一个窗口，可以通过这个窗口看到一个数组，但是不一定能看到该数组中的所有元素，有时候只能看到连续的一部分元素。
 
-Slice is an abstraction over Array, it actually uses arrays as an underlying structure. 
+Slice is an abstraction over Array, it actually uses arrays as an underlying structure.
 To define a slice, you can declare it as an array without specifying its size.
 
 The various operations over slice are:
 
 - append(): add the elements to a slice. If the size of underlying array is not enough then automatically a new array is created and content of the old array is copied to it.
 - len(): returns the number of elements presents in the slice.
-- cap(): returns the capacity of the underlying array of the slice. 
+- cap(): returns the capacity of the underlying array of the slice.
 - copy(): the contents of a source slice are copied to a destination slice.
 - <SliceName>[start:end]: returns a slice object containing the elements of base slice from index start to end- 1.
 
@@ -149,9 +148,9 @@ hash := make(map[string]int, 3)
 
 ```go
 hash := map[string]int{
-	"1": 2,
-	"3": 4,
-	"5": 6,
+    "1": 2,
+    "3": 4,
+    "5": 6,
 }
 ```
 
@@ -177,8 +176,8 @@ container/ring 包中的 Ring 类型实现的是一个循环链表，也就是�
 
 ### 字符串（string）
 
-- A String is a sequence of Unicode character. 
-- String is an immutable type variable. 
+- A String is a sequence of Unicode character.
+- String is an immutable type variable.
 - Double quotes are used to declare strings.
 
 #### 初始化
@@ -201,6 +200,7 @@ s := "Hello, World!" // 简短
 - mystring[1:4] --> "ell": Slicing
 
 ### Lab
+
 - [数组 Array](10_array.go)
 - [切片 Slice](11_slice.go)
 - [切片 Slice](12_slice2.go)
@@ -211,11 +211,9 @@ s := "Hello, World!" // 简短
 - [双向链表 List](25_list.go)
 - [字符串 String](29_string.go)
 
-
 ## 结构体（struct）
 
 structures are a collection of multiple data types as a single entity.
-
 
 ### 声明
 
@@ -322,7 +320,6 @@ var ppoint3 *Point = &point1
 - [结构体 struct](50_struct.go)
 - [结构体方法 method](51_struct-method.go)
 
-
 ## 接口（interface）
 
 ### 简介
@@ -350,55 +347,55 @@ Go 中的接口定义了一组**方法**的集合，但这些方法不会在接�
 package main
 
 import (
-	"fmt"
+    "fmt"
 )
 
 // Shaper 接口类型
 type Shaper interface {
-	Area() float64
+    Area() float64
 }
 
 // Circle struct类型
 type Circle struct {
-	radius float64
+    radius float64
 }
 
 // Circle类型实现Shaper中的方法Area()
 func (c *Circle) Area() float64 {
-	return 3.14 * c.radius * c.radius
+    return 3.14 * c.radius * c.radius
 }
 
 // Square struct类型
 type Square struct {
-	length float64
+    length float64
 }
 
 // Square类型实现Shaper中的方法Area()
 func (s *Square) Area() float64 {
-	return s.length * s.length
+    return s.length * s.length
 }
 
 func main() {
-	// Circle类型的指针类型实例
-	c := new(Circle)
-	c.radius = 2.5
+    // Circle类型的指针类型实例
+    c := new(Circle)
+    c.radius = 2.5
 
-	// Square类型的值类型实例
-	s := Square{3.2}
+    // Square类型的值类型实例
+    s := Square{3.2}
 
-	// Sharpe接口实例ins1，它自身是指针类型的
-	var ins1 Shaper
+    // Sharpe接口实例ins1，它自身是指针类型的
+    var ins1 Shaper
 
   // 将Circle实例c赋值给接口实例ins1，那么ins1中就保存了实例c
-	ins1 = c
-	fmt.Println(ins1)
+    ins1 = c
+    fmt.Println(ins1)
 
-	// 使用类型推断将Square实例s赋值给接口实例
-	ins2 := s
-	fmt.Println(ins2)
+    // 使用类型推断将Square实例s赋值给接口实例
+    ins2 := s
+    fmt.Println(ins2)
   
-	fmt.Println(ins1.Area())   // 输出19.625
-	fmt.Println(ins2.Area())   // 输出10.24
+    fmt.Println(ins1.Area())   // 输出19.625
+    fmt.Println(ins2.Area())   // 输出10.24
 }
 ```
 
@@ -428,8 +425,6 @@ func TotalPerimeter(shapes ...Shape) float64 {...}
 TotalPerimeter(a, b, c, d) # 实现Shape的结构体或结构体指针
 ```
 
-
-
 ### interface{}
 
 interface{} 作为所有类的“基类”被使用
@@ -439,8 +434,6 @@ func PrintAll(vals []interface{}) {...}
 ```
 
 可将 []string 转为 []interface{} 类型
-
-
 
 ## 类型转换
 
@@ -482,36 +475,18 @@ interface->struct
 
   - 结构体
 
-    - 原路返回（animal2 从 cat 转换过来）：cat2, ok := animal2.(*Cat) 
+    - 原路返回（animal2 从 cat 转换过来）：cat2, ok := animal2.(*Cat)
 
-    - 非原路返回（不可行）：dog3 , ok := animal2.(*Dog) 
+    - 非原路返回（不可行）：dog3 , ok := animal2.(*Dog)
 
   - 结构体指针：太复杂，不考虑
 
 ### Lab
+
 - [基础数据结构转换](80_basic-type-trans.go)
 - [字符串String转换](81_basic-string-trans.go)
 - [Interface-Struct转换](85_interface-trans.go)
 
-## 非结构化
-
-无法预知数据结构的数据类型属于非结构化范畴，在Go中，无法通过构建预定的struct数据结构来序列化或反序列化，在 Go 中，一般通过如下数据结构来解决：
-
-```go
-var result map[string]interface{}
-```
-
-其中 `interface{}` 是 Go 中的通用类型，可以转换为任何类型。在 Go 中，可以通过断言来进行类型转换：
-
-```go
-if description, ok := result["description"].(string); ok {
-  fmt.Println(description)
-}
-```
-
-
-
 ## Ref
 
 1. [Golang 之 interface接口全面理解](https://blog.csdn.net/Webben/article/details/110448404?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0.queryctr&spm=1001.2101.3001.4242.1&utm_relevant_index=2)
-
