@@ -77,13 +77,13 @@ func SendResponse(c *gin.Context, err error, data interface{}) {
 }
 ```
 
-##### String()
+#### String()
 
 返回的内容，可以是 String，也可以是 JSON
 
 将 String 作为 Response 返回
 
-##### JSON()
+#### JSON()
 
 将 gin.H 结构体转化为 JSON 作为 Response 返回
 
@@ -239,8 +239,8 @@ curl -X POST http://127.0.0.1:8080/form -H "Content-Type:application/x-www-form-
 ```shell
 go run 23_post-file.go
 curl -X POST http://127.0.0.1:8080/upload \
-	-F "file=@./23_post-file.go" \
-	-H "Content-Type: multipart/form-data"
+  -F "file=@./23_post-file.go" \
+  -H "Content-Type: multipart/form-data"
 ```
 
 - [Post File](24_post-multi-file.go)
@@ -258,17 +258,19 @@ curl -X POST http://127.0.0.1:8080/upload \
 ```shell
 go run 27_post-json.go
 curl -X POST http://127.0.0.1:8080/login \
-	-H "Content-Type:application/json" \
-	-d '{"username": "ruan", "passwd": "123", "age": 21}'
+  -H "Content-Type:application/json" \
+  -d '{"username": "ruan", "passwd": "123", "age": 21}'
 ```
+
+> 注意引号的使用方式
 
 - [Post JSON](28_bind-json.go)
 
 ```shell
 go run 28_post-json.go
 curl -X POST http://127.0.0.1:8080/login \
-	-H "Content-Type:application/json" \
-	-d '{"username": "ruan", "passwd": "123", "age": 21}'
+  -H "Content-Type:application/json" \
+  -d '{"username": "ruan", "passwd": "123", "age": 21}'
 ```
 
 - [Redirect](31_redirect.go)
@@ -309,7 +311,6 @@ curl http://127.0.0.1:8080/after
 
 /after 会只通过 middleware4，所以会报错 request4 不存在
 
-
 ```shell
 curl http://127.0.0.1:8080/before
 curl http://127.0.0.1:8080/after
@@ -331,9 +332,7 @@ curl http://127.0.0.1:8080/test
 
 - [Middleware with Basic Auth](46_middleware-basic-auth.go)：使用现有 Basic Auth Middleware
 
-Basic Auth 必须采用浏览器登录 http://127.0.0.1:8080/auth
-
-
+Basic Auth 必须采用浏览器登录 `http://127.0.0.1:8080/auth`
 
 ### Web Application
 
@@ -360,7 +359,6 @@ $ curl -XGET http://127.0.0.1:8080/v1/products/iphone12
 
 Cookie 实际上就是服务器保存在浏览器上的一段信息。浏览器有了 Cookie 之后，每次向服务器发送请求时都会同时将该信息发送给服务器，服务器收到请求后，就可以根据该信息处理请求。Cookie 由服务器创建，并发送给浏览器，最终由浏览器保存。
 
-
 - [Set and Get Cookie](90_advance/19_cookie.go)
 
 ```shell
@@ -383,7 +381,6 @@ curl http://127.0.0.1:8080/home  # check the cookie value
 
 #### Async
 
-
 - [Async](90_advanced/91_async.go)
 
 ```shell
@@ -404,6 +401,3 @@ apiserver 的 HTTPS 服务的介绍[在此](97_secure/README.md)。
 ## Ref
 
 1. [Golang 微框架 Gin 简介](https://www.jianshu.com/p/a31e4ee25305)
-
-
-

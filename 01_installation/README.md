@@ -12,9 +12,31 @@ Follow this [manuel](https://tecadmin.net/install-go-on-ubuntu/)
 - `go version`: check installation
 - `go env`
 
+### MacOS
+
+Follow this [manuel](https://golangdocs.com/install-go-mac-os)
+
+- 先下载pkg格式的安装包
+- 运行安装包，授予相应的权限
+
+或者首先安装Homebrew，然后运行`brew install go`。
+
+不管用何种形式，`go version`能够返回结果，就算是安装成功了
+
 ## 环境变量配置
 
-```bash
+主要是设置一下几个变量
+
+- GOROOT
+- GOPATH
+- GOBIN
+- PATH
+
+基本都是通过修改`~/.bashrc`或者`./zshrc`达成
+
+运行`go env`命令可以查看和GO有关的环境变量的值
+
+```shell
 go env
 $GOROOT=/usr/local/go # GO安装目录，不可加上 /bin
 $GOPATH=/Users/XXX/go # GO工作目录
@@ -22,9 +44,20 @@ $GOBIN=$GOPATH/bin # GO可执行文件目录
 $PATH=$PATH:$GOBIN:$GOROOT/bin # 将GO可执行文件加入PATH中，使GO指令与我们编写的GO应用可以全局调用 
 ```
 
-> 大部分Linux发行版的用户目录为`/home/XXX`，因此第二行`GOPATH=/Users/XXX/go`需要修改成`GOPATH=/home/XXX/go`
+### Ubuntu
 
-在MacOS下可以通过编辑`~/.zshrc` 文件添加以下四行内容配置GO环境变量
+```shell
+export GOROOT=/usr/local/go
+export GOPATH=/home/XXX/go
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOBIN:$GOROOT/bin
+```
+
+> 大部分Linux发行版的用户目录为`/home/XXX`，XXX 为用户名
+
+### MacOS
+
+在Ubuntu/MacOS下可以通过编辑`~/.zshrc` 文件添加以下四行内容配置GO环境变量
 
 ```bash
 export GOROOT=/usr/local/go
@@ -34,9 +67,9 @@ export PATH=$PATH:$GOBIN:$GOROOT/bin
 ```
 
 > XXX 为用户名
-> 可能需要替换`/usr/local/go`为安装目录，例如如果通过brew安装的go，则GOROOT应该是`/opt/homebrew/Cellar/go/<VERSION>/libexec`(M1)，`/usr/local/Cellar/go/<VERSION>/libexec`
+> 如果不是通过官方安装器安装的GO，可能需要替换`/usr/local/go`为具体的值。例如如果通过brew安装的go，则GOROOT应该是`/opt/homebrew/Cellar/go/<VERSION>/libexec`(M1)，`/usr/local/Cellar/go/<VERSION>/libexec`(Intel)
 
-通过 `sourc ~/.zshrc`更新当前终端下环境变量
+通过`sourc ~/.bashrc`或者`sourc ~/.zshrc`更新当前终端下环境变量
 
 ## hello-world
 
@@ -53,3 +86,5 @@ go build hello-world.go
 export GO111MODULE=on
 export GOPROXY=https://goproxy.cn
 ```
+
+> `export GOPROXY=direct`可以指定包从源站下载

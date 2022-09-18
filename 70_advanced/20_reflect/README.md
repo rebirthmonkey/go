@@ -9,8 +9,6 @@
 
 总的来说，Go 的`reflection`围绕者三个概念`Types`, `Kinds`, `Values`，所有关于反射的操作都在`reflect`包里。
 
-
-
 ## 操作
 
 ### TypeOf
@@ -42,20 +40,12 @@ refPtrVal.Elem().Set(newRefValue)
 newPtrVal := reflect.New(varType)
 ```
 
-
-
-
-
 - 反射开发中最常用的可能就是reflect.DeepEqual
-- 
 
 ## Lab
 
 - [TypeOf](10_typeof.go)
 
-
-
 ## Ref
 
 1. [Golang 反射](https://www.jianshu.com/p/1cf328cfe82b)
-2. 

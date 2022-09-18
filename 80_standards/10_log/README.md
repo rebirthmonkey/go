@@ -81,21 +81,28 @@
 - 支持动态开关 Debug 日志：对于定位一些隐藏得比较深的问题，可能需要更多的信息，这时候可能需要打印 Debug 日志。但现网的日志级别会设置为 Info 级别，为了获取 Debug 日志，可能会修改日志级别为 Debug 级别并重启服务，定位完问题后，再修改日志级别为 Info 级别，然后再重启服务，这种方式不仅麻烦而且还可能会对现网业务造成影响。最好的办法是能够在请求中通过 debug=true 这类参数动态控制某次请求是否开启 Debug 日志。
 
 ## Lab
+
 ### 标准log包
+
 Go 标准的 pkg/log 包
+
 - [log print](10_log/10_print.go)
 - [log fatal](10_log/20_fatal.go)
 - [log panic](10_log/30_panic.go)
 - [log customize](10_log/40_customize.go)
 
 ### wklog
+
 wklog 是一个简单的 log 包实现，demo 中主要展示了 WithLevel() 和 WithFormatter() 两个函数的设置。
+
 - [example.go](20_wklog/example.go)
+
 ```shell
 go run example.go
 ```
 
 ### pkg/log
+
 是个可在生产环境使用的 log 包，需要设置的配置参数为：
 
 - `writers`：输出位置，有两个可选项 —— file 和 stdout。选择 file 会将日志记录到 `logger_file` 指定的日志文件中，选择 stdout 会将日志输出到标准输出，当然也可以两者同时选择
@@ -119,4 +126,3 @@ go run exmaple2.go -l warn
 ## apiserver 示例
 
 在原先的实例中，所有的输出都是通过 `fmt.Print()` 的方式，这样在实际生产环境中无法持久化。在生产环境中推荐使用 log 的形式输出，方便后续联调排错，详细介绍[在此](80_server/README.md)。
-

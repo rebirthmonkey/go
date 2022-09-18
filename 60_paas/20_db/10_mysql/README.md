@@ -1,6 +1,7 @@
 # MySQL
 
 ## GO SQL Driver
+
 ```shell
 go run example.go
 ```
@@ -31,10 +32,6 @@ Gorm 是 Go 语言的 ORM 包，功能强大，调用方便。Gorm 有很多特�
 - Limit(2).Offset(5).Find()
 
 - Distinct('name', 'age').Find()
-
-- 
-
-  
 
 ### 配置
 
