@@ -214,10 +214,11 @@ s := "Hello, World!" // 简短
 
 ## 结构体（struct）
 
-structures are a collection of multiple data types as a single entity.
+Go 中提供了对 struct 结构体的支持，与数组一样，结构体属于复合类型。
 
+### 定义
 
-### 声明
+使用 struct 关键字可以定义一个结构体，结构体中的成员，称为结构体的字段或属性。
 
 ```go
 type Point struct { 
@@ -226,7 +227,19 @@ type Point struct {
 }
 ```
 
-#### 初始化
+### 使用
+
+#### 创建变量
+
+##### 直接定义
+
+不做初始化
+
+```go
+var p1 Point //所有字段均为空值
+```
+
+##### 使用字面量创建变量
 
 ```go
 point1 := Point{50, 50}
@@ -235,8 +248,13 @@ point2 := Point{x: 100, y: 100}
 
 #### 访问/赋值
 
+通过变量名，使用逗号`(.)`，可以访问 struct 中的字段，或为字段赋值，也可以对字段进行取址(&)操作。
+
 ```go
 point1.x = 3
+```
+
+```go
 a := point2.y
 ```
 
