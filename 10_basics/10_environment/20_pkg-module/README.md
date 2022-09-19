@@ -86,7 +86,7 @@ Go 依赖包管理工具经历了五个阶段：
 - Dep：对于从 0 构建项目的新用户来说，Glide 功能足够，是个不错的选择。不过，Golang 依赖管理工具混乱的局面最终由官方来终结了：Golang 官方接纳了由社区组织合作开发的 Dep，作为标准，成为了事实上的官方包管理工具。
 - Go  Modules：Go1.11 版本推出了 Go Modules 机制，Go Modules 基于 vgo 演变而来，是 Golang  官方的包管理工具。在 Go1.13 版本，Go 语言将 Go Modules 设置为默认的 Go 管理工具；在 Go1.14 版本，Go  语言官方正式推荐在生产环境使用 Go Modules，并且鼓励所有用户从其他的依赖管理工具迁移过来。至此，Go 终于有了一个稳定的、官方的 Go 包管理工具。
 
-<img src="figures/image-20220829150533468.png" alt="image-20220829150533468" style="zoom:50%;" />
+<img src="figures/348d772b26940f721c6fb907f6833be5.jpg" alt="img" style="zoom:50%;" />
 
 ### 原理
 
@@ -104,12 +104,13 @@ go.mod 文件中包含了以下部分：
 - go：用来设置预期的 Go 版本，目前只是起标识作用。
 - require：用来设置一个特定的模块版本，格式为<导入包路径> <版本> [//  indirect]。
 - exclude：用来从使用中排除一个特定的模块版本，如果知道模块的某个版本有严重的问题，就可以使用 exclude 将该版本排除掉。
-- replace：用来将一个模块版本替换为另外一个模块版本。格式为 $module => $newmodule  ，$newmodule可以是本地磁盘的相对路径，例如 github.com/gin-gonic/gin =>  ./gin。也可以是本地磁盘的绝对路径，例如 github.com/gin-gonic/gin =>  /home/lk/gin。还可以是网络路径，例如 golang.org/x/text v0.3.2 =>  github.com/golang/text v0.3.2。
+- replace：用来将一个模块版本替换为另外一个模块版本。格式为 `$module => $newmodule`  ，`$newmodule`可以是本地磁盘的相对路径，例如`github.com/gin-gonic/gin =>  ./gin`。也可以是本地磁盘的绝对路径，例如 `github.com/gin-gonic/gin =>  /home/lk/gin`。还可以是网络路径，例如 `golang.org/x/text v0.3.2 =>  github.com/golang/text v0.3.2`。
 
-执行 go build 后go.mod文件的内容为：
+执行 go build 后`wkmodule/go.mod`文件的内容为：
 
 ```shell
-# cat go.mod
+$ cd wkmodule && go build
+$ cat wkmodule/go.mod
 module wkmodule
 
 go 1.17
@@ -126,6 +127,9 @@ require golang.org/x/sys v0.0.0-20191026070338-33540a1f6037 // indirect
 - Go 命令在运行时自动修改。
 - 手动编辑 go.mod 文件，编辑之后可以执行go mod edit  -fmt格式化 go.mod 文件。
 - 执行 go mod 子命令修改。在实际使用中，我建议采用这种方法，和其他两种相比不太容易出错。
+
+> 如果出现`go:linkname must refer to declared function or variable`问题，则可以尝试执行以下语句
+> `go get -u golang.org/x/sys`以升级系统模块，该错误常见于MacOS
 
 #### go.sum
 
@@ -161,7 +165,7 @@ module 作为包的导入路径，一个 module 下可以包含多个包，所�
 - on：启用 Go Modules，Go1.14 版本推荐打开，未来版本会设为默认值。
 - off：关闭 Go  Modules，不推荐。
 
-如果要打开 Go Modules，可以设置环境变量 export GO111MODULE=on 或 export  GO111MODULE=auto，建议直接设置 export GO111MODULE=on。
+如果要打开 Go Modules，可以设置环境变量 `export GO111MODULE=on` 或 `export GO111MODULE=auto`，建议直接设置 `export GO111MODULE=on`。
 
 ```bash
 go env -w GOPROXY=https://mirrors.cloud.tencent.com/go/,direct
@@ -190,7 +194,7 @@ go env -w GO111MODULE=on
 cd wkmodule
 rm go.mod & rm go.sum # 清除环境
 go mod init wkmodule # 创建go.mod
-go mod tidy # 检测该目录下所有引入的依赖，并放入 go.mod中，并自动下周所有依赖包至$GOPATH/pkg/mod
+go mod tidy # 检测该目录下所有引入的依赖，并放入 go.mod中，并自动下载所有依赖包至$GOPATH/pkg/mod
 go run main.go
 go install  # 安装wkmodule可执行文件到 $GOPATH/bin
 ```
@@ -237,10 +241,10 @@ go mod init wkapp # 创建go.mod
 修改 go.mod，加入本地依赖
 ```
 require (
-	github.com/rebirthmonkey/wklib2 v0.0.0
+  github.com/rebirthmonkey/wklib2 v0.0.0
 )
 
-replace github.com/rebirthmonkey/wklib2 => /Users/ruan/workspace/go/10_basics/10_environment/20_pkg-module/wklib2
+replace github.com/rebirthmonkey/wklib2 => ../wklib2
 
 ```
 go mod tidy 
@@ -257,12 +261,9 @@ go run main.go
 ## Ref
 
 1. [理解Golang包导入](https://studygolang.com/articles/3189)
-1. [亲测GO环境搭建，理解go build、go install、go get](https://blog.csdn.net/zhangliangzi/article/details/77914943)
-1. [go module 基本使用](https://www.cnblogs.com/chnmig/p/11806609.html)
-1. [一文搞懂 Go Modules 前世今生及入门使用](https://www.cnblogs.com/wongbingming/p/12941021.html)
-1. [关于Go Modules，看这一篇文章就够了](https://zhuanlan.zhihu.com/p/105556877?utm_source=wechat_session)
-1. [初窥Go module](https://tonybai.com/2018/07/15/hello-go-module/)
-1. [Go 语言全新依赖管理系统 Go Modules 使用详解](https://www.toutiao.com/i6714564564194689543/?tt_from=weixin&utm_campaign=client_share&wxshare_count=1&timestamp=1597249873&app=news_article&utm_source=weixin&utm_medium=toutiao_ios&use_new_style=1&req_id=2020081300311301001405309209375D1B&group_id=6714564564194689543)
-
-
-
+2. [亲测GO环境搭建，理解go build、go install、go get](https://blog.csdn.net/zhangliangzi/article/details/77914943)
+3. [go module 基本使用](https://www.cnblogs.com/chnmig/p/11806609.html)
+4. [一文搞懂 Go Modules 前世今生及入门使用](https://www.cnblogs.com/wongbingming/p/12941021.html)
+5. [关于Go Modules，看这一篇文章就够了](https://zhuanlan.zhihu.com/p/105556877?utm_source=wechat_session)
+6. [初窥Go module](https://tonybai.com/2018/07/15/hello-go-module/)
+7. [Go 语言全新依赖管理系统 Go Modules 使用详解](https://www.toutiao.com/i6714564564194689543/?tt_from=weixin&utm_campaign=client_share&wxshare_count=1&timestamp=1597249873&app=news_article&utm_source=weixin&utm_medium=toutiao_ios&use_new_style=1&req_id=2020081300311301001405309209375D1B&group_id=6714564564194689543)

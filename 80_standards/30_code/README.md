@@ -35,7 +35,7 @@ glog_file.go  glog.go  glog_test.go  LICENSE   README
 
 - 结构化目录结构：当前 Go 社区比较推荐的结构化目录结构是  project-layout 。虽然它并不是官方和社区的规范，但因为组织方式比较合理，被很多 Go 开发人员接受，所以是一个事实上的规范。首结合 Go 项目通常应该包含的功能，总结出了一套 Go  的代码结构组织方式，也就是 Lab-IAM 应用使用的目录结构。它保留了 project-layout  优势的同时，还加入了一些个人的理解。
 
-```
+```text
 ├── api
 │   ├── openapi
 │   └── swagger
@@ -151,7 +151,7 @@ apiserver.go
 
 当其他项目引入 internal/ 下的包时，Go 语言会在编译时报错：
 
-```
+```text
 An import of a path containing the element “internal” is disallowed
 if the importing code is outside the tree rooted at the parent of the
 "internal" directory.
@@ -333,10 +333,6 @@ Go 项目在其根目录下应该有一个 Makefile 工具，用来对项目进�
 <!-- 这里链接上该项目的开源许可证 -->
 ```
 
-
-
-
-
 #### CONTRIBUTING.md
 
 如果是开源项目，还要有一个 CONTRIBUTING.md 文件，用来说明如何贡献代码，如何开源协同等等。CONTRIBUTING.md 不仅能够规范协同流程，还能降低第三方开发者贡献代码的难度。
@@ -395,8 +391,6 @@ docs
     └── 部署架构v1.png
 ```
 
-
-
 #### examples/
 
 存放应用程序或者公共包的示例代码。这些示例代码可以降低使用者的上手门槛。
@@ -412,8 +406,6 @@ docs
 #### XXs/
 
 在 Go 项目中，要避免使用带复数的目录或者包。建议统一使用单数。
-
-
 
 ## 代码规范
 
@@ -1076,8 +1068,6 @@ var _ http.Handler = LogHandler{}
 - append 要小心自动分配内存，append 返回的可能是新分配的地址。如果要直接修改 map 的 value 值，则 value 只能是指针，否则要覆盖原来的值。
 - map 在并发中需要加锁。
 
-
-
 ## 版本规范
 
 业界使用最普遍的是语义化版本规范（SemVer，Semantic  Versioning），它是 GitHub 起草的一个具有指导意义的、统一的版本号表示规范。它规定了版本号的表示、增加和比较方式，以及不同版本号代表的含义。在这套规范下，版本号及其更新方式包含了相邻版本间的底层代码和修改内容的信息。【6】
@@ -1094,13 +1084,13 @@ var _ http.Handler = LogHandler{}
 
 <img src="figures/29803c34698fee8a1e7e2c54cc77a92b.png" alt="img" style="zoom: 25%;" />
 
-可能还看过这么一种版本号：v1.2.3-alpha。这其实是把先行版本号（Pre-release）和版本编译元数据，作为延伸加到了主版本号.次版本号.修订号的后面，格式为  X.Y.Z[-先行版本号][+版本编译元数据]，如下图所示：
+可能还看过这么一种版本号：v1.2.3-alpha。这其实是把先行版本号（Pre-release）和版本编译元数据，作为延伸加到了主版本号.次版本号.修订号的后面，格式为  X.Y.Z`-先行版本号``+版本编译元数据`，如下图所示：
 
 <img src="figures/221ec1a06f4b0byy0716cb1ce5e82f33-20220322153217815.png" alt="img" style="zoom:25%;" />
 
 - 先行版本号：意味着该版本不稳定，可能存在兼容性问题，格式为：X.Y.Z-[一连串以`.`分隔的标识符]  ，如下例：
 
-```
+```text
 1.0.0-alpha
 1.0.0-alpha.1
 1.0.0-0.3.7
@@ -1109,7 +1099,7 @@ var _ http.Handler = LogHandler{}
 
 - 编译版本号：一般是编译器在编译过程中自动生成的，只定义其格式，并不进行人为控制，如下例：
 
-```
+```text
 1.0.0-alpha+001
 1.0.0+20130313144700
 1.0.0-beta+exp.sha.5114f85
@@ -1163,76 +1153,76 @@ API 接口文档中请求方法格式为：`HTTP方法+请求路径`，例如请
 1. 获取系统创建的 secretKey 和 secretID
 2. 通过 secretKey 和 secretID 生成 JWT Token，以下是一个可以生成 JWT Token 的 Go 源码（main.go）：
 
-```go
-package main
+    ```go
+    package main
 
-import (
-	"fmt"
-	"os"
-	"time"
+    import (
+      "fmt"
+      "os"
+      "time"
 
-	"github.com/dgrijalva/jwt-go"
-	"github.com/spf13/pflag"
-)
+      "github.com/dgrijalva/jwt-go"
+      "github.com/spf13/pflag"
+    )
 
-var (
-	cliAlgorithm = pflag.StringP("algorithm", "", "HS256", "Signing algorithm - possible values are HS256, HS384, HS512")
-	cliTimeout   = pflag.DurationP("timeout", "", 2*time.Hour, "JWT token expires time")
-	help         = pflag.BoolP("help", "h", false, "Print this help message")
-)
+    var (
+      cliAlgorithm = pflag.StringP("algorithm", "", "HS256", "Signing algorithm - possible values are HS256, HS384, HS512")
+      cliTimeout   = pflag.DurationP("timeout", "", 2*time.Hour, "JWT token expires time")
+      help         = pflag.BoolP("help", "h", false, "Print this help message")
+    )
 
-func main() {
-	pflag.Usage = func() {
-		fmt.Println(`Usage: gentoken [OPTIONS] SECRETID SECRETKEY`)
-		pflag.PrintDefaults()
-	}
-	pflag.Parse()
+    func main() {
+      pflag.Usage = func() {
+      fmt.Println(`Usage: gentoken [OPTIONS] SECRETID SECRETKEY`)
+      pflag.PrintDefaults()
+      }
+      pflag.Parse()
 
-	if *help {
-		pflag.Usage()
-		return
-	}
+      if *help {
+        pflag.Usage()
+        return
+      }
 
-	if pflag.NArg() != 2 {
-		pflag.Usage()
-		os.Exit(1)
-	}
+      if pflag.NArg() != 2 {
+        pflag.Usage()
+        os.Exit(1)
+      }
+      
+      token, err := createJWTToken(*cliAlgorithm, *cliTimeout, os.Args[1], os.Args[2])
+      if err != nil {
+        fmt.Printf("Error: %s\n", err.Error())
+        return
+      }
 
-	token, err := createJWTToken(*cliAlgorithm, *cliTimeout, os.Args[1], os.Args[2])
-	if err != nil {
-		fmt.Printf("Error: %s\n", err.Error())
-		return
-	}
+      fmt.Println(token)
+    }
 
-	fmt.Println(token)
-}
+    func createJWTToken(algorithm string, timeout time.Duration, secretID, secretKey string) (string, error) {
+      expire := time.Now().Add(timeout)
 
-func createJWTToken(algorithm string, timeout time.Duration, secretID, secretKey string) (string, error) {
-	expire := time.Now().Add(timeout)
+      token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), jwt.MapClaims{
+        "kid": secretID,
+        "exp": expire.Unix(),
+        "iat": time.Now().Unix(),
+      })
 
-	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), jwt.MapClaims{
-		"kid": secretID,
-		"exp": expire.Unix(),
-		"iat": time.Now().Unix(),
-	})
+      return token.SignedString([]byte(secretKey))
+    }
+    ```
 
-	return token.SignedString([]byte(secretKey))
-}
-```
+    在命令行执行如下命令，即可生成 JWT Token：
 
-在命令行执行如下命令，即可生成 JWT Token：
+    ```bash
+    $  go run main.go <secretID> <secretKey>
+    ```
 
-```bash
-$  go run main.go <secretID> <secretKey>
-```
-
-默认会生成 HS256 算法签名、2 小时后过期的 Token。可以通过 `--algorithm` 指定签名算法，通过 `--timeout` 指定 token 过期时间。
+    默认会生成 HS256 算法签名、2 小时后过期的 Token。可以通过 `--algorithm` 指定签名算法，通过 `--timeout` 指定 token 过期时间。
 
 3. 携带 Token，发送 HTTP 请求：
 
-```bash
-curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer <Token>' -d'{"metadata":{"name":"secretdemo"},"expires":0,"description":"admin secret"}' http://xxx.io:8080/v1/secrets
-```
+    ```bash
+    curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer <Token>' -d'{"metadata":{"name":"secretdemo"},"expires":0,"description":"admin secret"}' http://xxx.io:8080/v1/secrets
+    ```
 
 #### 请求参数
 
@@ -1313,7 +1303,7 @@ HTTP 状态码包括：
   -  400：响应失败，客户端发生错误，如参数不合法、格式错误等
   -  401：认证失败
   -  403：授权失败
-  -  404：页面或者资源不存在   
+  -  404：页面或者资源不存在
 - 5XX：（服务器错误）这些状态代码表示服务器在尝试处理请求时发生内部错误。这些错误可能是服务器本身的错误，而不是客户端的问题。
   - 500：响应失败，说明服务端发生错误
 
@@ -1512,6 +1502,5 @@ addlicense -v -f ./scripts/boilerplate.txt . --skip-dirs=third_party
 2. [Uber Go 语言编码规范](https://github.com/xxjwxc/uber_go_guide_cn)
 3. [Effective Go](https://go.dev/doc/effective_go)
 4. [CodeReviewComments](https://github.com/golang/go/wiki/CodeReviewComments)
-5. [Style guideline for Go packages]()：包含了如何组织 Go 包、如何命名 Go 包、如何写 Go 包文档的一些建议。
+5. [Style guideline for Go packages](https://rakyll.org/style-packages/#:~:text=Package%20Organization%201%20Use%20multiple%20files%20A%20package,gaps%20...%206%20Don%E2%80%99t%20export%20from%20main%20)：包含了如何组织 Go 包、如何命名 Go 包、如何写 Go 包文档的一些建议。
 6. [语义化版本控制规范](https://semver.org/lang/zh-CN/)
-

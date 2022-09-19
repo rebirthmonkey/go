@@ -58,8 +58,6 @@ Makefile 是高效管理项目的有效手段之一，可以通过 Makefile 来�
     └── ...
 ```
 
-
-
 ## 规则
 
 Makefile 的规则一般由 target、prerequisites 和 command 组成，用来指定源文件编译的先后顺序。Makefile 之所以受欢迎，核心原因就是 Makefile 规则，因为 Makefile 规则可以自动判断是否需要重新编译某个目标，从而确保目标仅在需要时编译。
@@ -92,7 +90,7 @@ target ...: prerequisites ...
 
 一个具体的 Makefile 包括：
 
-```
+```text
 build              Build source code for host platform.
 build.multiarch    Build source code for multiple platforms. 
 image              Build docker images for host arch.
@@ -122,9 +120,6 @@ help               Show this help info.
 ### .PHONY
 
 在 Makefile 中，`.PHONY`后面的 target 表示的是一个伪造的 target，而不是真实存在的文件 target。make 命令后面跟的参数如果出现在 .PHONY 定义的伪目标中，那就直接在 Makefile 中就执行伪目标的依赖和命令。不管 Makefile 同级目录下是否有该伪目标同名的文件，即使有也不会产生冲突。
-
-
-
 
 ## Lab
 
@@ -194,11 +189,10 @@ docker run -d -v /Users/ruan/workspace/go/84_se/20_build/30_make/80_server/confi
 
 ### K8s Run
 
-```
+```shell
 make deploy
 ```
 
 ## Ref
 
 1. [跟我一起写Makefile](https://github.com/seisman/how-to-write-makefile)
-2. 

@@ -19,7 +19,7 @@ HTTP1.1 中，请求和响应都由以下 4 部分组成，两者之间格式的
 
 HTTP 请求由客户端发来，Web 程序要做的首先就是分析这些请求，并用 Go 语言中响应的数据对象来表示。在 `net/http` 包中，用 `Request` 结构体表示 HTTP 请求：
 
-```
+```go
 type Request struct {
     Method string
     URL *url.URL
@@ -47,7 +47,7 @@ type Request struct {
 
 当收到并理解了请求之后，就需要根据相应的处理逻辑构建响应。`net/http` 包中，用 `Response` 结构体表示响应：
 
-```
+```go
 type Response struct {
     Status     string // e.g. "200 OK"
     StatusCode int    // e.g. 200
@@ -124,24 +124,30 @@ func (mux *ServeMux) ServeHTTP(w ResponseWriter, r *Request)
 ## Lab
 
 - [Handler](10_handler.go)
+
 ```shell
 go run 10_handler.go
 curl http://127.0.0.1:8080
 ```
 
 - [Handler](12_handler.go)
+
 ```shell
 go run 12_handler.go
 curl http://127.0.0.1:8080/view
 ```
 
+> 对于`/view/<NAME>`路径，该程序会展示`<NAME>.txt`文件的内容，如果路径下不存在`<NAME>.txt`，将会报错。
+
 - [Handler with Interface](14_handler-interface.go)
+
 ```shell
 go run 14_handler-interface.go
 curl http://127.0.0.1:8080/view
 ```
 
 - [Handler as Reverse Proxy](20_reverse-proxy.go)
+
 ```shell
 go run 20_reverse-proxy.go
 curl http://127.0.0.1:8080
@@ -150,14 +156,3 @@ curl http://127.0.0.1:8080
 ## Ref
 
 1. [理解 Go 语言 Web 编程](https://chingli.com/coding/understanding-go-web-app.html)
-
-
-
-
-
-
-
-
-
-
-

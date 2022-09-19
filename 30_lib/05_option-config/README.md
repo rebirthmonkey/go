@@ -17,6 +17,7 @@
 go run example.go a b c d
 ```
 
+## Flag
 
 ### Flag
 
@@ -80,8 +81,7 @@ pflag.BoolVarP(&version, "version", "v", true, "Print version information and qu
 - 函数名带Var说明是将标志的值绑定到变量，否则是将标志的值存储在指针中。
 - 函数名带P说明支持短选项，否则不支持短选项。
 
-
-##### Lab
+#### Lab
 
 - [pflag解析](20_flag/20_pflag/example.go)
 
@@ -100,8 +100,6 @@ go run example2.go --flagname 222 arg1 arg2
 ```shell
 go run example3.go --version xxx
 ```
-
-
 
 ## Config
 
@@ -169,33 +167,28 @@ Viper 支持 Pflag 包，能够绑定 key 到 Flag：
 - 对于单个 flag，可以调用 BindPFlag() 进行绑定：`viper.BindPFlag("token", pflag.Lookup("token"))`
 - 对于多个 flag，可以绑定一组 flagSet：`viper.BindPFlags(pflag.CommandLine)`
 
-## Cobra
+## 子命令
 
-Cobra 为程序**创建子命令**，既是一个可以创建 CLI 应用程序的库，也是一个可以生成应用和命令文件的程序。有许多大型项目都是用 Cobra 来构建应用程序的，如 Kubernetes、Docker、Etcd、Rkt、Hugo 等。Cobra 建立在 commands、arguments 和 flags 结构之上，同时与 Viper 库配合使用。一个好的应用程序应该是易懂的，用户可以清晰地知道如何去使用这个应用程序。
+为程序创建子命令
 
-应用程序通常遵循如下模式：`APP COMMAND ARG --FLAG`，如：`git clone URL  --bare`
+### Cobra
 
-- COMMAND：clone 是一个命令
-- ARG：URL 是一个非选项参数
-- FLAG：bare 是一个选项参数
+Cobra 既是一个可以创建 CLI 应用程序的库，也是一个可以生成应用和命令文件的程序。有许多大型项目都是用 Cobra 来构建应用程序的，如 Kubernetes、Docker、etcd、Rkt、Hugo 等。Cobra 建立在 commands、arguments 和 flags 结构之上。一个好的应用程序应该是易懂的，用户可以清晰地知道如何去使用这个应用程序。应用程序通常遵循如下模式：`APPNAME COMMAND ARG --FLAG`，如：`git clone URL  --bare`
 
-### Lab
+- clone 是一个命令，
+- URL是一个非选项参数，
+- bare是一个选项参数
 
-- [Cobra flag 示例](40_cobra/example.go)：首先创建 rootCmd 主命令，并定义 Run 执行函数。在为命令添加 Flag。最后执行 rootCmd 命令，执行时会在内部回调 Run 执行函数，它会解析出命令行中的所有参数 Cmd 和 Flag，把 Flag 作为参数传递给 Cmd 并执行。
+#### 构建
 
-```shell
-go run example.go -v true
-```
+Cobra 提供了两种方式来创建命令：Cobra 命令和 Cobra 库。Cobra 命令可以生成一个 Cobra 命令模板，而命令模板也是通过引用 Cobra 库来构建命令的。所以，这里直接介绍如何使用 Cobra 库来创建命令。使用 Cobra 库创建命令如果要用 Cobra 库编码实现一个应用程序，需要首先创建一个空的 main.go 文件和一个 rootCmd  文件，之后可以根据需要添加其他命令。具体步骤如下：
 
-- [Cobra 通过 AddCommand 添加子命令示例](40_cobra/example2.go)
+- [Cobra框架](40_sub-cmd/20_cobra/example.go)
 
 ```shell
-go run example2.go 
-go run example2.go help
-go run example2.go version
-go run example2.go hello xxx
+go build -o wkctl .
+./wkctl
+./wkctl help
+./wkctl version
+./wkctl hello xxx
 ```
-
-## Option & Config
-
-- [Option & Config](80_option-config/README.md)

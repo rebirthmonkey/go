@@ -8,7 +8,7 @@ type fileError struct {
 	s string
 }
 
-// 实现了Error()函数就等于实现了error interface
+//实现了Error()函数就等于实现了error interface
 func (fe *fileError) Error() string {
 	return fe.s
 }

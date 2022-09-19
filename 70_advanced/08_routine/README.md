@@ -40,7 +40,6 @@ work := <- ic  // 从channel中接收指针到work
 
 ### 循环读/ Range
 
-
 伴有 range 分句的 for 语句会连续读取通过 channel 发送的值，直到 channel 被关闭。
 
 ### 类型
@@ -74,8 +73,6 @@ wc := make(chan *Work, 10)  // 带缓冲工作的 channel
 
 select 是执行选择操作的一个结构，它里面有一组 case 语句。它会执行其中无阻塞的那一个，如果都阻塞了，那就等待其中一个不阻塞，进而继续执行，它有一个 default 语句，该语句是永远不会阻塞的，可以借助它实现无阻塞的操作。
 
-
-
 ## 锁
 
 当多个 goroutine 同时进行处理的时候，就会遇到同时抢占一个资源的情况，所以希望某个 goroutine 等待另一个 goroutine 处理完某一个步骤之后才能继续。sync 就是为了让 goroutine 同步而出现的，是 channel 的一种代替方案。
@@ -104,23 +101,22 @@ wg.Wait() // 等待5个goroutine执行结束
 fmt.Println()
 ```
 
-
-
-
-
-
 ## Lab
+
 - [goroutine](10_goroutine.go)：goroutine 持续循环，main() 等待外部输入然后中止整个进程
+
 ```shell
 go run 10_goroutine.go
 ```
 
 - [goroutine](12_goroutine-anonym.go)：同上，只是 goroutine 通过一个匿名函数来实现
+
 ```shell
 go run 12_goroutine-anonym.go 
 ```
 
 - [channel](20_channel.go)：当 goroutine 写入 channel 后，因为没有读取操作，所以 goroutine 处于阻塞状态。直到 channel 被读取后，整个 goroutine 才开始循环。
+
 ```shell
 go run 20_channel.go 
 ```
@@ -132,11 +128,13 @@ go run 21_channnel.go
 ```
 
 - [channel range](22_channel-range.go)：通过 for range 循环处理 channel 中的所有消息。
+
 ```shell
 go run 22_channel-range.go
 ```
 
 - [channel selelct](26_channel-select.go)：当有多个 channel 时，通过 select 自动选择先获得信息的 channel 来处理。
+
 ```shell
 go run 26_channel-select.go
 ```
@@ -172,20 +170,19 @@ go run 38_channel-select-ctx.go
 ```
 
 - [Mutex锁](41_sync-mutex.go)
+
 ```shell
 go run 41_sync-mutex.go 
 ```
 
 - [Once只执行一次](43_sync-once.go)
+
 ```shell
 go run 43_sync-once.go 
 ```
-
-
 
 ## Ref
 
 1. [总结了才知道，原来channel有这么多用法！](https://segmentfault.com/a/1190000017958702)
 2. [Golang之context](https://www.toutiao.com/article/7053778893844529695)
 3. [golang中Context的使用场景](https://mp.weixin.qq.com/s/xbDFN-JhTIQ4xWanEC1Bxw)
-4. 

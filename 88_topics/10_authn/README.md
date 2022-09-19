@@ -17,10 +17,10 @@
 
 Basic 是最简单的认证方式，它简单地将“用户名:密码”进行 base64 编码后，放到 HTTP Authorization Header 中。HTTP 请求到达后端服务后，后端服务会解析出 Authorization Header 中的 base64 字符串，解码获取用户名和密码，并将用户名和密码跟数据库中记录的值进行比较，如果匹配则认证通过。
 
-
 通过 base64 编码，可以将密码以非明文的方式传输，增加一定的安全性。但 base64 不是加密技术，入侵者仍然可以截获 base64 字符串，并反编码获取用户名和密码。另外，即使 Basic 认证中密码被加密，入侵者仍可通过加密后的用户名和密码进行重放攻击。所以，Basic 认证虽然简单，但极不安全。使用 Basic 认证的唯一方式就是将它和 SSL 配合使用，来确保整个认证过程是安全的。
 
 #### Lab: Gin Basic Auth
+
 ```shell
 cd 10_gin-basic-auth
 go run example.go auth.go basic.go
@@ -30,7 +30,6 @@ go run example.go auth.go basic.go
 basic=`echo -n 'admin:admin'|base64`
 curl -XGET -H "Authorization: Basic ${basic}" http://127.0.0.1:8080/test
 ```
-
 
 ### Digest
 
@@ -137,8 +136,8 @@ JWT Token 的 Header 中包含两部分信息：一是 Token 的类型，二是 
 
 ```shell
 {
-	"typ": "JWT",  
-	"alg":  "HS256"
+  "typ": "JWT",  
+  "alg":  "HS256"
 }
 ```
 
@@ -156,9 +155,9 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
 
 ```shell
 {    
-	"alg": "HS256",
-	"kid": "XhbY3aCrfjdYcP1OFJRu9xcno8JzSbUIvGE2",
-	"typ": "JWT"
+  "alg": "HS256",
+  "kid": "XhbY3aCrfjdYcP1OFJRu9xcno8JzSbUIvGE2",
+  "typ": "JWT"
 }
 ```
 
@@ -218,6 +217,7 @@ go run example.go auth.go jwt.go
 ```
 
 - 通过用户名、密码 login，获取 JWT
+
 ```shell
 curl -XPOST -H'Content-Type: application/json' -d'{"username":"admin","password":"admin"}' http://127.0.0.1:8080/login 
 {"code":200,"expire":"2022-04-30T18:23:43+08:00","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTEzMTQyMjMsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY1MTMxMDYyM30.AugP8KBMBD7nOmEi03-JKBZ5v1Oo18MGVFE5HpgCS9I"}
@@ -226,6 +226,7 @@ jwt=`echo -n 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTEzMTQyMjMsImlkI
 ```
 
 - 使用 JWT 认证、并获取 REST 资源
+
 ```shell
 curl -XGET -H "Content-Type: application/json" -H "Authorization: Bearer ${jwt}"  http://127.0.0.1:8080/auth/test
 ```
@@ -234,13 +235,8 @@ curl -XGET -H "Content-Type: application/json" -H "Authorization: Bearer ${jwt}"
 
 ### Basic
 
-
-
 ### JWT
-
-
 
 ## Ref
 
 1. [JWT Token](https://github.com/appleboy/gin-jwt)
-

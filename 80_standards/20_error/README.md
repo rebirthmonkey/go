@@ -124,7 +124,7 @@ errors.Errorf("file %s not found", "iam-apiserver") // 格式化创建
 - 当引用另一个字段名称时，请在反引号中指定该名称。例如，must be greater than  request。
 - 指定不等时，请使用单词而不是符号。例如，must be less than 256、must be greater than  or equal to 0 (不要用 larger than、bigger than、more than、higher  than)。
 - 指定数字范围时，请尽可能使用包含范围。
-- **错误命名用小写字母开头，结尾不要加标点符号**，例如：	
+- **错误命名用小写字母开头，结尾不要加标点符号**，例如：
 
 ```go
   // bad
@@ -252,12 +252,14 @@ if err != nil {
 - [rebirthmonkey/go/pkg/errors第三方调用错误](example4.go)：在错误处直接打印日志。
 
 - [rebirthmonkey/go/pkg/errors Gin Server](example5.go)：通过 gin/util 包解析错误并返回。同时，`log.L(ctx).Info()` 会把 context 中的信息传给 log，用于输出更详细信息。
+
 ```shell
 go run example5.go
 curl -X GET http://127.0.0.1:8080/ping
 ```
 
 - [rebirthmonkey/go/pkg/panic Gin Server](example6.go)：展示 log.Panic() 后会中断程序，停止后续操作（包括return）
+
 ```shell
 go run example6.go
 curl -X GET http://127.0.0.1:8080/ping
@@ -266,8 +268,3 @@ curl -X GET http://127.0.0.1:8080/ping
 ## apiserver
 
 原先示例中有许多错误输出都没处理，而且大部分的错误场景也没有处理，并且也没有加入业务错误码并返回客户端。在新的[示例](80_server/README.md)中，逐步将这些都予以纠正。
-
-
-
-
-

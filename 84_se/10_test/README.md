@@ -114,6 +114,7 @@ func (c *Call) Times(n int) *Call // 设置调用次数为 n 次
 ```shell
 $ go test -coverprofile=coverage.out
 ```
+
 -  分析覆盖率文件
 
 ```shell
@@ -125,7 +126,6 @@ $ go tool cover -func=coverage.out
 ```shell
 $ go tool cover -html=coverage.out -o coverage.html
 ```
-
 
 ### 自从生成
 
@@ -150,8 +150,6 @@ func ExampleMax() {
 }
 ```
 
-
-
 #### 命名规范
 
 示例测试需要遵循一些命名规范，因为只有这样，Godoc 才能将示例测试和包级别的标识符进行关联。
@@ -160,16 +158,12 @@ func ExampleMax() {
 
 ## 接口测试
 
-
-
 ### 接口 Mock
 
 - [golang/mock](https://github.com/golang/mock) 是官方提供的 Mock  框架。它实现了基于 interface 的 Mock 功能，能够与 Golang 内置的 testing 包做很好的集成，是最常用的 Mock  工具。golang/mock 提供了 mockgen 工具用来生成 interface 对应的 Mock  源文件。
 - [sqlmock](https://github.com/DATA-DOG/go-sqlmock) 可以用来模拟数据库连接。数据库是项目中比较常见的依赖，在遇到数据库依赖时都可以用它。
 - [httpmock](https://github.com/jarcoal/httpmock) 可以用来 Mock HTTP 请求。
 - [bouk/monkey](https://github.com/bouk/monkey) 猴子补丁，能够通过替换函数指针的方式来修改任意函数的实现。如果 golang/mock、sqlmock 和 httpmock 这几种方法都不能满足我们的需求，我们可以尝试通过猴子补丁的方式来 Mock 依赖。可以这么说，猴子补丁提供了单元测试  Mock 依赖的最终解决方案。
-
-
 
 ## 性能测试
 
@@ -183,8 +177,6 @@ go test 命令默认不会执行性能测试函数，需要通过指定参数 -b
 - benchtime：指定测试时间和循环执行次数（格式需要为 Nx，例如 100x）。
 - cpu：指定 GOMAXPROCS。
 - timeout：指定测试函数执行的超时时间。
-
-
 
 ## 代码可测试性
 
@@ -272,12 +264,6 @@ func TestListPosts(t *testing.T) {
 }
 ```
 
-
-
-
-
-
-
 ## Lab
 
 ### 单元测试
@@ -300,7 +286,7 @@ go test
 go test
 ```
 
-- [mock]()：为接口 Spider 创建一个 mock
+- `mock`：为接口 Spider 创建一个 mock
 
 ```shell
 $ mockgen -destination spider/mock/mock_spider.go -package spider -source spider/spider.go
@@ -310,10 +296,6 @@ $ go generate # 通过 spider.go 的注释 //go:generate mockgen -destination ..
 $ cd .. 
 $ go test
 ```
-
-
-
-
 
 - [自动生成测试文件](10_unit/90_gotests/math_test.go)：通过 gotests 自动生成测试文件
 
@@ -351,7 +333,7 @@ go test -bench=".*"
 
 ### 单元测试
 
-- 在 [Service]() 内添加单元测试
+- 在 `Service` 内添加单元测试
 - 运行单元测试
 
 ```shell
@@ -367,8 +349,3 @@ go test
 ```shell
 ./test/api/test.sh api::test::user
 ```
-
-
-
-
-

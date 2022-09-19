@@ -95,8 +95,8 @@ REST 是一种规范，而 RESTful API 则是满足这种规范的 API 接口，
 
 API 的域名设置主要有两种方式，如：
 
-- https://rebirthmonkey.com/api：这种方式适合 API 将来不会有进一步扩展的情况，比如 rebirthmonkey.com 域名下只会有一套 API。
-- https://iam.api.rebirthmonkey.com：如果 rebirthmonkey.com 域名下会持续新增其他 API，这时最好的方式是每个系统的 API 拥有专有的 API 域名，如 storage.api.rebirthmonkey.com，network.api.rebirthmonkey.com 等。
+- `https://rebirthmonkey.com/api`：这种方式适合 API 将来不会有进一步扩展的情况，比如 rebirthmonkey.com 域名下只会有一套 API。
+- `https://iam.api.rebirthmonkey.com`：如果 rebirthmonkey.com 域名下会持续新增其他 API，这时最好的方式是每个系统的 API 拥有专有的 API 域名，如 `storage.api.rebirthmonkey.com`，`network.api.rebirthmonkey.com` 等。
 
 ### API 版本管理
 
@@ -134,7 +134,7 @@ API 通常的命名方式有 3 种：
   - URI 路径用小写，不要用大写。
 - URI 层级避免过深：超过 2 层的资源嵌套会很乱，建议将其他资源转化为“?参数：，如：
 
-```
+```text
 /schools/tsinghua/classes/rooma/students/zhang # 不推荐
 /students?school=qinghua&class=rooma # 推荐
 ```
@@ -221,8 +221,3 @@ HTTP 具有以下 5 种参数类型：
 ## Ref
 
 1. [GitHub 标准 RESTful API](https://docs.github.com/en/rest)
-
-
-
-
-

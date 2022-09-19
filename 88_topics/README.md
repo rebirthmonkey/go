@@ -7,6 +7,3 @@
 ## Authorization
 
 - [Authorization](12_authz/README.md)
-
-
-
