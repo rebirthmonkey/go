@@ -257,6 +257,23 @@ point1.x = 3
 a := point2.y
 ```
 
+### 指针结构体
+
+struct 与 array 一样，都是值传递，比如当把 struct 作为实参传给函数的形参时，会复制一个副本。所以为了提高性能，一般不会把 struct 直接传递给函数，而是在把 struct 传给函数时，使用`指针结构体`。指针结构体，即一个指向结构体的指针。声明 struct 变量时，在 struct 类型前加*号，便声明一个指向 struct 的指针，如：
+
+```go
+var ppoint3 *Point
+var ppoint8 new(Point)
+var ppoint3 *Point = &point1
+```
+
+如果将 struct 转给函数，只是复制 struct 的副本。如果在函数内修改 struct 字段值，外面的 struct 并不会受影响。而如果将 struct 指针传给函数，则在函数中使用指针对 struct 所做的修改，都会影响到指针指向的 struct。
+
+#### 访问/赋值
+
+- (*ppoint3).x 与ppoint3.y 等价：可以通过指针名直接调用值的变量或方法。指针可用来代替值，但值无法代替指针，因为可能有多个指针指向同一个值，Go 会自动把指针转换为值。
+- 函数的输入/输出一般采用指针 struct
+
 ### 成员
 
 #### 变量
@@ -268,8 +285,21 @@ a := point2.y
 
 ##### 方法接收器
 
-在 Go 中，将函数绑定到结构体上，则称该函数是该结构体的方法，其定义的方式是在 func 与函数名间加上具体结构体变量，这个结构体变量称为"方法接收器"。
+在 Go 中，将函数绑定到 struct 上，则称该函数是该 struct 的方法，其定义的方式是在 func 与函数名间加上具体 struct 变量，这个 struct 变量称为"方法接收器"。
 
+通过`方法接收器`可以访问 struct 的字段，这类似其他编程语言中的 this 关键词，但在 Go 中，只是一个变量名而已。
+
+###### 值接收器
+
+值传递，修改时不会修改原 struct 变量
+
+```go
+func (p Point) Distance(q Point) float64 {
+  ...
+}
+```
+
+在下例中 
 ```go
 type Member struct {
     Id     int
@@ -284,29 +314,21 @@ func setName(m Member,name string){
     m.Name = name
 }
 
-//绑定到Member结构体的方法，只有指针才能传递
-func (m *Member)setName(name string){
+//绑定到Member结构体的方法，是值传递
+func (m Member)setName(name string){
     m.Name = name
 }
 
 m := Member{}
 m.setName("小明")
-fmt.Println(m.Name)//输出小明，如果非指针则为空
+fmt.Println(m.Name)//输出为空
 ```
 
-###### 值接收器
-
-值传递，修改时不会修改原变量
-
-```go
-func (p Point) Distance(q Point) float64 {
-  ...
-}
-```
+上面的代码中，虽然调用了 setName() 方法设置了字段 Name 的值，但因为 struct 是值传递，当调用setName时，方法接收器接收到是只是 struct 变量的一个副本，通过副本对值进行修复，并不会影响调用者。因此，可以将方法接收器定义为指针 struct，就可达到修改 struct 的目的了。
 
 ###### 指针接收器
 
-指针传递，修改时会修改值中原变量
+指针传递，修改时会修改值中原 struct 变量
 
 ```go
 func (p *Point) Distance(q Point) float64 {
@@ -314,9 +336,101 @@ func (p *Point) Distance(q Point) float64 {
 }
 ```
 
-### 匿名组合
+```go
+func (p Point) Distance(q Point) float64 {
+  ...
+}
+```
 
-通过结构体嵌套实现继承，Point 的成员直接变为 Circle 的成员，而不需要加一层嵌套。
+在下例中 
+```go
+type Member struct {
+    Id     int
+    Name   string
+    Email  string
+    Gender int
+    Age    int
+}
+
+//绑定到Member结构体的方法，是值传递
+func (m *Member)setName(name string){
+    m.Name = name
+}
+
+m := Member{}
+m.setName("小明")
+fmt.Println(m.Name) //输出值为 “小明”
+```
+
+#### 可见性
+
+当定义的 struct 字段名首字母是小写的，这意味着这些字段在`包外不可见`，因而无法在其他包中被访问，只允许包内访问。如果想在一个包中访问另一个包中 struct 的字段，则必须是大写字母开头的变量，即可导出的变量。
+
+#### Tags
+
+在定义 struct 字段时，除字段名称和数据类型外，还可以使用反引号为 struct 字段声明元信息，这种元信息称为 Tag，用于编译阶段关联到字段中。
+
+```go
+type Member struct {
+    Id     int    `json:"id,-"`
+    Name   string `json:"name"`
+    Email  string `json:"email"`
+    Gender int    `json:"gender,"`
+    Age    int    `json:"age"`
+}
+```
+
+上例中使用 encoding/json 包编码或解码 struct 时使用的 Tag 信息。Tag 由反引号括起来的一系列用空格分隔的key/value 键值对组成。
+
+### 嵌套/匿名组合
+
+#### 组合
+
+struct 中并没有继承的概念，其实，在 Go 中也没有继承的概念。Go 的编程哲学里，推荐使用`组合`的方式来达到代码复用效果。组合，可以理解为定义一个 struct 中，其字段可以是其他的 struct ，这样不同的 struct 就可以共用相同的字段。
+
+```go
+type Animal struct {
+    Name   string  //名称
+    Color  string  //颜色
+    Height float32 //身高
+    Weight float32 //体重
+    Age    int     //年龄
+}
+//奔跑
+func (a Animal)Run() {
+    fmt.Println(a.Name + "is running")
+}
+//吃东西
+func (a Animal)Eat() {
+    fmt.Println(a.Name + "is eating")
+}
+
+type Cat struct {
+    a Animal
+}
+
+func main() {
+    var c = Cat{
+	    a: Animal{
+            Name:   "猫猫",
+            Color:  "橙色",
+            Weight: 10,
+            Height: 30,
+            Age:    5,
+        },
+    }
+    fmt.Println(c.a.Name)
+    c.a.Run()
+}
+```
+
+#### 匿名组合
+
+在上例中，把 Animal 结构体作为 Cat 的字段时，其变量名为a，所以访问 Animal 的方法时，语法为`c.a.Run()`。这种通过子属性访问某个字段类型所带的方法和字段用法非常繁琐。
+
+Go语言支持直接将一个 struct 作为另一个 struct 的字段，而不需要取变量名，这种字段叫`匿名组合`。通过匿名组合，访问匿名字段类型所带的方法和字段时，不需要使用子属性，非常方便。
+
+下例中，通过 struct 组合实现继承，Point 的成员直接变为 Circle 的成员，而不需要加一层嵌套。
 
 ```go
 type Circle struct { 
@@ -324,15 +438,6 @@ type Circle struct {
 }
 c := Circle{x:8, y:10}
 ```
-
-### 结构体指针
-
-```go
-var ppoint3 *Point = &point1
-```
-
-- (*ppoint3).x 与ppoint3.y 等价：可以通过指针名直接调用值的变量或方法。指针可用来代替值，但值无法代替指针，因为可能有多个指针指向同一个值，Go会自动把指针转换为值。
-- 函数的输入/输出一般采用结构体指针
 
 ### Lab
 
@@ -343,9 +448,7 @@ var ppoint3 *Point = &point1
 
 ### 简介
 
-Go 中的接口定义了一组**方法**的集合，但这些方法不会在接口上直接实现，而是需要用户自定义的方法来实现。
-
-在接口类型中的方法都是没有实际结构体的，仅仅只是在接口中存放一些方法的签名（签名 = 函数名+参数(类型)+返回值(类型)）。
+接口（interface）是一种类型，用来定义行为（方法）。Go 中的接口定义了一组方法的集合，但这些方法不会在接口上直接实现，而是需要用户自定义的方法来实现。在接口类型中的方法都是没有实际 struct 的，仅仅只是在接口中存放一些方法的签名（签名 = 函数名+参数(类型)+返回值(类型)）。
 
 #### 优点
 
@@ -354,7 +457,7 @@ Go 中的接口定义了一组**方法**的集合，但这些方法不会在接�
 - 提高了代码的可测性
 - 代码更健壮、更稳定了
 
-#### Go语言是面向接口编程
+#### Go是面向接口编程
 
 面向接口编程是根据结构体可以执行的操作而不是其所包含的数据来设计抽象。接口可以看做结构体的“基类”，它定义了结构体的行为。结构体则是接口的实现，通过实现所有接口声明的方法来实现该接口。当结构体中包含了该接口，则表示结构体实现该“基类”
 
@@ -403,7 +506,7 @@ func main() {
     s := Square{3.2}
 
     // Sharpe接口实例ins1，它自身是指针类型的
-    var ins1 Shaper
+    var ins1 Sharpe
 
   // 将Circle实例c赋值给接口实例ins1，那么ins1中就保存了实例c
     ins1 = c
@@ -418,7 +521,7 @@ func main() {
 }
 ```
 
-当用户自定义的结构体实现了接口中定义的方法时，那么自定义结构体的实例可以赋值给接口类型的实例，这个赋值过程使得接口实例中保存了用户自定义结构体实例。如：结构体实例 c 与接口实例 ins1 包含了两个地址：【1】
+当用户自定义的 struct 实现了接口中定义的方法时，那么自定义 struct 的实例可以赋值给接口类型的实例，这个赋值过程使得接口实例中保存了用户自定义结构体实例。如：struct  实例 c 与接口实例 ins1 包含了两个地址：【1】
 
 - 第一部分是实例的类型信息
 - 第二个部分是实例自身信息
@@ -427,21 +530,21 @@ func main() {
 
 ### 实现
 
-当一个结构体为一个接口中所有的方法提供定义时，它被称为实现该接口。而判断一个结构体是否实现了一个接口是完全是自动地。
+当一个 struct 为一个接口中所有的方法提供定义时，它被称为实现了该接口。而判断一个 struct 是否实现了一个接口是完全是自动地。
 
 ### 多态
 
-通过接口定义“基类”，多个结构体实现接口中定义的所有方法，从而实现这个“基类”。当通过结构体调用该接口的方法时，所有符合该接口的结构体都可被调用，从而实现多态调用。
+通过接口定义“基类”，多个 struct 实现接口中定义的所有方法，从而实现这个“基类”。当通过 struct 调用该接口的方法时，所有符合该接口的 struct 都可被调用，从而实现多态调用。
 
-#### 基类（接口）定义
+#### 基类/接口定义
 
-重点是实现方法的主体，无论是结构体还是结构体指针
+重点是实现方法的主体，无论是结构体还是指针结构体
 
 ```go
-animals := []Animal{Dog{}, Cat{}} # Animal是个接口
-animals := []Animal{Dog{}, &Cat{}} # 既有结构体，也有接头体指针
+animals := []Animal{Dog{}, Cat{}} // Animal是个接口
+animals := []Animal{Dog{}, &Cat{}} // 既有结构体，也有接头体指针
 func TotalPerimeter(shapes ...Shape) float64 {...}
-TotalPerimeter(a, b, c, d) # 实现Shape的结构体或结构体指针
+TotalPerimeter(a, b, c, d) // 实现Shape的结构体或结构体指针
 ```
 
 ### interface{}
@@ -460,7 +563,7 @@ func PrintAll(vals []interface{}) {...}
 
 b=type(a) 如：`b = int32(a)`
 
-### 结构体
+### struct
 
 <img src="figures/image-20220410132213918.png" alt="image-20220410132213918" style="zoom:50%;" />
 
