@@ -79,9 +79,11 @@ service Cache{
 用于存储由 message 定义、创建的数据结构
 
 #### xxx_grpc.pb.go
+
 用于存储由 service 定义、创建的 interface、struct、method 等。该文件采用标准的 Go 包结构，内部包括（以 ProductInfo 为例）
 
 ##### client 端
+
   - ProductInfoClient interface：定义 client 端的 interface
   - productInfoClient struct：定义实现接口的 struct
   - NewProductInfoClient(cc grpc.ClientConnInterface) ProductInfoClient：作为 Factory，返回一个 client 端
@@ -95,7 +97,6 @@ service Cache{
 - RegisterProductInfoServer：把 interface 的实例注册到一个 gRPC server上
 - _ProductInfo_XXX_Handler：将后续 ProductInfoServer interface 中诸多方法的实现映射到 Handler 上
 - ProductInfo_ServiceDesc：server 端所有的运行参数
-
 
 ### Server 端（实现）
 
@@ -197,12 +198,12 @@ protoc --go_out=. --go_opt=paths=source_relative \
     productinfo.proto
 ```
 
-server/main.go 
+server/main.go
 
 ```go
 type server struct {
-	productMap map[string]*pb.Product
-	pb.UnimplementedProductInfoServer // 需要手动加上该行
+  productMap map[string]*pb.Product
+  pb.UnimplementedProductInfoServer // 需要手动加上该行
 }
 ```
 
@@ -241,10 +242,3 @@ protoc --go_out=. --go_opt=paths=source_relative \
 ## apiserver 示例
 
 在 apiserver 示例中，初了之前已经加入的 Gin HTTP 和 HTTPS server之外，在本例中，我们会继续加入 GRPC server，具体介绍[在此](80_server/README.md)。
-
-
-
-
-
-
-
