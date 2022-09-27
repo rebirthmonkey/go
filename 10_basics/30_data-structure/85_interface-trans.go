@@ -49,21 +49,23 @@ func main() {
 	animal1 := Animal3(monkey)
 	fmt.Println("I'm animal1", animal1.GetName())
 
+	// 子类->基类：struct->interface
 	// 指针接收器
 	animal2 := Animal3(&cat) // 括号里需要传递一个*Cat类型而不能是Cat类型，因为是*Cat类型实现了GetName()方法，而不是Cat类型
 	fmt.Println("I'm animal2", animal2.GetName())
 
 	// 子类->子类：struct->struct
-	// 值接收器
+	// 值接收器->值接收器
 	pig := Pig(monkey)
 	fmt.Println("I'm pig", pig.GetName())
 
-	// 指针接收器
-	// 结构体
+	// 子类->子类：struct->struct
+	// 指针接收器->指针接收器
 	dog1 := Dog3(cat) // 括号里需要传递一个Cat类型，因为Cat=Dog, *Cat=*Dog
 	fmt.Println("I'm dog1", dog1.GetName())
 
-	// 结构体指针
+	// 子类->子类：指针struct->指针struct
+	// 指针接收器->指针接收器
 	dog2 := (*Dog3)(&cat)
 	fmt.Println("I'm dog2", dog2.GetName()) // 如上所述，*Cat = *Dog
 
@@ -77,7 +79,7 @@ func main() {
 		fmt.Println("can not convert animal1 to monkey")
 	}
 
-	// 非原路返回
+	// 非原路返回：无法转换
 	pig3, ok := animal1.(Pig)
 	if ok {
 		fmt.Println("convert animal1 to pig", pig3.GetName())
@@ -95,10 +97,10 @@ func main() {
 	}
 
 	// 指针接收器
-	// 非原路返回
+	// 非原路返回：无法转换
 	dog3, ok := animal2.(*Dog3) // 类型断言，接口对象的实际类型和要转换的目标类型不匹配
 	if ok {
-		fmt.Println("convert animal2 to dog - " + dog3.GetName())
+		fmt.Println("convert animal2 to dog", dog3.GetName())
 	} else {
 		fmt.Println("can not convert animal2 to dog")
 	}

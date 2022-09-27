@@ -448,7 +448,7 @@ c := Circle{x:8, y:10}
 
 ### 简介
 
-接口（interface）是一种类型，用来定义行为（方法）。Go 中的接口定义了一组方法的集合，但这些方法不会在接口上直接实现，而是需要用户自定义的方法来实现。在接口类型中的方法都是没有实际 struct 的，仅仅只是在接口中存放一些方法的签名（签名 = 函数名+参数(类型)+返回值(类型)）。
+接口（interface）是一种类型，用来定义行为（方法）。Go 中的接口定义了一组方法的集合，但这些方法不会在接口上直接实现，而是需要通过用户自定义的 struct 来实现方法。在接口类型中的方法都是没有实际 struct 的，仅仅只是在接口中存放一些方法的签名（签名 = 函数名+参数(类型)+返回值(类型)）。
 
 #### 优点
 
@@ -461,7 +461,7 @@ c := Circle{x:8, y:10}
 
 面向接口编程是根据结构体可以执行的操作而不是其所包含的数据来设计抽象。接口可以看做结构体的“基类”，它定义了结构体的行为。结构体则是接口的实现，通过实现所有接口声明的方法来实现该接口。当结构体中包含了该接口，则表示结构体实现该“基类”
 
-### 声明
+### 声明&实现
 
 在接口声明中只能定义方法签名，不能包含变量。
 
@@ -472,8 +472,8 @@ import (
     "fmt"
 )
 
-// Shaper 接口类型
-type Shaper interface {
+// Shape接口类型
+type Shape interface {
     Area() float64
 }
 
@@ -505,10 +505,10 @@ func main() {
     // Square类型的值类型实例
     s := Square{3.2}
 
-    // Sharpe接口实例ins1，它自身是指针类型的
-    var ins1 Sharpe
+    // Shape接口实例ins1，它自身是指针类型的
+    var ins1 Shape
 
-  // 将Circle实例c赋值给接口实例ins1，那么ins1中就保存了实例c
+    // 将Circle实例c赋值给接口实例ins1，那么ins1中就保存了实例c
     ins1 = c
     fmt.Println(ins1)
 
@@ -521,24 +521,31 @@ func main() {
 }
 ```
 
-当用户自定义的 struct 实现了接口中定义的方法时，那么自定义 struct 的实例可以赋值给接口类型的实例，这个赋值过程使得接口实例中保存了用户自定义结构体实例。如：struct  实例 c 与接口实例 ins1 包含了两个地址：【1】
+当用户自定义的 struct 实现了 interface 中定义的方法时，那么**自定义 struct 的实例可以赋值给 interface 类型的实例**。这个赋值过程使得 interface 实例中保存了 2 个指针：
 
-- 第一部分是实例的类型信息
-- 第二个部分是实例自身信息
+- 用户自定义 struct 类型：这部分是实例的类型信息。
+- 用户自定义 struct 实例：这部分是实例自身信息。
+
+如：struct 实例 c 与接口实例 ins1 包含了两个地址：【1】
 
 <img src="figures/image-20211126113650944.png" alt="image-20211126113650944" style="zoom: 25%;" />
 
-### 实现
+当一个 struct 为一个 interface 中所有的方法提供定义时，它被称为实现了该 interface。而判断一个 struct 是否实现了一个interface 是完全是自动地。
 
-当一个 struct 为一个接口中所有的方法提供定义时，它被称为实现了该接口。而判断一个 struct 是否实现了一个接口是完全是自动地。
+#### 方法接收器
 
-### 多态
+- 值接收器：会在方法内部创建/复制一个 struct 实例进行操作，但出了方法后该 struct 实例就会被销毁，所以无法向外传递该 struct 实例。
+- 指针接收器：会通过指针直接使用外部的 struct 实例，所有在方法内对该 struct 实例的操作都会在外部的实例生效。
 
-通过接口定义“基类”，多个 struct 实现接口中定义的所有方法，从而实现这个“基类”。当通过 struct 调用该接口的方法时，所有符合该接口的 struct 都可被调用，从而实现多态调用。
+### 调用&多态
 
-#### 基类/接口定义
+通常在 func 定义中都会直接使用 interface 实例，通过 interface 的方法操作该 interface 实例。当该函数被具体使用时，会传入具体的 struct 实例。该 struct 实例会被自动转换为 interface 实例而被操作。
 
-重点是实现方法的主体，无论是结构体还是指针结构体
+因此可以看成通过 interface 定义“基类”，多个 struct 实现 interface 中定义的所有方法，从而实现这个“基类”。当通过 struct 调用该 interface 的方法时，所有符合该 interface 的 struct 都可被调用，从而实现多态调用。
+
+#### 基类/interface定义
+
+重点是实现方法的主体，无论是 struct 还是指针 struct
 
 ```go
 animals := []Animal{Dog{}, Cat{}} // Animal是个接口
@@ -549,7 +556,7 @@ TotalPerimeter(a, b, c, d) // 实现Shape的结构体或结构体指针
 
 ### interface{}
 
-interface{} 作为所有类的“基类”被使用
+interface{} 作为所有类的通用“基类”被使用
 
 ```go
 func PrintAll(vals []interface{}) {...}
@@ -557,11 +564,20 @@ func PrintAll(vals []interface{}) {...}
 
 可将 []string 转为 []interface{} 类型
 
+### Lab
+
+- [Interface 指针接收器](52_interface.go)
+- [多态](53_interface-polymorphism.go)
+- [多态](54_interface-polymorphism.go)
+- [多态](55_interface-polymorphism.go)
+- [多态](56_interface-polymorphism.go)
+- [通用 interface](59_interface-general.go)
+
 ## 类型转换
 
 ### 基本
 
-b=type(a) 如：`b = int32(a)`
+`b=type(a)` 如：`b = int32(a)`
 
 ### struct
 
@@ -577,7 +593,7 @@ struct->interface
 
 #### 子类->子类
 
-struct->struct，因为两个结构体都实现了该接口（方法）
+struct->struct，因为两个 struct 都实现了该 interfact（方法），所以可以相互转换。
 
 - 值接收器：pig := Pig(monkey)
 
