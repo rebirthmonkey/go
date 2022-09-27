@@ -539,7 +539,7 @@ func main() {
 
 ### 调用&多态
 
-通常在 func 定义中都会直接使用 interface 实例，通过 interface 的方法操作该 interface 实例。当该函数被具体使用时，会传入具体的 struct 实例。该 struct 实例会被自动转换为 interface 实例而被操作。
+通常在 func 定义中都会直接**使用 interface 实例**，通过 interface 的方法操作该 interface 实例。当该函数被具体调用时，会传入具体的 struct 实例。该 struct 实例会被自动转换为 interface 实例而被操作。
 
 因此可以看成通过 interface 定义“基类”，多个 struct 实现 interface 中定义的所有方法，从而实现这个“基类”。当通过 struct 调用该 interface 的方法时，所有符合该 interface 的 struct 都可被调用，从而实现多态调用。
 
