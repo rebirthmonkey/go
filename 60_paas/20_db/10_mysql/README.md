@@ -52,59 +52,34 @@ Gorm 支持两种删除方法：软删除和永久删除：
 
 如果没有指定表名，则 Gorm 使用结构体名的蛇形复数作为表名。例如：结构体名为 DockerInstance ，则表名为 dockerInstances 。
 
-
-
 ### Hook
 
-#### BeforeCreate
-
-
-
-#### AfterCreate
-
-
-
-#### BeforeUpdate
-
-
-
-#### AfterUpdate
-
-
-
-#### BeforeSave
-
-
-
-#### AfterSave
-
-
-
-#### BeforeDelete
-
-
-
-#### AfterDelete
-
-
-
-#### AfterFind
-
-
+- BeforeCreate
+- AfterCreate
+- BeforeUpdate
+- AfterUpdate
+- BeforeSave
+- AfterSave
+- BeforeDelete
+- AfterDelete
+- AfterFind
 
 ### Lab
 
 - Mysql DB 初始化
+
 ```shell
 mysql -h 127.0.0.1 -u root -p < test.sql
 ```
 
 - [Gorm](20_gorm/10_gorm.go)
+
 ```shell
 go run 10_gorm.go -H 127.0.0.1:3306 -u root -p P@ssw0rd -d test
 ```
 
 - [Gorm Model](20_gorm/12_gorm-model.go)
+
 ```shell
 go run 12_gorm-model.go -H 127.0.0.1:3306 -u root -p P@ssw0rd -d test
 ```
