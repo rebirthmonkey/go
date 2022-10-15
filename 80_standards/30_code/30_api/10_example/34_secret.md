@@ -35,7 +35,7 @@ POST /v1/secrets
 
 **输入示例**
 
-```bash
+```shell
  curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'{
   "metadata": {
     "name": "secret"
@@ -44,6 +44,7 @@ POST /v1/secrets
   "description": "admin secret"
 }' http://marmotedu.io:8080/v1/secrets
 ```
+
 **输出示例**
 
 ```json
@@ -88,7 +89,7 @@ Null
 
 **输入示例**
 
-```bash
+```shell
 curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://marmotedu.io:8080/v1/secrets/foo
 ```
 
@@ -133,7 +134,7 @@ PUT /v1/secrets/:name
 
 **输入示例**
 
-```bash
+```shell
  curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'{
   "metadata": {
     "name": "secret"
@@ -193,7 +194,7 @@ GET /v1/secrets/:name
 
 **输入示例**
 
-```bash
+```shell
 curl -XGET -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://marmotedu.io:8080/v1/secrets/secret
 ```
 
@@ -244,7 +245,7 @@ GET /v1/secrets
 
 **输入示例**
 
-```bash
+```shell
 curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://marmotedu.io:8080/v1/secrets?offset=0&limit=10&fieldSelector=name=secret1
 ```
 

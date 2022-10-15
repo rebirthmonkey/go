@@ -23,8 +23,8 @@ gRPC 支持定义 4 种类型的服务方法，分别是简单模式、服务端
 ### Install
 
 ```shell
-$ go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
-$ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
+go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
 ```
 
 ## 原理
@@ -155,11 +155,15 @@ message HelloReply {
 
 根据 .proto 服务定义生成 gRPC 客户端和服务器接口。可以使用 protoc 编译工具，并指定使用其 Go 语言插件来生成：
 
-```shell
-$ protoc --go_out=. --go_opt=paths=source_relative \
+```bash
+cd 10_helloworld/helloworld
+protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     helloworld.proto
-$ ls
+ls
+```
+
+```text
 helloworld.pb.go  helloworld.proto # 新增了一个 helloworld.pb.go 文件
 ```
 
@@ -192,10 +196,12 @@ helloworld.pb.go  helloworld.proto # 新增了一个 helloworld.pb.go 文件
 
 生成 pb
 
-```shell
+```bash
+cd 12_productinfo/productinfo
 protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     productinfo.proto
+ls
 ```
 
 server/main.go
@@ -209,7 +215,8 @@ type server struct {
 
 运行
 
-```shell
+```bash
+cd 12_productinfo
 go run server/main.go
 go run client/main.go
 ```
@@ -225,10 +232,15 @@ go run client/main.go
   - An interface type (or *stub*) for clients to call with the methods defined in the `RouteGuide` service.
   - An interface type for servers to implement, also with the methods defined in the `RouteGuide` service.
 
-```shell
+```bash
+cd 14_route-guid/routeguide
 protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     route_guide.proto
+ls
+cd ..
+go run server/main.go
+go run client/main.go
 ```
 
 #### 创建 server 端

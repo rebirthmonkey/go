@@ -48,6 +48,11 @@ var f float32 = 1.2345
 
 - [基础数据结构](01_basic.go)
 
+
+```bash
+go run 01_basic.go
+```
+
 ## 复合
 
 ### 数组（array）
@@ -192,12 +197,12 @@ s := "Hello, World!" // 简短
 
 #### Operation
 
-- len(mystring) --> 12: Used to find the number of characters in mystring
-- “hello”+“world” --> “helloworld”: 2 strings are concatenated into a single string
-- “world” == “hello” --> False: Equality can be tested using “==” sign
-- “a” < “b” --> True: Unicode value can also be used to “b” < “a” False compare
-- mystring[0] --> “h” Indexing: String are indexed same as array.
-- mystring[1:4] --> "ell": Slicing
+- `len(mystring)` --> `12`: Used to find the number of characters in mystring
+- `“hello”+“world”` --> `“helloworld”`: 2 strings are concatenated into a single string
+- `“world” == “hello”` --> `False`: Equality can be tested using “==” sign
+- `“a” < “b”` --> `True`: Unicode value can also be used to “b” < “a” False compare
+- `mystring[0]` --> `“h”` Indexing: String are indexed same as array.
+- `mystring[1:4]` --> `"ell"`: Slicing
 
 ### Lab
 
@@ -210,6 +215,43 @@ s := "Hello, World!" // 简短
 - [字典 Map](22_map.go)
 - [双向链表 List](25_list.go)
 - [字符串 String](29_string.go)
+
+```bash
+go run 10_array.go
+```
+
+```bash
+go run 11_slice.go
+```
+
+```bash
+go run 12_slice2.go
+```
+
+```bash
+go run 14_slice-sum.go
+```
+
+```bash
+go run 15_slice-sequential-search.go
+```
+
+```bash
+go run 16_slice-binary-search.go
+```
+
+```bash
+go run 22_map.go
+```
+```bash
+go run 25_list.go
+```
+
+```bash
+go run 29_string.go
+```
+
+
 
 ## 结构体（struct）
 
@@ -444,6 +486,14 @@ c := Circle{x:8, y:10}
 - [结构体 struct](50_struct.go)
 - [结构体方法 method](51_struct-method.go)
 
+```bash
+go run 50_struct.go
+```
+
+```bash
+go run 51_struct-method.go
+```
+
 ## 接口（interface）
 
 ### 简介
@@ -573,6 +623,30 @@ func PrintAll(vals []interface{}) {...}
 - [多态](56_interface-polymorphism.go)
 - [通用 interface](59_interface-general.go)
 
+```bash
+go run 52_interface.go
+```
+
+```bash
+go run 53_interface-polymorphism.go
+```
+
+```bash
+go run 54_interface-polymorphism.go
+```
+
+```bash
+go run 55_interface-polymorphism.go
+```
+
+```bash
+go run 56_interface-polymorphism.go
+```
+
+```bash
+go run 59_interface-general.go
+```
+
 ## 类型转换
 
 ### 基本
@@ -624,6 +698,18 @@ interface->struct
 - [基础数据结构转换](80_basic-type-trans.go)
 - [字符串String转换](81_basic-string-trans.go)
 - [Interface-Struct转换](85_interface-trans.go)
+
+```bash
+go run 80_basic-type-trans.go
+```
+
+```bash
+go run 81_basic-string-trans.go
+```
+
+```bash
+go run 85_interface-trans.go
+```
 
 ## Ref
 

@@ -141,15 +141,15 @@ func createJWTToken(algorithm string, timeout time.Duration, secretID, secretKey
 
 在命令行执行如下命令，即可生成 JWT Token：
 
-```bash
-$  go run main.go <secretID> <secretKey>
+```shell
+go run main.go <secretID> <secretKey>
 ```
 
 默认会生成 HS256 算法签名、2 小时后过期的 Token。可以通过 `--algorithm` 指定签名算法，通过 `--timeout` 指定 token 过期时间。
 
 3. 携带 Token，发送 HTTP 请求：
 
-```bash
+```shell
 curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer <Token>' -d'{"metadata":{"name":"secretdemo"},"expires":0,"description":"admin secret"}' http://xxx.io:8080/v1/secrets
 ```
 ## 5. 请求方法

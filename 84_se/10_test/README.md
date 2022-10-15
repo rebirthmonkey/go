@@ -270,19 +270,22 @@ func TestListPosts(t *testing.T) {
 
 - [HelloWorld](10_unit/10_hello/equal_test.go)：
 
-```shell
+```bash
+cd 10_unit/10_hello
 go test
 ```
 
 - [Struct-based](10_unit/11_struct-based/sqrt_test.go)：内部建立 struct list 统一测试
 
-```shell
+```bash
+cd 10_unit/11_struct-based
 go test
 ```
 
 - [Math Test](10_unit/12_math-test/math_test.go)：使用 TestMain() 函数做 test 前后准备
 
-```shell
+```bash
+cd 10_unit/12_math-test/
 go test
 ```
 
@@ -299,9 +302,10 @@ $ go test
 
 - [自动生成测试文件](10_unit/90_gotests/math_test.go)：通过 gotests 自动生成测试文件
 
-```shell
+```bash
+cd 10_unit/90_gotests/
 gotests -all -w .
-# 在 math_test.go 中不全数据，添加测试内容
+# 在 math_test.go 中补全数据，添加测试内容
 go test
 ```
 
@@ -309,27 +313,30 @@ go test
 
 - [math示例测试](13_example/10_math/example_test.go)：示例测试只对比输出结果
 
-```shell
+```bash
+cd 13_example/10_math/
 go test
 ```
 
 - [大型App示例测试](13_example/20_app/example_app_test.go)：
 
-```shell
+```bash
+cd 13_example/20_app/
 go test
 ```
 
 ### 性能测试
 
-- [math性能测试](15_benchmark/12_math-test/math_test.go)：测试 math 函数性能
+- [math性能测试](20_benchmark/12_math-test/math_test.go)：测试 math 函数性能
 
-```shell
+```bash
+cd 20_benchmark/12_math-test/
 go test -bench=".*"
 ```
 
 ## apierver 示例
 
-在章，会为 apiserver 示例添加额外的测试，具体包容“单元测试”和“接口测试”两部分。
+在本章，会为 apiserver 示例添加额外的测试，具体包容“单元测试”和“接口测试”两部分。
 
 ### 单元测试
 
@@ -337,7 +344,7 @@ go test -bench=".*"
 - 运行单元测试
 
 ```shell
-cd apiserver/user/service/v1
+cd 80_server/apiserver/user/service/v1
 go test
 ```
 
@@ -346,6 +353,7 @@ go test
 - 添加接口测试脚本到[此处](80_server/test/api)
 - 运行接口测试脚本
 
-```shell
+```bash
+cd 80_server/
 ./test/api/test.sh api::test::user
 ```

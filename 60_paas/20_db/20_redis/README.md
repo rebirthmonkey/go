@@ -4,20 +4,20 @@
 
 - [Ping-Pong](10_go-redis/10_ping-pong.go)
 
-```shell
-go run 10_ping-pong.go
+```bash
+go run 10_go-redis/10_ping-pong.go
 ```
 
 - [String](10_go-redis/21_string.go)
 
-```shell
-go run 21_string.go
+```bash
+go run 10_go-redis/21_string.go
 ```
 
 - [List](10_go-redis/23_list.go)
 
-```shell
-go run 23_list.go
+```bash
+go run 10_go-redis/23_list.go
 ```
 
 ## ristretto

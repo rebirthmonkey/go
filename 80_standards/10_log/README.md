@@ -64,9 +64,9 @@
 
 - 在记录日志时，不要输出一些敏感信息，例如密码、密钥等。
 - 为了方便调试，通常会在 Debug 级别记录一些临时日志，这些日志内容可以用一些特殊的字符开头，例如 log.Debugf("XXXXXXXXXXXX-1:Input key was: %s", setKeyName) 。这样，在完成调试后，可以通过查找 XXXXXXXXXXXX 字符串，找到这些临时日志，在 commit 前删除。
-- 日志内容应该小写字母开头，以英文点号 . 结尾，例如 log.Info("update user function  called.") 。
+- 日志内容应该小写字母开头，以英文点号 . 结尾，例如 log.Info("update user function called.") 。
 - 为了提高性能，尽可能使用明确的类型，如使用 log.Warnf("init datastore: %s",  err.Error()) 而非 log.Warnf("init datastore: %v", err)  。
-- 日志最好包含两个信息：一个是请求 ID（每次请求的唯一 ID），便于从海量日志中过滤出某次请求的日志，可以将请求 ID  放在请求的通用日志字段中。另一个是用户和行为，用于标识谁做了什么。
+- 日志最好包含两个信息：一个是请求 ID（每次请求的唯一 ID），便于从海量日志中过滤出某次请求的日志，可以将请求 ID 放在请求的通用日志字段中。另一个是用户和行为，用于标识谁做了什么。
 - 不要将日志记录在错误的日志级别上：例如，经常会发现有人将正常的日志信息打印在 Error 级，将错误的日志信息打印在 Info 级。
 
 ### 最佳实践
@@ -91,14 +91,30 @@ Go 标准的 pkg/log 包
 - [log panic](10_log/30_panic.go)
 - [log customize](10_log/40_customize.go)
 
+```bash
+go run 10_log/10_print.go
+```
+
+```bash
+go run 10_log/20_fatal.go
+```
+
+```bash
+go run 10_log/30_panic.go
+```
+
+```bash
+go run 10_log/40_customize.go
+```
+
 ### wklog
 
 wklog 是一个简单的 log 包实现，demo 中主要展示了 WithLevel() 和 WithFormatter() 两个函数的设置。
 
 - [example.go](20_wklog/example.go)
 
-```shell
-go run example.go
+```bash
+go run 20_wklog/example.go
 ```
 
 ### pkg/log
@@ -117,10 +133,11 @@ go run example.go
 - [example1.go](30_rebirthmonkey-log/example1.go)
 - [example2.go](30_rebirthmonkey-log/example2.go)
 
-```shell
+```bash
+cd 30_rebirthmonkey-log
 go run example1.go
 go run example2.go
-go run exmaple2.go -l warn
+go run example2.go -l warn
 ```
 
 ## apiserver 示例

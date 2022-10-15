@@ -103,6 +103,14 @@ value, ok := interface{}(container).([]string)
 - [变量声明](10_variable-constant-declaration.go)
 - [变量作用域](12_variable-scope.go)
 
+```bash
+go run 10_variable-constant-declaration.go
+```
+
+```bash
+go run 12_variable-scope.go
+```
+
 ## 函数
 
 形式：func 函数名 (参数列表) (返回值列表) {函数体}
@@ -123,6 +131,10 @@ value, ok := interface{}(container).([]string)
 #### Lab
 
 - [函数&传参](30_function.go)
+
+```bash
+go run 30_function.go
+```
 
 ### 返回值列表
 
@@ -164,7 +176,7 @@ switch {
   default:
     <statements>
 }
-``
+````
 
 ##### Loop
 
@@ -194,6 +206,14 @@ func main() {
 - [loop for](33_loop-for.go)
 - [loop switch](34_loop-switch.go)
 
+```bash
+go run 33_loop-for.go
+```
+
+```bash
+go run 34_loop-switch.go
+```
+
 #### defer
 
 ##### 使用场景
@@ -212,6 +232,14 @@ func main() {
 
 - [Defer](60_defer.go)
 - [Defer](62_defer.go)
+
+```bash
+go run 60_defer.go
+```
+
+```bash
+go run 60_defer.go
+```
 
 #### 异常处理
 
@@ -237,6 +265,22 @@ func main() {
 - [Error Interface实现错误](82_error-interface.go)
 - [Panic简介](84_panic.go)
 - [Panic通过Defer来Recover](85_panic-recover.go)
+
+```bash
+go run 80_error-func.go
+```
+
+```bash
+go run 82_error-interface.go
+```
+
+```bash
+go run 84_panic.go
+```
+
+```bash
+go run 85_panic-recover.go
+```
 
 ### 匿名函数
 

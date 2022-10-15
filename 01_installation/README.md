@@ -59,7 +59,7 @@ export PATH=$PATH:$GOBIN:$GOROOT/bin
 
 在Ubuntu/MacOS下可以通过编辑`~/.zshrc` 文件添加以下四行内容配置GO环境变量
 
-```bash
+```shell
 export GOROOT=/usr/local/go
 export GOPATH=/Users/XXX/go
 export GOBIN=$GOPATH/bin
@@ -69,7 +69,7 @@ export PATH=$PATH:$GOBIN:$GOROOT/bin
 > XXX 为用户名
 > 如果不是通过官方安装器安装的GO，可能需要替换`/usr/local/go`为具体的值。例如如果通过brew安装的go，则GOROOT应该是`/opt/homebrew/Cellar/go/<VERSION>/libexec`(M1)，`/usr/local/Cellar/go/<VERSION>/libexec`(Intel)
 
-通过`sourc ~/.bashrc`或者`sourc ~/.zshrc`更新当前终端下环境变量
+通过`source ~/.bashrc`或者`source ~/.zshrc`更新当前终端下环境变量
 
 ## hello-world
 

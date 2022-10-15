@@ -27,8 +27,8 @@ channel 存在 3 种状态：
 
 channel 可进行 3 种操作：
 
-1. 读：`work := <-c`
-2. 写：`ic <- 3`
+1. 读：`work := <- c`
+2. 写：`c <- 3`
 3. 关闭：close() 的作用是保证不能再向 channel 中发送值。 channel 被关闭后，仍然是可以从中接收值的。
 
 通过 channel 发送值，可使用 <- 作为二元运算符。通过 channel 接收值，可使用它作为一元运算符。
@@ -105,73 +105,73 @@ fmt.Println()
 
 - [goroutine](10_goroutine.go)：goroutine 持续循环，main() 等待外部输入然后中止整个进程
 
-```shell
+```bash
 go run 10_goroutine.go
 ```
 
 - [goroutine](12_goroutine-anonym.go)：同上，只是 goroutine 通过一个匿名函数来实现
 
-```shell
+```bash
 go run 12_goroutine-anonym.go 
 ```
 
 - [channel](20_channel.go)：当 goroutine 写入 channel 后，因为没有读取操作，所以 goroutine 处于阻塞状态。直到 channel 被读取后，整个 goroutine 才开始循环。
 
-```shell
+```bash
 go run 20_channel.go 
 ```
 
 - [确保 goroutine 完成](21_channnel.go)：main 函数中起了一个 goroutine，通过 channel 确保在 goroutine 执行结束之前 main 函数不会提前退出。这里缓冲与非缓冲 channel 都可以起到相同的效果。
 
-```shell
+```bash
 go run 21_channnel.go
 ```
 
 - [channel range](22_channel-range.go)：通过 for range 循环处理 channel 中的所有消息。
 
-```shell
+```bash
 go run 22_channel-range.go
 ```
 
 - [channel selelct](26_channel-select.go)：当有多个 channel 时，通过 select 自动选择先获得信息的 channel 来处理。
 
-```shell
+```bash
 go run 26_channel-select.go
 ```
 
 - [多核并行](30_multi-process.go)：不展示任何结果，goroutine 还没开始，main 就会退出。
 
-```shell
+```bash
 go run 30_multi-process.go
 ```
 
 - [多核并行](31_multi-process.go)：每次执行的结果都不相同，在多个 goroutine 还没执行完成的情况下，因为 goroutine 9 完成了，所以 main 就会退出。
 
-```shell
+```bash
 go run 31_multi-process.go
 ```
 
 - [多核并行](32_multi-process-channel.go)：需要读 channel 10 次，童儿通过 channel 来确认 10 个 routine 都已完成。
 
-```shell
+```bash
 go run 32_multi-process-channel.go
 ```
 
 - [多核并行](33_multi-process-wg.go)：通过 waitGroup 来确认 10 个 routine 都已完成。
 
-```shell
+```bash
 go run 33_multi-process-wg.go
 ```
 
 - [处理 Context.Done()](38_channel-select-ctx.go)：通过 context.Done() 来协同各个 goroutine
 
-```shell
+```bash
 go run 38_channel-select-ctx.go
 ```
 
 - [Mutex锁](41_sync-mutex.go)
 
-```shell
+```bash
 go run 41_sync-mutex.go 
 ```
 

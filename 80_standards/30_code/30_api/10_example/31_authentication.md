@@ -29,7 +29,7 @@ POST /login
 
 **输入示例**
 
-```bash
+```shell
 $ curl -XPOST -H"Authorization: Basic `echo -n 'admin:Admin@2021'|base64`" http://iam.api.marmotedu.com:8080/login
 ```
 
@@ -64,7 +64,7 @@ Null
 
 **输入示例**
 
-```bash
+```shell
 $ curl -XPOST http://iam.api.marmotedu.com:8080/logout
 ```
 
@@ -103,7 +103,7 @@ POST /refresh
 
 **输入示例**
 
-```bash
+```shell
 $ curl -XPOST -H"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzM0MTY1MzUsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MjU2NDA1MzUsInN1YiI6ImFkbWluIn0.tFJC5ZO2UGy-3NI_FLiGrQF-DztRmBSDP4C5gazQYW4" http://iam.api.marmotedu.com:8080/refresh
 ```
 

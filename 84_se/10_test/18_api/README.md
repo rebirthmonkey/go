@@ -20,11 +20,11 @@
 
 #### Install
 
-```ssh
+```shell
 git clone https://github.com/wg/wrk
 cd wrk
 make
-sudo cp ./wrk /usr/bin
+sudo install ./wrk /usr/bin
 ```
 
 #### 参数

@@ -125,32 +125,40 @@ func (mux *ServeMux) ServeHTTP(w ResponseWriter, r *Request)
 
 - [Handler](10_handler.go)
 
-```shell
-go run 10_handler.go
-curl http://127.0.0.1:8080
+```bash
+go run 10_handler.go &
+sleep 3;
+curl http://127.0.0.1:8080;
+kill -9 -$!;
 ```
 
 - [Handler](12_handler.go)
 
-```shell
-go run 12_handler.go
-curl http://127.0.0.1:8080/view
+```bash
+go run 12_handler.go &
+sleep 3;
+curl http://127.0.0.1:8080/view/abc;
+kill -9 -$!;
 ```
 
 > 对于`/view/<NAME>`路径，该程序会展示`<NAME>.txt`文件的内容，如果路径下不存在`<NAME>.txt`，将会报错。
 
 - [Handler with Interface](14_handler-interface.go)
 
-```shell
-go run 14_handler-interface.go
-curl http://127.0.0.1:8080/view
+```bash
+go run 14_handler-interface.go &
+sleep 3;
+curl http://127.0.0.1:8080/view/abc;
+kill -9 -$!;
 ```
 
 - [Handler as Reverse Proxy](20_reverse-proxy.go)
 
-```shell
-go run 20_reverse-proxy.go
-curl http://127.0.0.1:8080
+```bash
+go run 20_reverse-proxy.go &
+sleep 3;
+curl http://127.0.0.1:8080;
+kill -9 -$!;
 ```
 
 ## Ref

@@ -4,27 +4,30 @@
 ### Installation
 
 ```shell
-go get -u github.com/swaggo/swag/cmd/swag
+go install github.com/swaggo/swag/cmd/swag@latest
 ```
 
 ### Module Init
+
 ```shell
 go mod tidy
 go mod download
 ```
 
 ### Create Swag Docs
-```shell
+```bash
 swag init -g cmd/main.go
 ```
 
 !!! checl cmd/main.go, `import _ "wukong/go/50_web/20_gin/90_swag/docs"`
 
 ### run & check
-```shell
-go run cmd/main.go
+```bash
+go run cmd/main.go &
+sleep 3
 curl http://127.0.0.1:8080/user/123/xxx
 curl http://127.0.0.1:8080/docs/index.html
+kill -9 -$!
 ```
 
 

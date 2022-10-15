@@ -100,28 +100,31 @@ func TestListPosts(t *testing.T) {
 - 使用 gotests 工具自动生成单元测试代码，减少编写单元测试用例的工作量，从重复的劳动中解放出来。
 - 定期检查单元测试覆盖率，可以通过以下方法来检查：
 
-```shell
-$ go test -race -cover  -coverprofile=./coverage.out -timeout=10m -short -v ./...
-$ go tool cover -func ./coverage.out
+```bash
+go test -race -cover  -coverprofile=./coverage.out -timeout=10m -short -v ./...
+go tool cover -func ./coverage.out
 ```
 
 ## Lab
 
 - [单元测试](10_hello/equal_test.go)：单元测试
 
-```shell
+```bash
+cd 10_hello/
 go test
 ```
 
 - [单元测试](12_math-test/math_test.go)：单元测试
 
-```shell
+```bash
+cd 12_math-test
 go test
 ```
 
 - [自动生成测试文件](90_gotests/math_test.go)：单元测试
 
 ```shell
+cd 90_gotests
 gotests -all -w .
 # 在 math_test.go 中不全数据，添加测试内容
 go test

@@ -2,8 +2,8 @@
 
 ## GO SQL Driver
 
-```shell
-go run example.go
+```bash
+go run 10_go-sql-driver/example.go
 ```
 
 ## Gorm
@@ -74,14 +74,14 @@ mysql -h 127.0.0.1 -u root -p < test.sql
 
 - [Gorm](20_gorm/10_gorm.go)
 
-```shell
-go run 10_gorm.go -H 127.0.0.1:3306 -u root -p P@ssw0rd -d test
+```bash
+go run 20_gorm/10_gorm.go -H 127.0.0.1:3306 -u root -p P@ssw0rd -d test
 ```
 
 - [Gorm Model](20_gorm/12_gorm-model.go)
 
-```shell
-go run 12_gorm-model.go -H 127.0.0.1:3306 -u root -p P@ssw0rd -d test
+```bash
+go run 20_gorm/12_gorm-model.go -H 127.0.0.1:3306 -u root -p P@ssw0rd -d test
 ```
 
 ## apiserver 示例
