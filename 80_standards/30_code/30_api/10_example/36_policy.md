@@ -30,7 +30,7 @@ POST /v1/policies
 
 **输入示例**
 
-```bash
+```shell
  curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'{
   "metadata": {
     "name": "policy"
@@ -62,6 +62,7 @@ POST /v1/policies
   }
 }' http://marmotedu.io:8080/v1/policies
 ```
+
 **输出示例**
 
 ```json
@@ -129,7 +130,7 @@ Null
 
 **输入示例**
 
-```bash
+```shell
 curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://marmotedu.io:8080/v1/policies?name=policy&name=sdk
 ```
 
@@ -165,7 +166,7 @@ Null
 
 **输入示例**
 
-```bash
+```shell
 curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://marmotedu.io:8080/v1/policies/policy
 ```
 
@@ -205,7 +206,7 @@ PUT /v1/policies/:name
 
 **输入示例**
 
-```bash
+```shell
  curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'{
   "metadata": {
     "name": "policy"
@@ -237,6 +238,7 @@ PUT /v1/policies/:name
   }
 }' http://marmotedu.io:8080/v1/policies
 ```
+
 **输出示例**
 
 ```json
@@ -307,7 +309,7 @@ GET /v1/policies/:name
 
 **输入示例**
 
-```bash
+```shell
 curl -XGET -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://marmotedu.io:8080/v1/policies/policy
 ```
 
@@ -381,7 +383,7 @@ GET /v1/policies
 
 **输入示例**
 
-```bash
+```shell
 curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://marmotedu.io:8080/v1/policies?offset=0&limit=10&fieldSelector=name=policy
 ```
 

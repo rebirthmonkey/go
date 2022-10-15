@@ -6,23 +6,20 @@ import (
 )
 
 type RabbitMQ struct {
-	MQUrl string
-	Exchange string
+	MQUrl        string
+	Exchange     string
 	ExchangeType string
-	RoutingKey string
+	RoutingKey   string
 }
 
 type BaseConfig struct {
 	MsgFrequency int64 // 消息发送频率
-	RabbitMQ // MQ信息
+	RabbitMQ           // MQ信息
 }
 
 func ReadBaseConfig(bconfig *BaseConfig, mode string, confFile string) {
-	if mode == "ini" {
-		goconfig.InitConf(confFile, goconfig.INI)
-	} else if mode == "json" {
-		goconfig.InitConf(confFile, goconfig.JSON)
-	}
+	goconfig.InitConf(confFile)
+
 	bconfig.MsgFrequency = goconfig.ReadInt64("Base.messageFrequency", 3)
 	bconfig.MQUrl = goconfig.ReadString("RabbitMQ.MQUrl", "")
 	bconfig.RabbitMQ.MQUrl = goconfig.ReadString("RabbitMQ.MQUrl", "")
@@ -33,7 +30,7 @@ func ReadBaseConfig(bconfig *BaseConfig, mode string, confFile string) {
 
 func main() {
 	baseConfigIni := BaseConfig{}
-	ReadBaseConfig(&baseConfigIni, "ini","./config.ini")
+	ReadBaseConfig(&baseConfigIni, "ini", "./config.ini")
 	fmt.Println("msgFrequency = ", baseConfigIni.MsgFrequency)
 	fmt.Println("mq.MQUrl = ", baseConfigIni.MQUrl)
 	fmt.Println("mq.MQUrl = ", baseConfigIni.RabbitMQ.MQUrl) // embedded struct
@@ -41,11 +38,4 @@ func main() {
 	fmt.Println("mq.ExchangeType = ", baseConfigIni.RabbitMQ.ExchangeType)
 	fmt.Println("mq.RoutingKey = ", baseConfigIni.RabbitMQ.RoutingKey)
 
-	baseConfigJson := BaseConfig{}
-	ReadBaseConfig(&baseConfigJson, "json","./config.json")
-	fmt.Println("msgFrequency = ", baseConfigJson.MsgFrequency)
-	fmt.Println("mq.MQUrl = ", baseConfigJson.RabbitMQ.MQUrl)
-	fmt.Println("mq.Exchange = ", baseConfigJson.RabbitMQ.Exchange)
-	fmt.Println("mq.ExchangeType = ", baseConfigJson.RabbitMQ.ExchangeType)
-	fmt.Println("mq.RoutingKey = ", baseConfigJson.RabbitMQ.RoutingKey)
 }

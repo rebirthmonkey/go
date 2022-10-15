@@ -108,16 +108,19 @@ go.mod 文件中包含了以下部分：
 
 执行 go build 后`wkmodule/go.mod`文件的内容为：
 
-```shell
-$ cd wkmodule && go build
-$ cat wkmodule/go.mod
+```bash
+cd wkmodule && go build
+cat go.mod
+```
+
+```text
 module wkmodule
 
-go 1.17
+go 1.19
 
-require github.com/sirupsen/logrus v1.8.1
+require github.com/sirupsen/logrus v1.9.0
 
-require golang.org/x/sys v0.0.0-20191026070338-33540a1f6037 // indirect
+require golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
 ```
 
 该 module 并没有直接依赖 d 包，因此在 d 的记录后面通过注释形式标记了 indirect，即非直接、传递依赖。
@@ -208,14 +211,14 @@ go mod tidy
 - mod使用指定版本
 
 ```bash
-go mod -require=bitbucket.org/bigwhite/c@v1.0.0 # 会更新go.mod reqire部分
+go mod edit -require=bitbucket.org/bigwhite/c@v1.0.0 # 会更新go.mod require部分
 ```
 
 #### 基于vendor编译（推荐）
 
 可以不使用 $GOPATH/pkg/mod/ 而使用本地 vendor/ 来存放依赖包。Go Modules 默认会忽略 vendor/ 这个目录，但如果希望将依赖包都放入 vendor/，可以执行 `go mod vendor`。vender/ 目录会包含所有的依赖模块代码，并且会在该目录下面添加一个名为 modules.txt 的文件用来记录依赖包的一些信息。
 
-```bash
+```shell
 go mod vendor # 将刚才下载至 $GOPATH/mod/pkg 的依赖包转移至该项目目录的 vendor 目录下
 # go build -getmode=vendor main.go
 go build -ldflags "-s -w" -a -installsuffix cgo -o wkmodule-local .
@@ -235,10 +238,10 @@ go run main.go
 
 改为本地依赖
 
-````bash
-cd wkapp2
+```bash
+cd wkapp2 && rm go.mod
 go mod init wkapp # 创建go.mod
-修改 go.mod，加入本地依赖
+# 修改 go.mod 加入本地依赖
 ```
 require (
   github.com/rebirthmonkey/wklib2 v0.0.0

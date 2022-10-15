@@ -182,61 +182,75 @@ controller 存放请求处理相关，service 存放具体的业务逻辑处理�
 
 - [HelloWorld](01_hello-world.go)
 
-```shell
-go run 01_hello-world.go
+```bash
+go run 01_hello-world.go &
+sleep 3
 curl http://127.0.0.1:8080
+kill -9 -$!
 ```
 
 - [Get with JSON response](10_get-json.go)
 
-```shell
-go run 10_get-json.go
-curl http://127.0.0.1:8080/ping
+```bash
+go run 10_get-json.go &
+sleep 3
+curl http://127.0.0.1:8080/pingHandler
+kill -9 -$!
 ```
 
 - [Get with JSON response 2](11_get-json.go)
 
-```shell
-go run 11_get-json.go
+```bash
+go run 11_get-json.go &
+sleep 3
 curl http://127.0.0.1:8080/ping
+kill -9 -$!
 ```
 
 - [Get with Parameter](13_get-param.go)
 
-```shell
-go run 13_get-param.go
-curl http://127.0.0.1:8080/users/xxx 
+```bash
+go run 13_get-param.go &
+sleep 3
+curl http://127.0.0.1:8080/users/xxx
+kill -9 -$!
 ```
 
 - [Get with Path Parameter General](14_get-param.go)
 
-```shell
-go run 14_get-param.go
+```bash
+go run 14_get-param.go &
+sleep 3
 curl http://127.0.0.1:8080/users/xxx/
 curl http://127.0.0.1:8080/users/xxx/yyy/zzz
+kill -9 -$!
 ```
 
 - [Get with Query](16_get-query.go)
 
-```shell
-go run 16_get-query.go
+```bash
+go run 16_get-query.go &
+sleep 3
 curl http://127.0.0.1:8080/welcome
 curl http://127.0.0.1:8080/welcome\?firstname\=中国
 curl http://127.0.0.1:8080/welcome\?firstname\=中国\&lastname\=天朝
 curl http://127.0.0.1:8080/welcome\?firstname\=\&lastname\=天朝
 curl http://127.0.0.1:8080/welcome\?firstname\=%E4%B8%AD%E5%9B%BD
+kill -9 -$!
 ```
 
 - [Post Body](21_post-form.go)
 
-```shell
-go run 21_post-form.go
+```bash
+go run 21_post-form.go &
+sleep 3
 curl -X POST http://127.0.0.1:8080/form -H "Content-Type:application/x-www-form-urlencoded" -d "message=hello&nick=wukong"
+kill -9 -$!
 ```
 
 - [Post File](23_post-file.go)
 
-```shell
+```bash
 go run 23_post-file.go
 curl -X POST http://127.0.0.1:8080/upload \
   -F "file=@./23_post-file.go" \
@@ -245,7 +259,7 @@ curl -X POST http://127.0.0.1:8080/upload \
 
 - [Post File](24_post-multi-file.go)
 
-```shell
+```bash
 go run 24_post-multi-file.go
 curl -X POST http://127.0.0.1:8080/upload \
   -F "file[]=@./23_post-file.go" \
@@ -255,7 +269,7 @@ curl -X POST http://127.0.0.1:8080/upload \
 
 - [Post JSON](27_bind-json.go)
 
-```shell
+```bash
 go run 27_post-json.go
 curl -X POST http://127.0.0.1:8080/login \
   -H "Content-Type:application/json" \
@@ -266,7 +280,7 @@ curl -X POST http://127.0.0.1:8080/login \
 
 - [Post JSON](28_bind-json.go)
 
-```shell
+```bash
 go run 28_post-json.go
 curl -X POST http://127.0.0.1:8080/login \
   -H "Content-Type:application/json" \
@@ -275,20 +289,23 @@ curl -X POST http://127.0.0.1:8080/login \
 
 - [Redirect](31_redirect.go)
 
-```shell
+```bash
+go run 31_direct.go
 curl http://127.0.0.1:8080/redirect/google
 ```
 
 - [Multiple Routes](35_route-multi.go)
 
-```shell
+```bash
+go run 35_route-multi.go
 curl http://127.0.0.1:8080/v1/login
 curl http://127.0.0.1:8080/v2/login
 ```
 
 - [Embedded Routes](37_route-embedded.go)
 
-```shell
+```bash
+go run 37_route-embedded.go
 curl http://127.0.0.1:8080/user/index
 curl http://127.0.0.1:8080/user/login
 curl http://127.0.0.1:8080/user/shop/index
@@ -300,7 +317,8 @@ curl http://127.0.0.1:8080/user/shop/index
 
 /after 会同时通过 middleware1 和 middleware2
 
-```shell
+```bash
+go run 41_middleware.go
 curl http://127.0.0.1:8080/before
 curl http://127.0.0.1:8080/after
 ```
@@ -311,7 +329,8 @@ curl http://127.0.0.1:8080/after
 
 /after 会只通过 middleware4，所以会报错 request4 不存在
 
-```shell
+```bash
+go run 43_middleware.go
 curl http://127.0.0.1:8080/before
 curl http://127.0.0.1:8080/after
 ```
@@ -320,7 +339,8 @@ curl http://127.0.0.1:8080/after
 
 Middleware c.next() 之前的代码会在调用前完成，之后的代码会在调用返回后完成。
 
-```shell
+```bash
+go run 45_middleware-logger.go
 curl http://127.0.0.1:8080/test
 ```
 
@@ -334,6 +354,10 @@ curl http://127.0.0.1:8080/test
 
 Basic Auth 必须采用浏览器登录 `http://127.0.0.1:8080/auth`
 
+```bash
+go run 45_middleware-logger.go
+```
+
 ### Web Application
 
 - [A Real Web Application with HTTP and HTTPS](80_app/80_bind-json.go)：通过 c.ShouldBindJSON 函数，将 Body 中的 JSON 格式数据解析到指定的 Struct 中，通过 c.JSON 函数返回 JSON 格式的数据。
@@ -341,17 +365,24 @@ Basic Auth 必须采用浏览器登录 `http://127.0.0.1:8080/auth`
 主要做法是创建一个 struct，然后把 POST 的内容通过 c.ShouldBindJSON 添加到该 struct 的变量。
 在给这个 struct 变量添加类似 Create()、Get() 等方法注册到 router 的 POST、GET 上。
 
-```shell
+```bash
+go run 80_app/80_bind-json.go &
+sleep 3
 # 创建产品
-$ curl -XPOST -H"Content-Type: application/json" -d'{"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford"}' http://127.0.0.1:8080/v1/products
+curl -X POST -H"Content-Type: application/json" -d'{"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford"}' http://127.0.0.1:8080/v1/products
 {"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford","createdAt":"2021-06-20T11:17:03.818065988+08:00"}
 
 # 获取产品信息
-$ curl -XGET http://127.0.0.1:8080/v1/products/iphone12
+curl -X GET http://127.0.0.1:8080/v1/products/iphone12
 {"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford","createdAt":"2021-06-20T11:17:03.818065988+08:00"}
+kill -9 -$!
 ```
 
 - [Middleware with Gin MW](80_app/82_bind-json-mw.go)：使用 Gin 现有的 middleware
+
+```bash
+go run 80_app/82_bind-json-mw.go
+```
 
 ### Advanced Topics
 
@@ -361,10 +392,12 @@ Cookie 实际上就是服务器保存在浏览器上的一段信息。浏览器�
 
 - [Set and Get Cookie](90_advance/19_cookie.go)
 
-```shell
-go run 19_cookie.go
+```bash
+go run 90_advance/19_cookie.go &
+sleep 3
 curl http://127.0.0.1:8080/login  # set the cookie for the browser
 curl http://127.0.0.1:8080/home  # check the cookie value
+kill -9 -$!
 ```
 
 #### Session
@@ -383,9 +416,12 @@ curl http://127.0.0.1:8080/home  # check the cookie value
 
 - [Async](90_advanced/91_async.go)
 
-```shell
+```bash
+go run 90_advanced/91_async.go &
+sleep 3
 curl http://127.0.0.1:8080/sync
 curl http://127.0.0.1:8080/async
+kill -9 -$!
 ```
 
 ## apiserver 示例

@@ -36,7 +36,7 @@ POST /v1/users
 
 **输入示例**
 
-```bash
+```shell
 curl -XPOST -H'Content-Type: application/json' 
 -d'{
   "metadata": {
@@ -48,6 +48,7 @@ curl -XPOST -H'Content-Type: application/json'
   "phone": "1812884xxxx"
 }' http://127.0.0.1:8080/v1/users
 ```
+
 **输出示例**
 
 ```json
@@ -91,7 +92,7 @@ Null
 
 **输入示例**
 
-```bash
+```shell
 curl -XDELETE -H'Content-Type: application/json' http://127.0.0.1:8080/v1/users/foo
 ```
 
@@ -137,7 +138,7 @@ PUT /v1/users/:name
 
 **输入示例**
 
-```bash
+```shell
 curl -XPOST -H'Content-Type: application/json' -d'{
   "nickname": "foo1",
   "password": "Foo@2020",
@@ -145,6 +146,7 @@ curl -XPOST -H'Content-Type: application/json' -d'{
   "phone": "1812884xxxx"
 }' http://127.0.0.1:8080/v1/users/foo
 ```
+
 **输出示例**
 
 ```json
@@ -194,7 +196,7 @@ GET /v1/users/:name
 
 **输入示例**
 
-```bash
+```shell
 curl -XGET -H'Content-Type: application/json' -d'' http://127.0.0.1:8080/v1/users/foo
 ```
 
@@ -244,7 +246,7 @@ GET /v1/users
 
 **输入示例**
 
-```bash
+```shell
 curl -XPOST -H'Content-Type: application/json' -d'' http://127.0.0.1:8080/v1/users?offset=0&limit=10&fieldSelector=name=foo
 ```
 

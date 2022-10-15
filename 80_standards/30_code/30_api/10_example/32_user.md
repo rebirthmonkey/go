@@ -36,7 +36,7 @@ POST /v1/users
 
 **输入示例**
 
-```bash
+```shell
  curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'{
   "metadata": {
     "name": "foo"
@@ -47,6 +47,7 @@ POST /v1/users
   "phone": "1812884xxxx"
 }' http://marmotedu.io:8080/v1/users
 ```
+
 **输出示例**
 
 ```json
@@ -90,7 +91,7 @@ Null
 
 **输入示例**
 
-```bash
+```shell
 curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://marmotedu.io:8080/v1/users?name=foo&name=fooo
 ```
 
@@ -126,7 +127,7 @@ Null
 
 **输入示例**
 
-```bash
+```shell
 curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://marmotedu.io:8080/v1/users/foo
 ```
 
@@ -163,7 +164,7 @@ Null
 
 **输入示例**
 
-```bash
+```shell
 curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'{
   "oldPassword": "Foo@2020",
   "newPassword": "Foo@2021"
@@ -212,7 +213,7 @@ PUT /v1/users/:name
 
 **输入示例**
 
-```bash
+```shell
  curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'{
   "metadata": {
     "name": "foo"
@@ -223,6 +224,7 @@ PUT /v1/users/:name
   "phone": "1812884xxxx"
 }' http://marmotedu.io:8080/v1/users
 ```
+
 **输出示例**
 
 ```json
@@ -272,7 +274,7 @@ GET /v1/users/:name
 
 **输入示例**
 
-```bash
+```shell
 curl -XGET -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://marmotedu.io:8080/v1/users/foo
 ```
 
@@ -322,7 +324,7 @@ GET /v1/users
 
 **输入示例**
 
-```bash
+```shell
 curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://marmotedu.io:8080/v1/users?offset=0&limit=10&fieldSelector=name=foo
 ```
 

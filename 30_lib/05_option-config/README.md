@@ -13,7 +13,8 @@
 
 - [命令行参数解析](10_arg/example.go)
 
-```shell
+```bash
+cd 10_arg
 go run example.go a b c d
 ```
 
@@ -27,7 +28,8 @@ go run example.go a b c d
 
 - [命令行flag解析](20_flag/10_flag/example1.go)
 
-```shell
+```bash
+cd 20_flag/10_flag/
 go run example1.go -p 888
 go run example2.go # 未输入参数，则采用默认
 ```
@@ -37,7 +39,8 @@ go run example2.go # 未输入参数，则采用默认
 - [命令行多flag解析](20_flag/10_flag/example2.go)
 - [命令行多flag解析](20_flag/10_flag/example3.go)
 
-```shell
+```bash
+cd 20_flag/10_flag/
 go run example2.go -d dd -l ll -w=false
 go run example3.go x y z # 未输入flag，则采用默认
 ```
@@ -85,20 +88,20 @@ pflag.BoolVarP(&version, "version", "v", true, "Print version information and qu
 
 - [pflag解析](20_flag/20_pflag/example.go)
 
-```shell
-go run example.go -n nnn -a 88 -g female -o=false
+```bash
+go run 20_flag/20_pflag/example.go -n nnn -a 88 -g female -o=false
 ```
 
 - [获取非选项参数](20_flag/20_pflag/example2.go)
 
-```shell
-go run example2.go --flagname 222 arg1 arg2
+```bash
+go run 20_flag/20_pflag/example2.go --flagname 222 arg1 arg2
 ```
 
 - [FlagSet](20_flag/20_pflag/example3.go)
 
-```shell
-go run example3.go --version xxx
+```bash
+go run 20_flag/20_pflag/example3.go --version xxx
 ```
 
 ## Config
@@ -109,8 +112,9 @@ go run example3.go --version xxx
 
 - [配置文件解析](30_config-file/10_goconfig/example.go)
 
-```shell
-go run example1.go
+```bash
+cd 30_config-file/10_goconfig
+go run example.go
 ```
 
 ### viper
@@ -160,6 +164,21 @@ common:
 - [viper with struct unmarshal](30_config-file/20_viper/example2.go)
 - [viper 处理嵌套结构体](30_config-file/20_viper/example3.go)
 
+```bash
+cd 30_config-file/20_viper/
+go run example.go
+```
+
+```bash
+cd 30_config-file/20_viper/
+go run example2.go
+```
+
+```bash
+cd 30_config-file/20_viper/
+go run example3.go
+```
+
 #### 使用 Pflag
 
 Viper 支持 Pflag 包，能够绑定 key 到 Flag：
@@ -183,10 +202,17 @@ Cobra 既是一个可以创建 CLI 应用程序的库，也是一个可以生成
 
 Cobra 提供了两种方式来创建命令：Cobra 命令和 Cobra 库。Cobra 命令可以生成一个 Cobra 命令模板，而命令模板也是通过引用 Cobra 库来构建命令的。所以，这里直接介绍如何使用 Cobra 库来创建命令。使用 Cobra 库创建命令如果要用 Cobra 库编码实现一个应用程序，需要首先创建一个空的 main.go 文件和一个 rootCmd  文件，之后可以根据需要添加其他命令。具体步骤如下：
 
-- [Cobra框架](40_sub-cmd/20_cobra/example.go)
+- [Cobra框架1](40_cobra/example.go)
+- [Cobra框架2](40_cobra/example2.go)
 
-```shell
-go build -o wkctl .
+```bash
+cd 40_cobra/
+go build -o wkctl ./example.go
+./wkctl
+./wkctl help
+./wkctl version
+./wkctl hello xxx
+go build -o wkctl ./example2.go
 ./wkctl
 ./wkctl help
 ./wkctl version

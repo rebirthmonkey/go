@@ -82,76 +82,76 @@ APIServer 采用 JWT Token 进行认证，具体操作步骤如下：
 1. 获取在 APIServer 系统创建的 secretKey 和s ecretID
 2. 通过 secretKey 和 secretID 生成 JWT Token，以下是一个可以生成 JWT Token 的 Go 源码（main.go）：
 
-```go
-package main
-
-import (
-	"fmt"
-	"os"
-	"time"
-
-	"github.com/golang-jwt/jwt/v4"
-	"github.com/spf13/pflag"
-)
-
-var (
-	cliAlgorithm = pflag.StringP("algorithm", "", "HS256", "Signing algorithm - possible values are HS256, HS384, HS512")
-	cliTimeout   = pflag.DurationP("timeout", "", 2*time.Hour, "JWT token expires time")
-	help         = pflag.BoolP("help", "h", false, "Print this help message")
-)
-
-func main() {
-	pflag.Usage = func() {
-		fmt.Println(`Usage: gentoken [OPTIONS] SECRETID SECRETKEY`)
-		pflag.PrintDefaults()
-	}
-	pflag.Parse()
-
-	if *help {
-		pflag.Usage()
-		return
-	}
-
-	if pflag.NArg() != 2 {
-		pflag.Usage()
-		os.Exit(1)
-	}
-
-	token, err := createJWTToken(*cliAlgorithm, *cliTimeout, os.Args[1], os.Args[2])
-	if err != nil {
-		fmt.Printf("Error: %s\n", err.Error())
-		return
-	}
-
-	fmt.Println(token)
-}
-
-func createJWTToken(algorithm string, timeout time.Duration, secretID, secretKey string) (string, error) {
-	expire := time.Now().Add(timeout)
-
-	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), jwt.MapClaims{
-		"kid": secretID,
-		"exp": expire.Unix(),
-		"iat": time.Now().Unix(),
-	})
-
-	return token.SignedString([]byte(secretKey))
-}
-```
-
-在命令行执行如下命令，即可生成 JWT Token：
-
-```bash
-$  go run main.go <secretID> <secretKey>
-```
-
-默认会生成 HS256 算法签名、2 小时后过期的 Token。可以通过 `--algorithm` 指定签名算法，通过 `--timeout` 指定 token 过期时间。
+    ```go
+    package main
+    
+    import (
+        "fmt"
+        "os"
+        "time"
+    
+        "github.com/golang-jwt/jwt/v4"
+        "github.com/spf13/pflag"
+    )
+    
+    var (
+        cliAlgorithm = pflag.StringP("algorithm", "", "HS256", "Signing algorithm - possible values are HS256, HS384, HS512")
+        cliTimeout   = pflag.DurationP("timeout", "", 2*time.Hour, "JWT token expires time")
+        help         = pflag.BoolP("help", "h", false, "Print this help message")
+    )
+    
+    func main() {
+        pflag.Usage = func() {
+            fmt.Println(`Usage: gentoken [OPTIONS] SECRETID SECRETKEY`)
+            pflag.PrintDefaults()
+        }
+        pflag.Parse()
+    
+        if *help {
+            pflag.Usage()
+            return
+        }
+    
+        if pflag.NArg() != 2 {
+            pflag.Usage()
+            os.Exit(1)
+        }
+    
+        token, err := createJWTToken(*cliAlgorithm, *cliTimeout, os.Args[1], os.Args[2])
+        if err != nil {
+            fmt.Printf("Error: %s\n", err.Error())
+            return
+        }
+    
+        fmt.Println(token)
+    }
+    
+    func createJWTToken(algorithm string, timeout time.Duration, secretID, secretKey string) (string, error) {
+        expire := time.Now().Add(timeout)
+    
+        token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), jwt.MapClaims{
+            "kid": secretID,
+            "exp": expire.Unix(),
+            "iat": time.Now().Unix(),
+        })
+    
+        return token.SignedString([]byte(secretKey))
+    }
+    ```
+    
+    在命令行执行如下命令，即可生成 JWT Token：
+    
+    ```shell
+    go run main.go <secretID> <secretKey>
+    ```
+    
+    默认会生成 HS256 算法签名、2 小时后过期的 Token。可以通过 `--algorithm` 指定签名算法，通过 `--timeout` 指定 token 过期时间。
 
 3. 携带 Token，发送 HTTP 请求：
-
-```bash
-curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer <Token>' -d'{"metadata":{"name":"secretdemo"},"expires":0,"description":"admin secret"}' http://xxx.io:8080/v1/secrets
-```
+    
+    ```shell
+    curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer <Token>' -d'{"metadata":{"name":"secretdemo"},"expires":0,"description":"admin secret"}' http://xxx.io:8080/v1/secrets
+    ```
 ## 5. 请求方法
 
 本 API 接口文档中请求方法格式为：`HTTP方法 请求路径`，例如请求方法为：`GET /v1/users`，请求地址为：`marmotedu.io`，请求协议为：`HTTP`，则实际的请求格式为：`curl -XGET http://marmotedu.io/v1/users`

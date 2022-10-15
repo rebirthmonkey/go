@@ -34,9 +34,9 @@ API Server 同时也具有以下能力：
 
 如果你需要重新编译本项目，可以执行以下步骤：
 
-```bash
-$ cd xxx/80_server
-$ make
+```shell
+cd path/to/80_server
+make
 ```
 
 构建后的二进制文件保存在 `_output/platforms/linux/amd64/` 目录下。

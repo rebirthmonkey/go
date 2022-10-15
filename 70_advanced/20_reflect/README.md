@@ -343,6 +343,17 @@ ReflectCallFuncNoArgs
 
 - [TypeOf](10_typeof.go)
 
+```bash
+go run 10_typeof.go
+```
+
+
+- [ValueOf](20_valueof.go)
+
+```bash
+go run 20_valueof.go
+```
+
 ## Ref
 
 1. [Golang 反射](https://www.jianshu.com/p/1cf328cfe82b)

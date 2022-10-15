@@ -245,22 +245,38 @@ if err != nil {
 
 - [pkg/errors应用](example1.go)：通过 wrap 层层包裹错误
 
+```bash
+go run example1.go
+```
+
 - [pkg/errors应用](example2.go)：`%+v` 表明直接展示堆栈
+
+```bash
+go run example2.go
+```
 
 - [rebirthmonkey/pkg/errors自定义错误](example3.go)：自定义错误，并逐层 Wrap。除了 HTTP 状态码，还添加了业务错误码，并且在 Wrap 时可以添加业务错误码。通过自定义错误包 errorcode 首先定义了多个业务错误码，并且通过 registry() 函数注册，再在 example 中使用注册的业务错误码堆栈排错。注意，这边的业务错误码需要在 errcode 包中定义，并且**显示地 register() 到 pkg/errors 包中**。
 
+```bash
+go run example3.go
+```
+
 - [rebirthmonkey/go/pkg/errors第三方调用错误](example4.go)：在错误处直接打印日志。
+
+```bash
+go run example4.go
+```
 
 - [rebirthmonkey/go/pkg/errors Gin Server](example5.go)：通过 gin/util 包解析错误并返回。同时，`log.L(ctx).Info()` 会把 context 中的信息传给 log，用于输出更详细信息。
 
-```shell
+```bash
 go run example5.go
 curl -X GET http://127.0.0.1:8080/ping
 ```
 
 - [rebirthmonkey/go/pkg/panic Gin Server](example6.go)：展示 log.Panic() 后会中断程序，停止后续操作（包括return）
 
-```shell
+```bash
 go run example6.go
 curl -X GET http://127.0.0.1:8080/ping
 ```

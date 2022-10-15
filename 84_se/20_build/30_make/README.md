@@ -46,7 +46,7 @@ Makefile 是高效管理项目的有效手段之一，可以通过 Makefile 来�
 
 具体目录结构如下：
 
-```shell
+```text
 ├── Makefile
 ├── scripts
 │   ├── gendoc.sh
@@ -125,7 +125,7 @@ help               Show this help info.
 
 ### Hello-World
 
-```shell
+```bash
 cd 10_hello-world
 make clean
 make hello
@@ -138,7 +138,8 @@ make clean
 
 ### 配置环境
 
-```shell
+```bash
+cd 80_server
 make help
 make tools # install all the tools on the local host
 make tidy # go mod tidy
@@ -146,13 +147,15 @@ make tidy # go mod tidy
 
 ### Test
 
-```shell
+```bash
+cd 80_server
 make test
 ```
 
 ### Run
 
-```shell
+```bash
+cd 80_server
 make run
 ```
 
@@ -160,7 +163,8 @@ make run
 
 Build current platform
 
-```shell
+```bash
+cd 80_server
 make clean
 make build
 make clean
@@ -168,7 +172,8 @@ make clean
 
 Build multiple platforms
 
-```shell
+```bash
+cd 80_server
 make clean
 make build.multiarch
 make clean
@@ -176,9 +181,10 @@ make clean
 
 ### Docker Image & Run
 
-```shell
+```bash
+cd 80_server
 make image
-docker run -d -v /Users/ruan/workspace/go/84_se/20_build/30_make/80_server/configs/:/etc/apiserver/ -p 8080:8080 wukongsun/apiserver-amd64:a46f731
+docker run -d -v $(pwd)/configs/:/etc/apiserver/ -p 8080:8080 wukongsun/apiserver-amd64
 ```
 
 注意：因为运行环境不同，在 Docker 镜像启动时，需要修改 apiserver.yaml 的 3 个参数：

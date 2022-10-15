@@ -38,7 +38,7 @@ Options 结构体面向配置文件，而 Config 结构体则更面向 app 运�
 
 ## Lab
 
-```shell
+```bash
 go run cmd/apiserver.go -c configs/config.yaml
 ```
 

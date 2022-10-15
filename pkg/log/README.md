@@ -41,8 +41,11 @@ func main() {
 
 执行代码：
 
-```shell
-$ go run example1.go 
+```bash
+go run example1.go
+```
+
+```text
 2022-04-01 11:40:59.596	INFO	examples/example1.go:12	This is a info message	{"int_key": 10}
 2022-04-01 11:40:59.596	WARN	examples/example1.go:13	This is a formatted warn message
 ```
@@ -118,7 +121,10 @@ func main() {
 执行如上代码：
 
 ```bash
-$ go run v_level.go 
+go run v_level.go
+```
+
+```text
 2020-12-05 08:20:37.763	info	example/v_level.go:10	This is a V level message
 2020-12-05 08:20:37.763	info	example/v_level.go:11	This is a V level message with fields	{"X-Request-ID": "7a7b9f24-4cae-4b2a-9464-69088b45b904"}
 ```

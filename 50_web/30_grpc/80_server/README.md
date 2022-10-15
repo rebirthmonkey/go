@@ -4,7 +4,7 @@
 
 ### 创建 PB 文件
 
-```shell
+```bash
 cd apiserver/model/v1
 protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
@@ -14,13 +14,17 @@ protoc --go_out=. --go_opt=paths=source_relative \
 
 ## 运行
 
-```shell
-go run cmd/apiserver.go -c configs/config.yaml
+- server.pem `/Users/ruan/workspace/go/50_web/30_grpc/80_server/configs/cert/server.pem`
+- server.key `/Users/ruan/workspace/go/50_web/30_grpc/80_server/configs/cert/server.key`
+
+```bash
+cat configs/config.yaml | sed "s#{CERT-FILE}#$(pwd)/configs/cert/server.pem#g" | sed "s#{PRIVATE-KEY-FILE}#$(pwd)/configs/cert/server.key#g"  > configs/config-out.yaml
+go run cmd/apiserver.go -c configs/config-out.yaml
 ```
 
 ## Test
 
-```shell
+```bash
 go run tests/grpc/user_client.go
 curl -X GET http://127.0.0.1:8080/v1/users
 curl -X POST -H "Content-Type: application/json" \
