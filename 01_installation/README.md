@@ -25,24 +25,34 @@ Follow this [manuel](https://golangdocs.com/install-go-mac-os)
 
 ## 环境变量配置
 
-主要是设置一下几个变量
+主要是设置一下几个变量，如 GOROOT、GOPATH、GOBIN、PATH 等。
 
-- GOROOT
-- GOPATH
-- GOBIN
-- PATH
+| **环境变量** | **含义**                                                     |
+| ------------ | ------------------------------------------------------------ |
+| GOROOT       | Go  语言编译工具、标准库等的安装路径                         |
+| GOPATH       | Go  的工作目录，也就是编译后二进制文件的存放目录和 import 包时的搜索路径 |
+| GO111MODULE  | 通过设置GO111MODULE值为 on、off、auto 来控制是否开启 Go Modules 特性。其中，**on** 代表开启 Go modules 特性，这会让 Go 编译器忽略$GOPATH 和 vendor 文件夹，只根据 go.mod 下载依赖。**off** 代表关闭 Go modules 特性，这会让 Go 编译器在$GOPATH 目录和 vendor目录来查找依赖关系，也就是继续使用“GOPATH 模式”。而 **auto** 在 Go1.14 和之后的版本中是默认值。当设置为 auto 后，源码在$GOPATH/src 下，并且没有包含 go.mod 则关闭 Go modules，其他情况下都开启 Go modules |
+| GOPROXY      | Go  包下载代理服务器。众所周知的原因，在大陆的网络环境下是无法访问 golang.org 等 google 网站的，但在日常开发中使用的很多依赖包都要从 google 的服务器上下载。为了解决无法加载依赖的问题，需要设置一个代理服务器。以便我们能够使用 go  get 下载以来包 |
+| GOPRIVATE    | 指定不走代理的 Go 包域名。go get 通过代理服务拉取私有仓库（内部仓库或托管站点的私有仓库），而代理服务无法访问私有仓库，会出现了 404 错误。go1.13 版本提供了一个方便的解决方案：GOPRIVATE 环境变量，通过该变量，可以使得指定的包不通过代理下载，而是直接下载 |
+| GOSUMDB      | GOSUMDB 的值是一个 web 服务器，默认值是 sum.golang.org，该服务可以用来查询依赖包指定版本的哈希值，保证拉取到的模块版本数据未经过篡改 |
 
-基本都是通过修改`~/.bashrc`或者`./zshrc`达成
-
-运行`go env`命令可以查看和GO有关的环境变量的值
+基本都是通过修改`~/.bashrc`或者`./zshrc`达成：
 
 ```shell
-go env
-$GOROOT=/usr/local/go # GO安装目录，不可加上 /bin
-$GOPATH=/Users/XXX/go # GO工作目录
-$GOBIN=$GOPATH/bin # GO可执行文件目录
-$PATH=$PATH:$GOBIN:$GOROOT/bin # 将GO可执行文件加入PATH中，使GO指令与我们编写的GO应用可以全局调用 
+export GOVERSION=go1.17.2 # Go 版本设置
+export GO_INSTALL_DIR=XXX # Go 安装目录
+export GOROOT=XXX # GOROOT 设置
+export GOPATH=$WORKSPACE/go # GOPATH 设置
+export PATH=$GOROOT/bin:$GOPATH/bin:$PATH # 将 Go 语言自带的和通过 go install 安装的二进制文件加入到 PATH 路径中
+export GO111MODULE="on" # 开启 Go moudles 特性
+export GOPROXY=https://goproxy.cn,direct # 安装 Go 模块时，代理服务器设置
+export GOPRIVATE=
+export GOSUMDB=off # 关闭校验 Go 依赖包的哈希值
+
 ```
+
+运行`go env`命令可以查看和GO有关的环境变量的值。
+
 
 ### Ubuntu
 
