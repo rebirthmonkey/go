@@ -21,7 +21,7 @@ go 默认用于存放源文件：
 
 $GOBIN，一般为 $GOPATH/bin，用于存放编译后的可执行文件。
 
-往往会将 $GOBIN 目录添加到 $PATH：`export PATH=$PATH:$(go env GOPATH)/bin`
+往往会将 `$GOBIN` 目录添加到 `$PATH`：`export PATH=$PATH:$(go env GOPATH)/bin`
 
 ## pkg/
 
