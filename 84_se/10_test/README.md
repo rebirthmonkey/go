@@ -280,6 +280,7 @@ go test
 ```bash
 cd 10_unit/11_struct-based
 go test
+echo $?
 ```
 
 - [Math Test](10_unit/12_math-test/math_test.go)：使用 TestMain() 函数做 test 前后准备

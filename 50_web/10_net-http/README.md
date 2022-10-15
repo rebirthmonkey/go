@@ -127,18 +127,18 @@ func (mux *ServeMux) ServeHTTP(w ResponseWriter, r *Request)
 
 ```bash
 go run 10_handler.go &
-sleep 3;
-curl http://127.0.0.1:8080;
-kill -9 -$!;
+sleep 3
+curl http://127.0.0.1:8080
+ps aux | grep -i 10_handler |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 - [Handler](12_handler.go)
 
 ```bash
 go run 12_handler.go &
-sleep 3;
-curl http://127.0.0.1:8080/view/abc;
-kill -9 -$!;
+sleep 3
+curl http://127.0.0.1:8080/view/abc
+ps aux | grep -i 12_handler |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 > 对于`/view/<NAME>`路径，该程序会展示`<NAME>.txt`文件的内容，如果路径下不存在`<NAME>.txt`，将会报错。
@@ -147,18 +147,18 @@ kill -9 -$!;
 
 ```bash
 go run 14_handler-interface.go &
-sleep 3;
-curl http://127.0.0.1:8080/view/abc;
-kill -9 -$!;
+sleep 3
+curl http://127.0.0.1:8080/view/abc
+ps aux | grep -i 14_handler-interface |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 - [Handler as Reverse Proxy](20_reverse-proxy.go)
 
 ```bash
 go run 20_reverse-proxy.go &
-sleep 3;
-curl http://127.0.0.1:8080;
-kill -9 -$!;
+sleep 3
+curl http://127.0.0.1:8080
+ps aux | grep -i 20_reverse-proxy |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 ## Ref

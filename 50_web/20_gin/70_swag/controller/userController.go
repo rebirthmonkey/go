@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"wukong/go/50_web/20_gin/90_swag/model"
+	"github.com/rebirthmonkey/go/50_web/20_gin/70_swag/model"
 )
 
 // @Summary UserController 接口

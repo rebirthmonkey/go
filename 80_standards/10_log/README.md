@@ -97,6 +97,7 @@ go run 10_log/10_print.go
 
 ```bash
 go run 10_log/20_fatal.go
+echo $?
 ```
 
 ```bash

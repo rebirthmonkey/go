@@ -247,6 +247,7 @@ if err != nil {
 
 ```bash
 go run example1.go
+echo $?
 ```
 
 - [pkg/errors应用](example2.go)：`%+v` 表明直接展示堆栈
