@@ -2,7 +2,11 @@
 
 ## API 简介
 
-API（Application Programming Interface，应用程序编程接口）是一些预先定义的函数或者接口，目的是提供应用程序与开发人员基于某软件或硬件得以访问一组例程的能力，而又无须访问源码，或理解内部工作机制的细节。
+API（Application Programming Interface，应用程序编程接口）是一些预先定义的函数或者接口，目的是提供应用程序与开发人员基于某软件或硬件得以访问一组例程的能力，而又无须访问源码，或理解内部工作机制的细节。这些接口充当软件中介，为应用程序之间的交互和对话建立特定的定义和规则。API 负责将响应从用户传递到系统，然后从系统返回给用户。
+
+假设我们正在预订一个酒店。我们在电脑上访问酒店预订页面，连接到互联网的这个页面会将数据（我们的请求）发送到服务器。然后，服务器检索数据、解析它，一旦所需的操作得到执行，它就会向我们发送一个响应，并在我们的界面上提供信息。这个过程需要 API 才能实现。API 指定了一个应用程序（网页或移动应用）可以向另一个应用程序发出的请求类型，并进一步确定：如何发出这些请求、使用哪些数据格式、以及用户必须遵循的实践。
+
+<img src="figures/image-20221015142450307.png" alt="image-20221015142450307" style="zoom:50%;" />
 
 要实现一个 API 服务器，首先要考虑两个方面：API 风格和媒体类型。Go 语言中常用的 API 风格是 RPC 和  REST，常用的媒体类型是 JSON、XML 和 Protobuf。在 Go API 开发中常用的组合是 gRPC + Protobuf 和 REST + JSON。
 
@@ -10,9 +14,15 @@ API（Application Programming Interface，应用程序编程接口）是一些�
 
 REST （REpresentational State Transfer）是由 Roy Fielding 在他的论文《Architectural Styles and the Design of Network-based Software  Architectures》里提出。REST 是一种软件架构风格，不是技术框架，REST 有一系列规范，满足这些规范的 API 均可称为 RESTful API。
 
-REST 规范把所有内容都视为资源，也就是说网络上一切皆资源。REST 对资源的操作包括获取、创建、修改和删除，这些操作正好对应 HTTP 提供的 GET、POST、PUT 和 DELETE 方法。由于 REST 天生和 HTTP 相辅相成，因此 HTTP 协议已经成了实现 RESTful  API 事实上的标准。HTTP 动词与 REST 风格 CRUD 的对应关系见下表：
+REST 规范把所有内容都视为资源，也就是说网络上一切皆资源。REST 对资源的操作包括获取、创建、修改和删除，这些操作正好对应 HTTP 提供的 GET、POST、PUT 和 DELETE 方法。由于 REST 天生和 HTTP 相辅相成，因此 HTTP 协议已经成了实现 RESTful  API 事实上的标准。REST 风格虽然适用于很多传输协议，但在实际开发中，REST 由于天生和 HTTP 协议相辅相成，因此 HTTP 协议已经成了实现  RESTful API 事实上的标准。在 HTTP 协议中通过 POST、DELETE、PUT、GET 方法来对应 REST  资源的增、删、改、查操作，具体的对应关系如下：
 
-![image-20220827154509367](figures/image-20220827154509367.png)
+| HTTP 方法 | 行为                     | URI          | 示例说明                  |
+| --------- | ------------------------ | ------------ | ------------------------- |
+| GET       | 获取资源列表             | /users       | 获取用户列表              |
+| GET       | 获取一个具体的资源       | /users/admin | 获取 admin 用户的详细信息 |
+| POST      | 创建一个新的资源         | /users       | 创建一个新用户            |
+| PUT       | 以整体的方式更新一个资源 | /users/1     | 更新 id 为 1 的用户       |
+| DELETE    | 删除服务器上的一个资源   | /users/1     | 删除 id 为 1 的用户       |
 
 REST 风格的 API 具有一些天然的优势，例如通过 HTTP 协议降低了客户端的耦合，具有极好的开放性。因此越来越多的开发者使用 REST 这种风格设计 API，REST 规范中有如下几个核心：
 
@@ -25,16 +35,6 @@ REST 风格的 API 具有一些天然的优势，例如通过 HTTP 协议降低�
 3. 无状态：这里的无状态是指每个 RESTful API 请求都包含了所有足够完成本次操作的信息，服务器端无须保持 Session
 
 > 无状态对于服务端的弹性扩容是很重要的。
-
-REST 风格虽然适用于很多传输协议，但在实际开发中，REST 由于天生和 HTTP 协议相辅相成，因此 HTTP 协议已经成了实现  RESTful API 事实上的标准。在 HTTP 协议中通过 POST、DELETE、PUT、GET 方法来对应 REST  资源的增、删、改、查操作，具体的对应关系如下：
-
-| HTTP 方法 | 行为                     | URI          | 示例说明                  |
-| --------- | ------------------------ | ------------ | ------------------------- |
-| GET       | 获取资源列表             | /users       | 获取用户列表              |
-| GET       | 获取一个具体的资源       | /users/admin | 获取 admin 用户的详细信息 |
-| POST      | 创建一个新的资源         | /users       | 创建一个新用户            |
-| PUT       | 以整体的方式更新一个资源 | /users/1     | 更新 id 为 1 的用户       |
-| DELETE    | 删除服务器上的一个资源   | /users/1     | 删除 id 为 1 的用户       |
 
 ### RPC
 
@@ -216,7 +216,7 @@ HTTP 具有以下 5 种参数类型：
 
 ## gRPC 框架
 
-- [gRPC](30_grpc/README.md)
+- [gRPC](30_grpc/README.md)：gRPC (Google Remote Procedure Call) 是基于 RCP 架构的变体。该技术遵循一个使用 HTTP 2.0 协议的 RPC API 实现，但 HTTP 不会呈现给 API 开发人员或服务器。因此，开发人员无需担心 RPC 概念如何映射到 HTTP，从而降低了复杂性。
 
 ## Ref
 
