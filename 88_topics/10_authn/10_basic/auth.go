@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// AuthStrategy defines the set of methods used to do resource authentication.
+// AuthStrategy defines the set of methods used to do authentication.
 type AuthStrategy interface {
 	AuthFunc() gin.HandlerFunc
 }
@@ -14,12 +14,12 @@ type AuthOperator struct {
 	strategy AuthStrategy
 }
 
-// AuthFunc execute resource authentication.
+// AuthFunc executes the set authentication.
 func (operator *AuthOperator) AuthFunc() gin.HandlerFunc {
 	return operator.strategy.AuthFunc()
 }
 
-// SetStrategy used to set to another authentication strategy.
+// SetStrategy used to set to an authentication strategy.
 func (operator *AuthOperator) SetStrategy(strategy AuthStrategy) {
 	operator.strategy = strategy
 }

@@ -4,14 +4,18 @@
 
 ### 认证 vs. 授权
 
-认证证明了你是谁，授权决定了你能做什么。
+认证是证明了你是谁，而授权是决定了你能做什么。
 
 - 认证（Authentication，英文缩写  authn）：用来验证某个用户是否具有访问系统的权限。如果认证通过，该用户就可以访问系统，从而创建、修改、删除、查询平台支持的资源。
 - 授权（Authorization，英文缩写 authz）：用来验证某个用户是否具有访问某个资源的权限。如果授权通过，该用户就能对资源做增删改查等操作。
 
+例如，用户 james、colin、aaron 分别创建了 Product-A、Product-B、Product-C。现在用户 colin 通过用户名和密码（认证）成功登录到仓库系统中，但他尝试访问 Product-A、Product-C 失败，因为这两个产品不属于他（授权失败），但他可以成功访问自己创建的产品 Product-B（授权成功）。由此可见：**认证证明了你是谁，授权决定了你能做什么**。
+
 <img src="figures/image-20220914155207130.png" alt="image-20220914155207130" style="zoom:50%;" />
 
 ## 方式
+
+前常见的四种认证方法：Basic、Digest、OAuth、Bearer。
 
 ### Basic
 
@@ -22,7 +26,7 @@ Basic 是最简单的认证方式，它简单地将“用户名:密码”进行 
 #### Lab: Gin Basic Auth
 
 ```shell
-cd 10_gin-basic-auth
+cd 10_basic
 go run example.go auth.go basic.go
 ```
 
@@ -199,7 +203,7 @@ NjA0MTUxNzg3LCJpc3MiOiJpYW1jdGwiLCJuYmYiOjE2MDQxNTE3ODd9
 
 除此之外，还有公共的声明和私有的声明。公共的声明可以添加任何的需要的信息，一般添加用户的相关信息或其他业务需要的信息，注意不要添加敏感信息；私有声明是客户端和服务端所共同定义的声明，因为 base64 是对称解密的，所以一般不建议存放敏感信息。
 
-##### Signature（签名）
+##### Signature
 
 Signature 是 Token 的签名部分，通过如下方式生成：将 Header 和 Payload 分别 base64 编码后，用 . 连接。然后再使用 Header 中声明的加密方式，利用 secretKey 对连接后的字符串进行加密，加密后的字符串即为最终的  Signature。secretKey 是密钥，保存在服务器中，一般通过配置文件来保存。这里要注意，密钥一定不能泄露。密钥泄露后，入侵者可以使用该密钥来签发 JWT Token，从而入侵系统。最后生成的 Token 如下：
 
@@ -231,11 +235,7 @@ jwt=`echo -n 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTEzMTQyMjMsImlkI
 curl -XGET -H "Content-Type: application/json" -H "Authorization: Bearer ${jwt}"  http://127.0.0.1:8080/auth/test
 ```
 
-## Lab
 
-### Basic
-
-### JWT
 
 ## Ref
 
