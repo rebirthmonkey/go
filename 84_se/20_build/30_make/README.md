@@ -136,7 +136,7 @@ make clean
 
 在本章中，会为 apiserver 示例添加 Makefile 自动化构建，具体包括如下内容。
 
-### 配置环境
+### 配置运行环境
 
 ```bash
 cd 80_server
@@ -145,17 +145,17 @@ make tools # install all the tools on the local host
 make tidy # go mod tidy
 ```
 
-### Test
+### 配置参数
 
-```bash
-cd 80_server
-make test
-```
+根据运行方式（本地、docker 或 k8s）需要对 `configs/apiserver.yaml`进行不同的配置。
+
+
+
+
 
 ### Run
 
 ```bash
-cd 80_server
 make run
 ```
 
@@ -164,7 +164,6 @@ make run
 Build current platform
 
 ```bash
-cd 80_server
 make clean
 make build
 make clean
@@ -173,7 +172,6 @@ make clean
 Build multiple platforms
 
 ```bash
-cd 80_server
 make clean
 make build.multiarch
 make clean
@@ -182,7 +180,6 @@ make clean
 ### Docker Image & Run
 
 ```bash
-cd 80_server
 make image
 docker run -d -v $(pwd)/configs/:/etc/apiserver/ -p 8080:8080 wukongsun/apiserver-amd64
 ```
@@ -197,6 +194,12 @@ docker run -d -v $(pwd)/configs/:/etc/apiserver/ -p 8080:8080 wukongsun/apiserve
 
 ```shell
 make deploy
+```
+
+### Test
+
+```bash
+make test
 ```
 
 ## Ref
