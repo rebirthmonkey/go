@@ -32,9 +32,15 @@ goroutine 就是一段代码，一个函数入口，以及在堆上为其分配�
 
 调度器对可以创建的逻辑处理器的数量没有限制，但语言运行时默认限制每个程序最多创建 1W 个线程。这个限制值可以通过调用 runtime/debug 包的 SetMaxThreads 方法来更改。如果程序试图使用更多的线程，就会崩溃。
 
+## 协程通讯
+
+Go 的并发同步模型来自一个叫作 CSP（Communicating Sequential  Processes，CSP）的范型。CSP 是一种消息传递模型，通过在 goroutine  之间传递数据来传递消息，而不是对数据进行加锁来实现同步访问。
+
+Go 中用于协程间通信和管理的有 channel 和 sync 包。比如 channel 可以通知协程做特定操作（退出、阻塞等），sync 可以加锁和同步。
+
 ### Channel
 
-Go 的并发同步模型来自一个叫作 CSP（Communicating Sequential  Processes，CSP）的范型。CSP 是一种消息传递模型，通过在 goroutine  之间传递数据来传递消息，而不是对数据进行加锁来实现同步访问。用于在 goroutine 之间同步和传递数据的关键数据类型叫作 channel。
+用于在 goroutine 之间同步和传递数据的关键数据类型叫作 channel。
 
 #### 原理
 
@@ -105,24 +111,18 @@ work := <- ic  // 从channel中接收指针到work
 
 select 是执行选择操作的一个结构，它里面有一组 case 语句。它会执行其中无阻塞的那一个，如果都阻塞了，那就等待其中一个不阻塞，进而继续执行。它有一个 default 语句，该语句是永远不会阻塞的，可以借助它实现无阻塞的操作。
 
-### Context
-
-Context  是协程的上下文，主要用于跟踪协程的状态，可以做一些简单的协程控制，也能记录一些协程信息。
-
-通过 Context 可以进一步简化控制代码，且更为友好的是，大多数 go 库，如 http、各种 db driver、grpc 等都内置了对 ctx.Done() 的判断，只需要将 ctx 传入即可。
-
-## 锁
+### Sync
 
 当多个 goroutine 同时进行处理的时候，就会遇到同时抢占一个资源的情况，所以希望某个 goroutine 等待另一个 goroutine 处理完某一个步骤之后才能继续。sync 就是为了让 goroutine 同步而出现的，是 channel 的一种代替方案。
 
-### 锁
+#### 锁
 
 锁有两种：互斥锁（mutex）和读写锁（RWMutex）
 
 - 互斥锁：当数据被加锁了之后，除次外的其他协程不能对数据进行读操作和写操作。这当然能解决并发程序对资源的操作。但是，效率上是个问题，因为当加锁后，其他协程只有等到解锁后才能对数据进行读写操作。
 - 读写锁：读数据的时候上读锁，写数据的时候上写锁。有写锁的时候，数据不可读不可写。有读锁的时候，数据可读，不可写。
 
-### waitGroup
+#### waitGroup
 
 sync.WaitGroup 是 go 标准库的一部分，它等待一系列 goroutines 执行结束。
 
@@ -137,6 +137,116 @@ for i := 0; i < 5; **i++** {
 }
 wg.Wait() // 等待上述 5 个 goroutine 执行结束
 fmt.Println()
+```
+
+### Context
+
+使用 Channel 每次都要在协程内部增加对 channel 的判断，也要在外部设置关闭条件。Context 是协程的上下文，主要用于跟踪协程的状态，可以做一些简单的协程控制，也能记录一些协程信息。通过 Context 可以进一步简化控制代码，且更为友好的是，大多数 go 库，如 http、各种 db driver、grpc 等都内置了对 ctx.Done() 的判断，只需要将 ctx 传入即可。
+
+```go
+// 空的父context
+pctx := context.TODO()
+
+// 子context（携带有超时信息），cancel函数（可以主动触发取消）
+ctx, cancel := context.WithTimeout(pctx, 5*time.Second)
+
+for i := 0; i < 2; i++ {
+   go func(i int) {
+      // do something
+
+  // 大部分工具库内置了对ctx的判断，下面的部分几乎可以省略
+      select {
+      case <-ctx.Done():
+         fmt.Printf("%d Done\n", i)
+      }
+   }(i)
+}
+
+// 调用cancel会直接关闭ctx.Done()返回的管道，不用等到超时
+//cancel()
+
+time.Sleep(6 * time.Second)
+```
+
+#### 原理
+
+在启动一个程序后，会创建一个 context 作为根 context，当需要创建更多的协程时，则基于这个根 context 来创建子 context，并且将根 context 的信息携带给子 context。同理子 context 也可以创建更多的自己的子 context 给后续创建的协程。当其中有一个父协程处理超时，可以通知自己下面的所有子协程，这样这些子协程也不用再继续自己的任务，避免浪费资源和性能。
+
+因此， context 整体是一个树形结构，不同的 context 间可能是兄弟节点或父子节点关系。由于 Context 接口有多种不同的实现，所以树的节点可能也是多种不同的 context 实现。总的来说 Context 的特点是：
+
+- 树形结构：每次调用 WithCancel、WithValue、WithTimeout、WithDeadline 实际是为当前节点在追加子节点。
+- 继承性：某个节点被取消，其对应的子树也会全部被取消。
+- 多样性：节点存在不同的实现，故每个节点会附带不同的功能。
+
+如下图中，根 context 的第一个子 context 执行超时了，它后续的所有子 context 都能接收到 context 被取消的通知，进而取消自己的 context。
+
+<img src="figures/image-20221016092256995.png" alt="image-20221016092256995" style="zoom:50%;" />
+
+#### 分类
+
+- context.Background：是 context 默认值，一般用在主函数（入口函数）或最初的根 context，其他所有的 context 上下文都是基于它创建出来。
+- context.Todo：仅在不知道使用哪种 context 时使用。
+
+但从其实现的源代码来看，Background 和 Todo 可以认为就是互为别名、基本没有差别，很多时候互用也没有任何关系。
+
+#### 操作
+
+- 新建 Context：返回一个空的 Context，这个 Context 一般用来做父 Context。
+
+```go
+ctx := context.TODO()
+ctx := context.Background()
+```
+
+- WithCancel：会根据传入的 Context 生成一个子 Context 和 cancel() 取消函数。当父 Context 有相关取消操作，或直接调用 cancel() 函数，子 Context 就会被取消。
+
+```go
+// 一般操作比较耗时等，都会在输入参数里带上一个ctx
+func Do(ctx context.Context, ...) {
+ ctx, cancel := context.WithCancel(parentCtx)
+
+ // 实现某些业务逻辑
+
+ // 当遇到某种条件，如程序出错，就取消掉子Context，这样子Context绑定的协程也可以跟着退出
+ if err != nil {
+  cancel()
+ }
+}
+```
+
+- WithTimeout：给 context 附加一个超时控制。当超过指定的时长后，能被自动取消的 context。
+
+```go
+func demo(ctx context.Context) {
+	ctx, cancel = context.WithTimeout(ctx, 30 * time.Second)
+  defer cancel()
+  
+  go doSomething1(ctx)
+  go doSomething2(ctx)
+}
+```
+
+- WithDeadline：用于创建一个到达指定时间后能被自动取消的 context。WithTimeout 是指定时长，而 WithDeadline 是指定时间点。
+
+```go
+func demo(ctx context.Context) {
+	// 创建一个1分钟后便会超时取消的context
+  t := time.Now().Add(time.Minute)
+	ctx, cancel = context.WithDeadline(ctx, t)
+  defer cancel()
+  
+  go doSomething1(ctx)
+  go doSomething2(ctx)
+}
+```
+
+- WithValue：用来保存一些如链路追踪等信息，比如 API 服务里会有来保存一些来源 IP、请求参数等。这个方法比较常用了，如 grpc-go 里的 metadata 就使用这个方法将结构体存储在 ctx 里。在使用 Value() 查找 key 对应的值时，如果没找到，就会从父 context 中查找，直某个父 context 中返回 nil 或找到对应的值。
+
+```go
+//  传入父Context和(key, value)，相当于存一个kv
+ctx := context.WithValue(parentCtx, "name", 123)
+// 用法：将key对应的值取出
+v := ctx.Value("name")
 ```
 
 ## Lab

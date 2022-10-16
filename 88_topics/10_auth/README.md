@@ -23,7 +23,7 @@ Basic 是最简单的认证方式，它简单地将“用户名:密码”进行 
 
 通过 base64 编码，可以将密码以非明文的方式传输，增加一定的安全性。但 base64 不是加密技术，入侵者仍然可以截获 base64 字符串，并反编码获取用户名和密码。另外，即使 Basic 认证中密码被加密，入侵者仍可通过加密后的用户名和密码进行重放攻击。所以，Basic 认证虽然简单，但极不安全。使用 Basic 认证的唯一方式就是将它和 SSL 配合使用，来确保整个认证过程是安全的。
 
-#### Lab: Gin Basic Auth
+#### Lab
 
 ```shell
 cd 10_basic
@@ -32,7 +32,7 @@ go run example.go auth.go basic.go
 
 ```shell
 basic=`echo -n 'admin:admin'|base64`
-curl -XGET -H "Authorization: Basic ${basic}" http://127.0.0.1:8080/test
+curl -XGET -H "Authorization: Basic ${basic}" http://127.0.0.1:8080/ping
 ```
 
 ### Digest
@@ -213,17 +213,17 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJpYW0uYXV0aHoubWFybW90ZWR1LmNvbSI
 
 签名后服务端会返回生成的 Token，客户端下次请求会携带该 Token。服务端收到 Token 后会解析出 header.payload，然后用相同的加密算法和密钥对 header.payload 再进行一次加密，得到 Signature。并且，对比加密后的 Signature 和收到的 Signature 是否相同，如果相同则验证通过，不相同则返回 HTTP 401 Unauthorized 错误。
 
-#### Lab: Gin JWT Auth
+#### Lab
 
 ```shell
-cd 20_gin-jwt-auth
+cd 20_jwt
 go run example.go auth.go jwt.go
 ```
 
-- 通过用户名、密码 login，获取 JWT
+- 通过用户名、密码 获取 JWT
 
 ```shell
-curl -XPOST -H'Content-Type: application/json' -d'{"username":"admin","password":"admin"}' http://127.0.0.1:8080/login 
+curl -XPOST -H'Content-Type: application/json' -d'{"username":"admin","password":"admin"}' http://127.0.0.1:8080/login/jwt 
 {"code":200,"expire":"2022-04-30T18:23:43+08:00","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTEzMTQyMjMsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY1MTMxMDYyM30.AugP8KBMBD7nOmEi03-JKBZ5v1Oo18MGVFE5HpgCS9I"}
 
 jwt=`echo -n 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTEzMTQyMjMsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY1MTMxMDYyM30.AugP8KBMBD7nOmEi03-JKBZ5v1Oo18MGVFE5HpgCS9I'`
@@ -232,7 +232,7 @@ jwt=`echo -n 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTEzMTQyMjMsImlkI
 - 使用 JWT 认证、并获取 REST 资源
 
 ```shell
-curl -XGET -H "Content-Type: application/json" -H "Authorization: Bearer ${jwt}"  http://127.0.0.1:8080/auth/test
+curl -XGET -H "Content-Type: application/json" -H "Authorization: Bearer ${jwt}"  http://127.0.0.1:8080/ping/
 ```
 
 

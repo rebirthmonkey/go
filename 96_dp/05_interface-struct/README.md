@@ -1,24 +1,33 @@
 # interface-struct
 
-## 对象
+## 简介
 
-在 Go 中，不同对象间的交互都必须通过方法调用。因此只需要定义了 interface，就等于“类的声明”。而 struct 可以理解为“类的定义”，var struct 则是“类的对象”。
+Go 是面向接口语言，不同对象间的交互都必须通过方法调用。对比与 OOP 面向对象，Go 的 interface、interface-var、struct、struct-var 类似于 OOP 的类定义声明、调用声明、实现和实例化：
 
-对比与面向对象，GO的面向接口中的interface、struct、var类似于面向对象的类申明、定义、对象。
+- 只要定义了 interface 就等于“类的定义声明”
+- interface var 则是“类的使用声明”
+- struct 可以理解为“类的实现”
+- struct var 则是“该类的实例化”
 
-如下图，可以在函数中对 interface 的对象 var1 进行操作，在具体运行时会 map 到对应的 struct1 上。
+如下图，可以在函数中对 interface 的 var 对象进行操作声明，在具体运行时会 map 到对应的 struct 的实例（var）上。
 
 ![image-20220504163654074](figures/image-20220504163654074.png)
 
 
 
-### interface（声明）
+### 定义声明：interface
 
 interface 定义了对象的对外的行为，是外部操作对象的抓手。
 
 
 
-### struct（定义）
+### 调用声明
+
+在函数中通过操作 interface 的 var 来声明如何使用 interface 以及实现 interface 的 struct。
+
+
+
+### 实现：struct+方法
 
 #### 结构
 
@@ -37,6 +46,14 @@ struct 为 interface 提供不同的实现方式，一个 interface 可以由多
 
 在继承中，如果 A 对 B 的某个方法不满意，可以重新定义，从而覆盖 B 的该方法。
 
+
+
+### 实例化
+
+可以创建多个 struct 的实例来使用 interface 的方法。
+
+
+
 ## 最佳实践
 
 见 gRPC productinfo_grpc.go 文件
@@ -50,5 +67,18 @@ struct 为 interface 提供不同的实现方式，一个 interface 可以由多
 
 
 
+## Lab
 
+- [多态](10_multi-impl/main.go)：多 struct 实现相同 interface
 
+```shell
+cd 10_multi-imple
+go run main.go interface.go impl1.go impl2.go
+```
+
+- [多接口](20_multi-interface/main.go)：一个 struct 实现多个 interface
+
+```shell
+cd 20_multi-interface
+go run main.go interface1.go interface2.go impl.go
+```

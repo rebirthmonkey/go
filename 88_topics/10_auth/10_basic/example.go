@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -16,12 +17,12 @@ func main() {
 	})
 	ginEngine.Use(authStrategy.AuthFunc())
 
-	ginEngine.GET("/test", func(c *gin.Context) {
+	ginEngine.GET("/ping", func(c *gin.Context) {
 		usernameKey := c.MustGet(UsernameKey).(string)
 		c.JSON(http.StatusOK, gin.H{
 			"UsernameKey": usernameKey,
+			"message":     "pong",
 		})
-		//c.JSON(http.StatusOK, gin.H{"message": "pong"})
 	})
 
 	ginEngine.Run(":8080")

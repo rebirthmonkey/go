@@ -3,10 +3,11 @@ package main
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/rebirthmonkey/pkg/log"
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/rebirthmonkey/pkg/log"
 )
 
 type BasicStrategy struct {
@@ -23,7 +24,7 @@ func NewBasicStrategy(compare func(username string, password string) bool) Basic
 	}
 }
 
-func (b BasicStrategy) AuthFunc() gin.HandlerFunc {
+func (strategy BasicStrategy) AuthFunc() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		log.Info("start BasicStrategy AuthFunc()")
 		auth := strings.SplitN(c.Request.Header.Get("Authorization"), " ", 2)
@@ -37,7 +38,7 @@ func (b BasicStrategy) AuthFunc() gin.HandlerFunc {
 		payload, _ := base64.StdEncoding.DecodeString(auth[1])
 		pair := strings.SplitN(string(payload), ":", 2)
 
-		if len(pair) != 2 || !b.compare(pair[0], pair[1]) {
+		if len(pair) != 2 || !strategy.compare(pair[0], pair[1]) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Errorf("username or password not matched")})
 			c.Abort()
 			return

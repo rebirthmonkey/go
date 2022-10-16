@@ -1,11 +1,12 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"time"
+
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
-	"time"
 )
 
 type login struct {
@@ -84,18 +85,19 @@ func main() {
 
 	authStrategy := NewJWTStrategy(*ginJWT)
 
-	ginEngine.POST("/login", authStrategy.LoginHandler)
-	auth := ginEngine.Group("/auth")
+	ginEngine.POST("/login/jwt", authStrategy.LoginHandler)
+
+	auth := ginEngine.Group("/ping")
 	auth.Use(authStrategy.AuthFunc())
 	{
-		auth.GET("/test", func(c *gin.Context) {
+		auth.GET("/", func(c *gin.Context) {
 			claims := jwt.ExtractClaims(c)
-			fmt.Println("the claims is:", claims)
+			log.Println("the claims is:", claims)
 			user, _ := c.Get(identityKey)
 			c.JSON(200, gin.H{
 				"userID":   claims[identityKey],
 				"userName": user.(*User).Username,
-				"text":     "Auth Test",
+				"message":  "pong",
 			})
 		})
 	}

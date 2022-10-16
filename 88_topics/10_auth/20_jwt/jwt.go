@@ -17,6 +17,6 @@ func NewJWTStrategy(gjwt ginjwt.GinJWTMiddleware) JWTStrategy {
 	return JWTStrategy{gjwt}
 }
 
-func (j JWTStrategy) AuthFunc() gin.HandlerFunc {
-	return j.MiddlewareFunc()
+func (strategy JWTStrategy) AuthFunc() gin.HandlerFunc {
+	return strategy.MiddlewareFunc()
 }
