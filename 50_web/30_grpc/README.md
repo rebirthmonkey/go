@@ -219,8 +219,10 @@ type server struct {
 
 ```bash
 cd 12_productinfo
-go run server/main.go
+go run server/main.go &
+sleep 3
 go run client/main.go
+ps aux | grep -i server/main.go |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 ### route-guide
@@ -235,14 +237,16 @@ go run client/main.go
   - An interface type for servers to implement, also with the methods defined in the `RouteGuide` service.
 
 ```bash
-cd 14_route-guid/routeguide
+cd 14_route-guide/routeguide
 protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     route_guide.proto
 ls
 cd ..
-go run server/main.go
+go run server/main.go &
+sleep 3
 go run client/main.go
+ps aux | grep -i server/main.go |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 #### 创建 server 端

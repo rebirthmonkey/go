@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/rebirthmonkey/go/50_web/20_gin/70_swag/controller"
+	_ "github.com/rebirthmonkey/go/50_web/20_gin/70_swag/docs"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"net/http"
-	"wukong/go/50_web/20_gin/90_swag/controller"
-	_ "wukong/go/50_web/20_gin/90_swag/docs"
 )
 
 // @title Gin Swag 案例

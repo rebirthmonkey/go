@@ -265,10 +265,12 @@ go run 34_loop-switch.go
 
 ```bash
 go run 60_defer.go
+echo $?
 ```
 
 ```bash
-go run 60_defer.go
+go run 62_defer.go
+echo $?
 ```
 
 #### 调用
@@ -499,6 +501,7 @@ go run 82_error-interface.go
 
 ```bash
 go run 84_panic.go
+echo $?
 ```
 
 ```bash

@@ -2,7 +2,7 @@
 
 ## Run
 
-```bash
+```shell
 go run cmd/apiserver.go -c configs/config.yaml
 ```
 
