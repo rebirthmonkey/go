@@ -253,14 +253,28 @@ v := ctx.Value("name")
 
 - [goroutine](10_goroutine.go)：goroutine 持续循环，main() 等待外部输入然后中止整个进程
 
-```bash
+```shell
 go run 10_goroutine.go
+# 从键盘输入
+```
+
+或者使用cat创建输入
+
+```bash
+cat "some text 10_goroutine" | go run 10_goroutine.go
 ```
 
 - [goroutine](12_goroutine-anonym.go)：同上，只是 goroutine 通过一个匿名函数来实现
 
-```bash
+```shell
 go run 12_goroutine-anonym.go 
+# 从键盘输入
+```
+
+或者使用cat创建输入
+
+```bash
+cat "some text 12_goroutine-anonym" | go run 12_goroutine-anonym.go 
 ```
 
 - [channel](20_channel.go)：当 goroutine 写入 channel 后，因为没有读取操作，所以 goroutine 处于阻塞状态。直到 channel 被读取后，整个 goroutine 才开始循环。

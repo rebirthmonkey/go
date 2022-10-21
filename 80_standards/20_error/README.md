@@ -88,7 +88,7 @@ Go net/http 包提供了 60 个 HTTP 码，大致分为如下 5 类：
 
 ### 具体错误码
 
-具体错误码可参考：[错误码](40_error-code.md)，该错误码描述是通过程序自动生成的。
+具体错误码可参考：[错误码](../30_code/30_api/40_error-code.md)，该错误码描述是通过程序自动生成的。
 
 ## errors包
 
@@ -270,15 +270,33 @@ go run example4.go
 
 - [rebirthmonkey/go/pkg/errors Gin Server](example5.go)：通过 gin/util 包解析错误并返回。同时，`log.L(ctx).Info()` 会把 context 中的信息传给 log，用于输出更详细信息。
 
-```bash
+```shell
 go run example5.go
+# 新建终端，并在新建的终端继续
+curl -X GET http://127.0.0.1:8080/ping
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run example5.go &
+sleep 5
 curl -X GET http://127.0.0.1:8080/ping
 ```
 
 - [rebirthmonkey/go/pkg/panic Gin Server](example6.go)：展示 log.Panic() 后会中断程序，停止后续操作（包括return）
 
+```shell
+go run example6.go 
+# 新建终端，并在新建的终端继续
+curl -X GET http://127.0.0.1:8080/ping
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
-go run example6.go
+go run example6.go &
+sleep 10
 curl -X GET http://127.0.0.1:8080/ping
 ```
 

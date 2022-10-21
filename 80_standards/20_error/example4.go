@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	if err := os.Chdir("/root"); err != nil {
+	if err := os.Chdir("/rooot"); err != nil {
 		log.Errorf("change dir failed err: %+v", err)
 
 		err2 := errors.Wrap(err, "wrap the error")

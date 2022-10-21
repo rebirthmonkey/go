@@ -4,8 +4,7 @@
 
 ### 配置运行环境
 
-```bash
-cd 80_server
+```shell
 make help
 make tools # install all the tools on the local host
 make tidy # go mod tidy
@@ -29,7 +28,7 @@ Makefile 进行配置
 
 ### Run
 
-```bash
+```shell
 make run
 ```
 
@@ -37,7 +36,7 @@ make run
 
 Build current platform
 
-```bash
+```shell
 make clean
 make build
 make clean
@@ -45,7 +44,7 @@ make clean
 
 Build multiple platforms
 
-```bash
+```shell
 make clean
 make build.multiarch
 make clean
@@ -53,7 +52,7 @@ make clean
 
 ### Docker Image & Run
 
-```bash
+```shell
 make image
 docker run -d -v $(pwd)/configs/:/etc/apiserver/ -p 8080:8080 wukongsun/apiserver-amd64
 ```
@@ -72,7 +71,7 @@ make deploy
 
 ### Test
 
-```bash
+```shell
 make test
 ```
 

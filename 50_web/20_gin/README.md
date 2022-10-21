@@ -182,147 +182,262 @@ controller 存放请求处理相关，service 存放具体的业务逻辑处理�
 
 - [HelloWorld](01_hello-world.go)
 
+```shell
+go run 01_hello-world.go
+# 新建终端，并在新建的终端继续
+curl http://127.0.0.1:8080
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
 go run 01_hello-world.go &
-sleep 3
+sleep 10
 curl http://127.0.0.1:8080
-ps aux | grep -i 01_hello-world |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 - [Get with JSON response](10_get-json.go)
 
+```shell
+go run 10_get-json.go
+# 新建终端，并在新建的终端继续
+curl http://127.0.0.1:8080/pingHandler
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
 go run 10_get-json.go &
-sleep 3
+sleep 10
 curl http://127.0.0.1:8080/pingHandler
-ps aux | grep -i 10_get-json |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 - [Get with JSON response 2](11_get-json.go)
 
+```shell
+go run 11_get-json.go
+# 新建终端，并在新建的终端继续
+curl http://127.0.0.1:8080/ping
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
 go run 11_get-json.go &
-sleep 3
+sleep 10
 curl http://127.0.0.1:8080/ping
-ps aux | grep -i 11_get-json |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 - [Get with Parameter](13_get-param.go)
 
+```shell
+go run 13_get-param.go
+# 新建终端，并在新建的终端继续
+curl http://127.0.0.1:8080/users/xxx
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
 go run 13_get-param.go &
-sleep 3
+sleep 10
 curl http://127.0.0.1:8080/users/xxx
-ps aux | grep -i 13_get-param |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 - [Get with Path Parameter General](14_get-param.go)
 
-```bash
-go run 14_get-param.go &
-sleep 3
+```shell
+go run 14_get-param.go
+# 新建终端，并在新建的终端继续
 curl http://127.0.0.1:8080/users/xxx/
 curl http://127.0.0.1:8080/users/xxx/yyy/zzz
-ps aux | grep -i 14_get-param |  grep -v grep | awk {'print $2'} | xargs kill -9
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run 14_get-param.go &
+sleep 10
+curl http://127.0.0.1:8080/users/xxx/
+curl http://127.0.0.1:8080/users/xxx/yyy/zzz
 ```
 
 - [Get with Query](16_get-query.go)
 
-```bash
-go run 16_get-query.go &
-sleep 3
+```shell
+go run 16_get-query.go
+# 新建终端，并在新建的终端继续
 curl http://127.0.0.1:8080/welcome
 curl http://127.0.0.1:8080/welcome\?firstname\=中国
 curl http://127.0.0.1:8080/welcome\?firstname\=中国\&lastname\=天朝
 curl http://127.0.0.1:8080/welcome\?firstname\=\&lastname\=天朝
 curl http://127.0.0.1:8080/welcome\?firstname\=%E4%B8%AD%E5%9B%BD
-ps aux | grep -i 16_get-query |  grep -v grep | awk {'print $2'} | xargs kill -9
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run 16_get-query.go &
+sleep 5
+curl http://127.0.0.1:8080/welcome
+curl http://127.0.0.1:8080/welcome\?firstname\=中国
+curl http://127.0.0.1:8080/welcome\?firstname\=中国\&lastname\=天朝
+curl http://127.0.0.1:8080/welcome\?firstname\=\&lastname\=天朝
+curl http://127.0.0.1:8080/welcome\?firstname\=%E4%B8%AD%E5%9B%BD
 ```
 
 - [Post Body](21_post-form.go)
 
+```shell
+go run 21_post-form.go
+# 新建终端，并在新建的终端继续
+curl -X POST http://127.0.0.1:8080/form -H "Content-Type:application/x-www-form-urlencoded" -d "message=hello&nick=wukong"
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
 go run 21_post-form.go &
-sleep 3
+sleep 10
 curl -X POST http://127.0.0.1:8080/form -H "Content-Type:application/x-www-form-urlencoded" -d "message=hello&nick=wukong"
-ps aux | grep -i 21_post-form | grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 - [Post File](23_post-file.go)
 
-```bash
-go run 23_post-file.go &
-sleep 3
+```shell
+go run 23_post-file.go
+# 新建终端，并在新建的终端继续
 curl -X POST http://127.0.0.1:8080/upload \
   -F "file=@./23_post-file.go" \
   -H "Content-Type: multipart/form-data"
-ps aux | grep -i 23_post-file | grep -v grep | awk {'print $2'} | xargs kill -9
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run 23_post-file.go &
+sleep 10
+curl -X POST http://127.0.0.1:8080/upload \
+  -F "file=@./23_post-file.go" \
+  -H "Content-Type: multipart/form-data"
 ```
 
 - [Post File](24_post-multi-file.go)
 
-```bash
-go run 24_post-multi-file.go &
-sleep 3
+```shell
+go run 24_post-multi-file.go
+# 新建终端，并在新建的终端继续
 curl -X POST http://127.0.0.1:8080/upload \
   -F "file[]=@./23_post-file.go" \
   -F "file[]=@./24_post-multi-file.go" \
   -H "Content-Type: multipart/form-data"
-ps aux | grep -i 24_post-multi-file | grep -v grep | awk {'print $2'} | xargs kill -9
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run 24_post-multi-file.go &
+sleep 10
+curl -X POST http://127.0.0.1:8080/upload \
+  -F "file[]=@./23_post-file.go" \
+  -F "file[]=@./24_post-multi-file.go" \
+  -H "Content-Type: multipart/form-data"
 ```
 
 - [Post JSON](27_bind-json.go)
 
-```bash
-go run 27_bind-json.go &
-sleep 3
+```shell
+go run 27_bind-json.go
+# 新建终端，并在新建的终端继续
 curl -X POST http://127.0.0.1:8080/login \
   -H "Content-Type:application/json" \
   -d '{"username": "ruan", "passwd": "123", "age": 21}'
-ps aux | grep -i 27_bind-json | grep -v grep | awk {'print $2'} | xargs kill -9
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run 27_bind-json.go &
+sleep 10
+curl -X POST http://127.0.0.1:8080/login \
+  -H "Content-Type:application/json" \
+  -d '{"username": "ruan", "passwd": "123", "age": 21}'
 ```
 
 > 注意引号的使用方式
 
 - [Post JSON](28_bind-json.go)
 
-```bash
-go run 28_bind-json.go &
-sleep 3
+```shell
+go run 28_bind-json.go
 curl -X POST http://127.0.0.1:8080/login \
   -H "Content-Type:application/json" \
   -d '{"username": "ruan", "passwd": "123", "age": 21}'
-ps aux | grep -i 28_bind-json |  grep -v grep | awk {'print $2'} | xargs kill -9
+# 新建终端，并在新建的终端继续
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run 28_bind-json.go &
+sleep 10
+curl -X POST http://127.0.0.1:8080/login \
+  -H "Content-Type:application/json" \
+  -d '{"username": "ruan", "passwd": "123", "age": 21}'
 ```
 
 - [Redirect](31_redirect.go)
 
+```shell
+go run 31_redirect.go
+# 新建终端，并在新建的终端继续
+curl http://127.0.0.1:8080/redirect/google
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
 go run 31_redirect.go &
-sleep 3
+sleep 10
 curl http://127.0.0.1:8080/redirect/google
-ps aux | grep -i 31_redirect |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 - [Multiple Routes](35_route-multi.go)
 
-```bash
-go run 35_route-multi.go &
-sleep 3
+```shell
+go run 35_route-multi.go
+# 新建终端，并在新建的终端继续
 curl http://127.0.0.1:8080/v1/login
 curl http://127.0.0.1:8080/v2/login
-ps aux | grep -i 35_route-multi |  grep -v grep | awk {'print $2'} | xargs kill -9
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run 35_route-multi.go &
+sleep 10
+curl http://127.0.0.1:8080/v1/login
+curl http://127.0.0.1:8080/v2/login
 ```
 
 - [Embedded Routes](37_route-embedded.go)
 
-```bash
-go run 37_route-embedded.go &
-sleep 3
+```shell
+go run 37_route-embedded.go
+# 新建终端，并在新建的终端继续
 curl http://127.0.0.1:8080/user/index
 curl http://127.0.0.1:8080/user/login
 curl http://127.0.0.1:8080/user/shop/index
-ps aux | grep -i 37_route-embedded |  grep -v grep | awk {'print $2'} | xargs kill -9
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run 37_route-embedded.go &
+sleep 10
+curl http://127.0.0.1:8080/user/index
+curl http://127.0.0.1:8080/user/login
+curl http://127.0.0.1:8080/user/shop/index
 ```
 
 - [Middleware1](41_middleware.go)
@@ -331,11 +446,21 @@ ps aux | grep -i 37_route-embedded |  grep -v grep | awk {'print $2'} | xargs ki
 
 /after 会同时通过 middleware1 和 middleware2
 
-```bash
+```shell
 go run 41_middleware.go
+# 新建终端，并在新建的终端继续
+go run 41_middleware.go &
+sleep 10
+curl http://127.0.0.1:8080/before
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run 41_middleware.go &
+sleep 10
 curl http://127.0.0.1:8080/before
 curl http://127.0.0.1:8080/after
-ps aux | grep -i 41_middleware |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 - [Middleware2](43_middleware.go)
@@ -344,23 +469,39 @@ ps aux | grep -i 41_middleware |  grep -v grep | awk {'print $2'} | xargs kill -
 
 /after 会只通过 middleware4，所以会报错 request4 不存在
 
+```shell
+go run 43_middleware.go
+# 新建终端，并在新建的终端继续
+curl http://127.0.0.1:8080/before
+curl http://127.0.0.1:8080/after
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
 go run 43_middleware.go &
 sleep 5
 curl http://127.0.0.1:8080/before
 curl http://127.0.0.1:8080/after
-ps aux | grep -i 43_middleware |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 - [Middleware with new Logger MW](45_middleware-logger.go)：自定义 logger middleware
 
 Middleware c.next() 之前的代码会在调用前完成，之后的代码会在调用返回后完成。
 
+```shell
+go run 45_middleware-logger.go 
+# 新建终端，并在新建的终端继续
+sleep 10
+curl http://127.0.0.1:8080/test
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
 go run 45_middleware-logger.go &
-sleep 3
+sleep 10
 curl http://127.0.0.1:8080/test
-ps aux | grep -i 45_middleware-logger |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 ### Middleware
@@ -373,11 +514,18 @@ ps aux | grep -i 45_middleware-logger |  grep -v grep | awk {'print $2'} | xargs
 
 Basic Auth 必须采用浏览器登录 `http://127.0.0.1:8080/auth`
 
+```shell
+go run 46_middleware-basic-auth.go
+# 新建终端，并在新建的终端继续
+curl http://127.0.0.1:8080/auth --user user:password
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
 go run 46_middleware-basic-auth.go &
-sleep 3
+sleep 10
 curl http://127.0.0.1:8080/auth --user user:password
-ps aux | grep -i 46_middleware-basic-auth |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 ### Web Application
@@ -387,9 +535,9 @@ ps aux | grep -i 46_middleware-basic-auth |  grep -v grep | awk {'print $2'} | x
 主要做法是创建一个 struct，然后把 POST 的内容通过 c.ShouldBindJSON 添加到该 struct 的变量。
 在给这个 struct 变量添加类似 Create()、Get() 等方法注册到 router 的 POST、GET 上。
 
-```bash
-go run 80_app/80_bind-json.go &
-sleep 3
+```shell
+go run 80_app/80_bind-json.go
+# 新建终端，并在新建的终端继续
 # 创建产品
 curl -X POST -H"Content-Type: application/json" -d'{"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford"}' http://127.0.0.1:8080/v1/products
 # {"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford","createdAt":"2021-06-20T11:17:03.818065988+08:00"}
@@ -397,15 +545,33 @@ curl -X POST -H"Content-Type: application/json" -d'{"username":"colin","name":"i
 # 获取产品信息
 curl -X GET http://127.0.0.1:8080/v1/products/iphone12
 # {"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford","createdAt":"2021-06-20T11:17:03.818065988+08:00"}
-ps aux | grep -i 80_app/80_bind-json.go |  grep -v grep | awk {'print $2'} | xargs kill -9
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run 80_app/80_bind-json.go &
+sleep 10
+# 创建产品
+curl -X POST -H"Content-Type: application/json" -d'{"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford"}' http://127.0.0.1:8080/v1/products
+# {"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford","createdAt":"2021-06-20T11:17:03.818065988+08:00"}
+
+# 获取产品信息
+curl -X GET http://127.0.0.1:8080/v1/products/iphone12
+# {"username":"colin","name":"iphone12","category":"phone","price":8000,"description":"cannot afford","createdAt":"2021-06-20T11:17:03.818065988+08:00"}
 ```
 
 - [Middleware with Gin MW](80_app/82_bind-json-mw.go)：使用 Gin 现有的 middleware
 
+```shell
+go run 80_app/82_bind-json-mw.go
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
 go run 80_app/82_bind-json-mw.go &
-sleep 3
-ps aux | grep -i 80_app/82_bind-json-mw.go |  grep -v grep | awk {'print $2'} | xargs kill -9
+sleep 5
 ```
 
 ### Advanced Topics
@@ -414,14 +580,23 @@ ps aux | grep -i 80_app/82_bind-json-mw.go |  grep -v grep | awk {'print $2'} | 
 
 Cookie 实际上就是服务器保存在浏览器上的一段信息。浏览器有了 Cookie 之后，每次向服务器发送请求时都会同时将该信息发送给服务器，服务器收到请求后，就可以根据该信息处理请求。Cookie 由服务器创建，并发送给浏览器，最终由浏览器保存。
 
-- [Set and Get Cookie](90_advance/19_cookie.go)
+- [Set and Get Cookie](90_advanced/19_cookie.go)
 
-```bash
-go run 90_advance/19_cookie.go &
-sleep 3
+```shell
+go run 90_advanced/19_cookie.go
+# 新建终端，并在新建的终端继续
+sleep 10
 curl http://127.0.0.1:8080/login  # set the cookie for the browser
 curl http://127.0.0.1:8080/home  # check the cookie value
-ps aux | grep -i 90_advance/19_cookie |  grep -v grep | awk {'print $2'} | xargs kill -9
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run 90_advanced/19_cookie.go &
+sleep 10
+curl http://127.0.0.1:8080/login  # set the cookie for the browser
+curl http://127.0.0.1:8080/home  # check the cookie value
 ```
 
 #### Session
@@ -440,12 +615,20 @@ ps aux | grep -i 90_advance/19_cookie |  grep -v grep | awk {'print $2'} | xargs
 
 - [Async](90_advanced/91_async.go)
 
-```bash
-go run 90_advanced/91_async.go &
-sleep 3
+```shell
+go run 90_advanced/91_async.go
+# 新建终端，并在新建的终端继续
 curl http://127.0.0.1:8080/sync
 curl http://127.0.0.1:8080/async
-ps aux | grep -i 90_advanced/91_async |  grep -v grep | awk {'print $2'} | xargs kill -9
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run 90_advanced/91_async.go &
+sleep 5
+curl http://127.0.0.1:8080/sync
+curl http://127.0.0.1:8080/async
 ```
 
 ## apiserver 示例

@@ -114,7 +114,7 @@ func main() {
 	})
 
 	eg.Go(func() error {
-		err := secureServer.ListenAndServeTLS("server.pem", "server.key")
+		err := secureServer.ListenAndServeTLS("./configs/server.pem", "./configs/server.key")
 		if err != nil && err != http.ErrServerClosed {
 			log.Fatal(err)
 		}

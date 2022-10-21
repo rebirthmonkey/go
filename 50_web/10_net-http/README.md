@@ -125,40 +125,68 @@ func (mux *ServeMux) ServeHTTP(w ResponseWriter, r *Request)
 
 - [Handler](10_handler.go)
 
+```shell
+go run 10_handler.go
+# 新建终端，并在新建的终端继续
+curl http://127.0.0.1:8080
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
 go run 10_handler.go &
 sleep 3
 curl http://127.0.0.1:8080
-ps aux | grep -i 10_handler |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 - [Handler](12_handler.go)
+
+```shell
+go run 12_handler.go
+# 新建终端，并在新建的终端继续
+curl http://127.0.0.1:8080/view/abc
+```
+
+或者在同一个终端窗口中执行
 
 ```bash
 go run 12_handler.go &
 sleep 3
 curl http://127.0.0.1:8080/view/abc
-ps aux | grep -i 12_handler |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 > 对于`/view/<NAME>`路径，该程序会展示`<NAME>.txt`文件的内容，如果路径下不存在`<NAME>.txt`，将会报错。
 
 - [Handler with Interface](14_handler-interface.go)
 
+```shell
+go run 14_handler-interface.go
+# 新建终端，并在新建的终端继续
+curl http://127.0.0.1:8080/view/abc
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
 go run 14_handler-interface.go &
 sleep 3
 curl http://127.0.0.1:8080/view/abc
-ps aux | grep -i 14_handler-interface |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 - [Handler as Reverse Proxy](20_reverse-proxy.go)
+
+```shell
+go run 20_reverse-proxy.go
+# 新建终端，并在新建的终端继续
+curl http://127.0.0.1:8080
+```
+
+或者在同一个终端窗口中执行
 
 ```bash
 go run 20_reverse-proxy.go &
 sleep 3
 curl http://127.0.0.1:8080
-ps aux | grep -i 20_reverse-proxy |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 ## Ref
