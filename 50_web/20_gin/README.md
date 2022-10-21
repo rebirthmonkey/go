@@ -278,7 +278,7 @@ curl http://127.0.0.1:8080/welcome\?firstname\=%E4%B8%AD%E5%9B%BD
 
 ```bash
 go run 16_get-query.go &
-sleep 5
+sleep 10
 curl http://127.0.0.1:8080/welcome
 curl http://127.0.0.1:8080/welcome\?firstname\=中国
 curl http://127.0.0.1:8080/welcome\?firstname\=中国\&lastname\=天朝
@@ -480,7 +480,7 @@ curl http://127.0.0.1:8080/after
 
 ```bash
 go run 43_middleware.go &
-sleep 5
+sleep 10
 curl http://127.0.0.1:8080/before
 curl http://127.0.0.1:8080/after
 ```
@@ -626,7 +626,7 @@ curl http://127.0.0.1:8080/async
 
 ```bash
 go run 90_advanced/91_async.go &
-sleep 5
+sleep 10
 curl http://127.0.0.1:8080/sync
 curl http://127.0.0.1:8080/async
 ```

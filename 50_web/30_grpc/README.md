@@ -249,13 +249,13 @@ go run client/main.go
 cd 14_route-guide/routeguide
 protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-    route_guide.proto
+    routeguide.proto
 ls
 cd ..
-go run server/main.go &
+go run server/server.go
 # 新建终端，并在新建的终端继续
 cd 14_route-guide/routeguide
-go run client/main.go
+go run client/client.go
 ```
 
 或者在同一个终端窗口中执行
@@ -264,12 +264,12 @@ go run client/main.go
 cd 14_route-guide/routeguide
 protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-    route_guide.proto
+    routeguide.proto
 ls
 cd ..
-go run server/main.go &
+go run server/server.go &
 sleep 10
-go run client/main.go
+go run client/client.go
 ```
 
 #### 创建 server 端

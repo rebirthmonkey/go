@@ -46,7 +46,7 @@ curl -X DELETE http://127.0.0.1:8080/v1/users/user99
 
 ```bash
 go run cmd/apiserver.go -c configs/config.yaml &
-sleep 10
+sleep 15
 #create
 curl -X POST -H "Content-Type: application/json" \
 -d '{"metadata":{"name":"user99", "password":"admin"},"description":"admin user"}' \

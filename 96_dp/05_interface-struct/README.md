@@ -72,7 +72,7 @@ struct 为 interface 提供不同的实现方式，一个 interface 可以由多
 - [多态](10_multi-impl/main.go)：多 struct 实现相同 interface
 
 ```bash
-cd 10_multi-imple
+cd 10_multi-impl
 go run main.go interface.go impl1.go impl2.go
 ```
 

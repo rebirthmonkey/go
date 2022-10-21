@@ -1437,7 +1437,7 @@ go doc .
 - 通过 `go doc func-name` 展示该 type/interface/func 的详细注释
 
 ```bash
-d 80_server/apiserver/user/repo
+cd 80_server/apiserver/user/repo
 go doc SetClient
 ```
 

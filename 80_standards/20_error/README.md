@@ -385,7 +385,7 @@ curl -X GET http://127.0.0.1:8080/ping
 
 ```bash
 go run example5.go &
-sleep 5
+sleep 10
 curl -X GET http://127.0.0.1:8080/ping
 ```
 

@@ -11,7 +11,7 @@ curl --insecure -X GET https://127.0.0.1:8443/v1/users
 ```bash
 cat configs/config.yaml | sed "s#{{CERT-FILE}}#$(pwd)/configs/cert/server.pem#g" | sed "s#{{PRIVATE-KEY-FILE}}#$(pwd)/configs/cert/server.key#g"  > configs/config-out.yaml
 go run cmd/apiserver.go -c configs/config-out.yaml
-sleep 10
+sleep 15
 #create
 curl --insecure -X POST -H "Content-Type: application/json" \
 -d '{"metadata":{"name":"user99", "password":"admin"},"description":"admin user"}' \

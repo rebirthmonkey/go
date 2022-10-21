@@ -32,7 +32,7 @@ sudo install ./wrk /usr/bin
 #### 参数
 
 ```bash
-wrh --help
+wrk --help
 ```
 
 - -t：线程数（线程数不要太多，是核数的 2 到 4 倍就行，多了反而会因为线程切换过多造成效率降低）。
