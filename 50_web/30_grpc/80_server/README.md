@@ -19,14 +19,14 @@ protoc --go_out=. --go_opt=paths=source_relative \
 
 
 ```shell
-cat configs/config.yaml | sed "s#{CERT-FILE}#$(pwd)/configs/cert/server.pem#g" | sed "s#{PRIVATE-KEY-FILE}#$(pwd)/configs/cert/server.key#g"  > configs/config-out.yaml
+cat configs/config.yaml | sed "s#{{CERT-FILE}}#$(pwd)/configs/cert/server.pem#g" | sed "s#{{PRIVATE-KEY-FILE}}#$(pwd)/configs/cert/server.key#g"  > configs/config-out.yaml
 go run cmd/apiserver.go -c configs/config-out.yaml
 ```
 
 ## Test
 
 ```shell
-cat configs/config.yaml | sed "s#{CERT-FILE}#$(pwd)/configs/cert/server.pem#g" | sed "s#{PRIVATE-KEY-FILE}#$(pwd)/configs/cert/server.key#g"  > configs/config-out.yaml
+cat configs/config.yaml | sed "s#{{CERT-FILE}}#$(pwd)/configs/cert/server.pem#g" | sed "s#{{PRIVATE-KEY-FILE}}#$(pwd)/configs/cert/server.key#g"  > configs/config-out.yaml
 go run cmd/apiserver.go -c configs/config-out.yaml &
 # 新建终端，并在新建的终端继续
 go run test/grpc/user_client.go
@@ -41,7 +41,7 @@ go run test/grpc/user_client.go
 或者在同一个终端窗口中执行
 
 ```bash
-cat configs/config.yaml | sed "s#{CERT-FILE}#$(pwd)/configs/cert/server.pem#g" | sed "s#{PRIVATE-KEY-FILE}#$(pwd)/configs/cert/server.key#g"  > configs/config-out.yaml
+cat configs/config.yaml | sed "s#{{CERT-FILE}}#$(pwd)/configs/cert/server.pem#g" | sed "s#{{PRIVATE-KEY-FILE}}#$(pwd)/configs/cert/server.key#g"  > configs/config-out.yaml
 go run cmd/apiserver.go -c configs/config-out.yaml &
 sleep 10
 go run test/grpc/user_client.go

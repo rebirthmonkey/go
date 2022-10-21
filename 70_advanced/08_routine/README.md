@@ -339,7 +339,7 @@ go run 41_sync-mutex.go
 
 - [Once只执行一次](43_sync-once.go)
 
-```shell
+```bash
 go run 43_sync-once.go 
 ```
 

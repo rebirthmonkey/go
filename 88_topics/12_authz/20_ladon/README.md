@@ -92,11 +92,22 @@ AuditLogger 会在授权时打印调用的策略到标准错误。AuditLogger �
 
 在使用 Ladon 的过程中，有两个地方需要注意：所有检查都区分大小写，因为主题值可能是区分大小写的 ID。如果 ladon.Ladon 无法将策略与请求匹配，会默认授权结果为拒绝，并返回错误。
 
-
-
 ## Lab
 
 ```shell
+go run example.go
+# 新建终端，并在新建的终端继续
+curl -s -X POST -H "Content-Type: application/json" \
+-d '{"subject": "Tony", "action" : "delete", "resource": "resources:hair"}' \
+http://127.0.0.1:8080/check
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run example.go &
+sleep 10
+
 curl -s -X POST -H "Content-Type: application/json" \
 -d '{"subject": "Tony", "action" : "delete", "resource": "resources:hair"}' \
 http://127.0.0.1:8080/check

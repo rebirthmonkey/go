@@ -36,7 +36,7 @@ Strategy 模式定义一组 strategy，将所有 strategy 都封装成一个 int
 
 - [Strategy](10_strategy/main.go)
 
-```shell
+```bash
 cd 10_strategy
 go run main.go
 ```
@@ -46,7 +46,7 @@ go run main.go
 ```shell
 cd 30_gin-auth
 go run example.go auth.go basic.go jwt.go
-
+# 新建终端，并在新建的终端继续
 basic=`echo -n 'admin:admin'|base64`
 curl -XGET -H "Authorization: Basic ${basic}" http://127.0.0.1:8080/ping/basic/
 
@@ -58,3 +58,19 @@ jwt=`echo -n 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTEzMTQyMjMsImlkI
 curl -XGET -H "Content-Type: application/json" -H "Authorization: Bearer ${jwt}"  http://127.0.0.1:8080/ping/jwt/
 ```
 
+或者在同一个终端窗口中执行
+
+```bash
+cd 30_gin-auth
+go run example.go auth.go basic.go jwt.go &
+sleep 10
+basic=`echo -n 'admin:admin'|base64`
+curl -XGET -H "Authorization: Basic ${basic}" http://127.0.0.1:8080/ping/basic/
+
+curl -XPOST -H'Content-Type: application/json' -d'{"username":"admin","password":"admin"}' http://127.0.0.1:8080/login/jwt 
+{"code":200,"expire":"2022-04-30T18:23:43+08:00","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTEzMTQyMjMsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY1MTMxMDYyM30.AugP8KBMBD7nOmEi03-JKBZ5v1Oo18MGVFE5HpgCS9I"}
+
+jwt=`echo -n 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTEzMTQyMjMsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY1MTMxMDYyM30.AugP8KBMBD7nOmEi03-JKBZ5v1Oo18MGVFE5HpgCS9I'`
+
+curl -XGET -H "Content-Type: application/json" -H "Authorization: Bearer ${jwt}"  http://127.0.0.1:8080/ping/jwt/
+```

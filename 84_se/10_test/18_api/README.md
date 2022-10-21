@@ -23,13 +23,15 @@
 ```shell
 git clone https://github.com/wg/wrk
 cd wrk
-make
+make -j4
 sudo install ./wrk /usr/bin
 ```
 
+> 编译需要unzip
+
 #### 参数
 
-```shell
+```bash
 wrh --help
 ```
 
@@ -44,9 +46,23 @@ wrh --help
 #### VM Test
 
 ```shell
-./wrk -t50 -c1000 -d5s -T5s --latency http://192.168.1.10:8080/healthz
+wrk -t50 -c1000 -d5s -T5s --latency http://192.168.1.10:8080/healthz
 
-./wrk -t50 -c1000 -d5s -T5s --latency http://192.168.1.10:8080/v1/users
+wrk -t50 -c1000 -d5s -T5s --latency http://192.168.1.10:8080/v1/users
+```
+
+> 假设已经安装`wrk`到path。否则，使用相对路径`path/to/wrk`代替`wrk`
+
+> `http://192.168.1.10:8080/v1/users` 需要被替换
+
+可以用`50_web/20_gin/96_insecure/`中的apiserver搭建测试服务器
+
+```bash
+cd ../../../50_web/20_gin/96_insecure/
+go run cmd/apiserver.go -c configs/config.yaml &
+sleep 10
+wrk -t50 -c1000 -d5s -T5s --latency http://127.0.0.1:8080/healthz
+wrk -t50 -c1000 -d5s -T5s --latency http://127.0.0.1:8080/healthz
 ```
 
 下面是对测试结果的解析。
@@ -66,13 +82,13 @@ Thread Stats 是线程统计，包括 Latency 和  Req/Sec。
 #### K8s Test
 
 ```shell
-./wrk -t10 -c100 -d5s -T5s --latency http://129.204.97.254:8080/v1/users
+wrk -t10 -c100 -d5s -T5s --latency http://129.204.97.254:8080/v1/users
 
 
-./wrk -t10 -c100 -d5s -T5s --latency http://192.168.34.15:8080/v1/users
+wrk -t10 -c100 -d5s -T5s --latency http://192.168.34.15:8080/v1/users
 ```
 
-
+> `http://129.204.97.254:8080/v1/users` 需要被替换
 
 
 

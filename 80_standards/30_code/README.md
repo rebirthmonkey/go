@@ -1222,7 +1222,7 @@ API 接口文档中请求方法格式为：`HTTP方法+请求路径`，例如请
 
     在命令行执行如下命令，即可生成 JWT Token：
 
-    ```shell
+   ```shell
     go run main.go <secretID> <secretKey>
     ```
 
@@ -1416,7 +1416,7 @@ apiserver 实例前期在代码规范上完全没有按照标准，在新的代�
 
 ##### 安装
 
-```shell
+```bash
 go get -v golang.org/x/tools/cmd/godoc
 go install -v golang.org/x/tools/cmd/godoc
 ```
@@ -1426,8 +1426,8 @@ go install -v golang.org/x/tools/cmd/godoc
 - 为每个 pkg 添加 `doc.go` 注释
 - 通过 `go doc .` 命令展示本 pkg 的注释
 
-```shell
-cd apiserver/user/repo
+```bash
+cd 80_server/apiserver/user/repo
 go doc .
 ```
 
@@ -1436,8 +1436,8 @@ go doc .
 - 在每个 type/interface/func 上添加 `// func-name ...` 注释
 - 通过 `go doc func-name` 展示该 type/interface/func 的详细注释
 
-```shell
-cd apiserver/user/repo
+```bash
+d 80_server/apiserver/user/repo
 go doc SetClient
 ```
 
@@ -1460,7 +1460,7 @@ go doc SetClient
 
 ##### Install
 
-```shell
+```bash
 go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.46
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.46
 golangci-lint version # 输出 golangci-lint 版本号，说明安装成功
@@ -1500,20 +1500,20 @@ run 命令执行 golangci-lint 对代码进行检查，是 golangci-lint 最为�
 
 ##### Install
 
-```shell
+```bash
 go get -u github.com/marmotedu/addlicense
 go install github.com/marmotedu/addlicense
 ```
 
 ##### Check
 
-```shell
+```bash
 addlicense --check -f ./scripts/boilerplate.txt . --skip-dirs=third_party
 ```
 
 ##### Add License
 
-```shell
+```bash
 addlicense -v -f ./scripts/boilerplate.txt . --skip-dirs=third_party
 ```
 

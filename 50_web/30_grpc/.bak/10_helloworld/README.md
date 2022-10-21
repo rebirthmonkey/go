@@ -104,17 +104,20 @@ message HelloReply {
 
 根据 .proto 服务定义生成 gRPC 客户端和服务器接口。可以使用 protoc 编译工具，并指定使用其 Go 语言插件来生成：
 
-```shell
-$ protoc --go_out=. --go_opt=paths=source_relative \
+```bash
+protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     helloworld.proto
 
-$ protoc --go_out=plugins=grpc:. --go_opt=paths=source_relative ProductInfo.proto
-$ protoc --go_out=plugins=grpc:. --go_opt=paths=source_relative ProductInfo.proto
+protoc --go_out=plugins=grpc:. --go_opt=paths=source_relative ProductInfo.proto
+protoc --go_out=plugins=grpc:. --go_opt=paths=source_relative ProductInfo.proto
     
 protoc --go_out=. --go_opt=paths=source_relative \
   --go-grpc_out=require_unimplemented_servers=false:. --go-grpc_opt=paths=source_relative \
   ProductInfo.proto
+```
+
+```shell
 $ ls
 helloworld.pb.go  helloworld.proto # 新增了一个 helloworld.pb.go 文件
 ```
@@ -155,7 +158,7 @@ helloworld.pb.go  helloworld.proto # 新增了一个 helloworld.pb.go 文件
   - An interface type (or *stub*) for clients to call with the methods defined in the `RouteGuide` service.
   - An interface type for servers to implement, also with the methods defined in the `RouteGuide` service.
 
-```shell
+```bash
 protoc --go_out=plugins=grpc:./test/ ./test.proto
 
 protoc --go_out=. --go_opt=paths=source_relative \

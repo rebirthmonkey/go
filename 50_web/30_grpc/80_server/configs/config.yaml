@@ -16,8 +16,8 @@ gin:
     bind-address: 127.0.0.1 # HTTPS 安全模式的 IP 地址，默认为 0.0.0.0
     bind-port: 8443 # 使用 HTTPS 安全模式的端口号，设置为 0 表示不启用 HTTPS，默认为 8443
     tls:
-      cert-file: {CERT-FILE} # 包含 x509 证书的文件路径，用 HTTPS 认证
-      private-key-file: {PRIVATE-KEY-FILE} # TLS 私钥
+      cert-file: {{CERT-FILE}} # 包含 x509 证书的文件路径，用 HTTPS 认证
+      private-key-file: {{PRIVATE-KEY-FILE}} # TLS 私钥
 
 # GRPC 服务配置
 grpc:
