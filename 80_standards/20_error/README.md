@@ -1,6 +1,8 @@
 # 错误码
 
-传统的 try...catch... 结构很容易让开发人员把错误和异常混为一谈，甚至把业务错误处理的一部分当做异常来处理，于是会在程序中看到一大堆的 catch...。在 Go 中区分了错误和异常，Go 认为错误应该明确地当成业务的一部分，任何可以预见的问题都需要做错误处理。于是在 Go 代码中，任何调用者在接收函数返回值的同时也需要对错误进行处理，以防遗漏任何运行时可能的错误。异常则是意料之外的，甚至可以认为在编码中不可能发生的，Go 遇到异常会自动触发 panic，触发 panic 程序会自动退出。除了程序自动触发异常，一些不可允许的情况也可以手动触发异常。所以在 Go 编程中，所有非主线逻辑都以 error 的方式来处理。
+针对大部分 web service，很多都是对外暴露 RESTful API 接口，内部系统通信采用 RPC 协议。因为 RESTful API 接口有一些天生的优势，比如规范、调试友好、易懂，所以通常作为直接面向用户的通信规范。
+
+既然是直接面向用户，那么首先就要求消息返回格式是规范的。其次，如果接口报错，还要能给用户提供一些有用的报错信息，通常需要包含错误 Code（用来唯一定位一次错误）和 Message（用来展示出错的信息），这就需要设计一套规范的、科学的错误码。
 
 ## HTTP状态码
 
@@ -21,15 +23,28 @@ Go net/http 包提供了 60 个 HTTP 码，大致分为如下 5 类：
   - 404：表示资源找不到。
 - 500：表示服务端出问题。
 
-## 业务错误码
+## 错误码
 
-除了 HTTP 的状态码，还需要有额外的业务错误码。因为 HTTP 状态码有限，并且是只跟 HTTP 层相关的。Go 的 net/http 中包含的 60 个 HTTP 状态码，基本都是跟 HTTP 请求相关的错误码。在一个大型系统中，这些错误码完全不够用，而且这些错误码跟业务没有任何关联，满足不了业务的需求，所以需要有业务错误码。
+Go 应用如果出错，需要用户或开发者感知到这些错误，并且能够提供一些有效的错误信息进行排障，这就需要对错误进行处理。除了 HTTP 的状态码，还需要有额外的业务错误码。因为 HTTP 状态码有限，并且是只跟 HTTP 层相关的。Go 的 net/http 中包含的 60 个 HTTP 状态码，基本都是跟 HTTP 请求相关的错误码。在一个大型系统中，这些错误码完全不够用，而且这些错误码跟业务没有任何关联，满足不了业务的需求，所以需要有业务错误码。请求出错时，可以通过 HTTP 状态码直接感知到请求出错。需要返回详细出错信息时，通常需要返回 3 类信息：业务错误码、错误信息和参考文档（可选）。具体与 HTTP 状态码的配合方式为：返回 HTTP 404、500 状态码，并在 Body 中返回详细的业务错误码和错误信息。这种方式既能通过 HTTP 状态码使客户端方便地知道请求出错，又可以根据返回的信息知道哪里出错，以及如何解决问题。同时，返回了机器友好的业务业务码，可以在有需要时让程序进一步判断处理。
+
+在实际开发中，引入业务错误码有下面几个好处：
+
+- 可以非常方便地定位问题和定位代码行（看到错误码知道什么意思、搜索错误码可以定位到错误码所在行、某个错误类型的唯一标识）。
+- 错误码包含一定的信息，通过错误码可以判断出错误级别、错误模块和具体错误信息。
+- Go 中的 HTTP 服务器开发都是引用 net/http 包，该包中只有 60 个错误码，基本都是跟 HTTP 请求相关的错误码，在一个大型系统中，这些错误码完全不够用，而且这些错误码跟业务没有任何关联，满足不了业务的需求。引入业务错误码，则可以解决这些问题。
+- 业务开发过程中，可能需要判断错误是哪种类型，以便做相应的逻辑处理，通过定制的错误可以很容易做到这点，例如：
+
+```go
+if err == code.ErrBind {
+  ...
+}
+```
+
+这里要注意，业务错误码可以是一个整数，也可以是一个整型字符串，还可以是一个字符型字符串，它是错误的唯一标识。
+
+### 业务错误码
 
 业务错误码是在业务开发过程中，用于判断错误是哪种类型，以便做相应的逻辑处理。一方面，可以根据需要自行扩展，另一方面也能够精准地定位到具体是哪个业务错误。同时，因为业务错误码通常是对计算机友好的 10 进制整数，基于业务错误码，计算机也可以很方便地进行一些分支处理。业务码也要有一定规则，可以通过业务码迅速定位出是哪类错误。
-
-请求出错时，可以通过 HTTP 状态码直接感知到请求出错。需要返回详细出错信息时，通常需要返回 3 类信息：业务错误码、错误信息和参考文档（可选）。具体与 HTTP 状态码的配合方式为：返回 HTTP 404、500 状态码，并在 Body 中返回详细的错误信息。这种方式既能通过 HTTP 状态码使客户端方便地知道请求出错，又可以根据返回的信息知道哪里出错，以及如何解决问题。同时，返回了机器友好的业务业务码，可以在有需要时让程序进一步判断处理。
-
-### 设计规范
 
 参考新浪的业务错误码设计，业务错误码需要用纯数字表示，不同部位代表不同的服务、不同的模块。业务错误码从 100101 开始，其中：
 
@@ -52,11 +67,15 @@ Go net/http 包提供了 60 个 HTTP 码，大致分为如下 5 类：
 | 11   | 02   | apiserver服务 - 策略模块错误 |
 | 12   | 00   | 其他服务 - 认证模块错误      |
 
-#### 错误信息规范
+#### 具体错误码
+
+具体错误码可参考：[错误码](40_error-code.md)，该错误码描述是通过程序自动生成的。
+
+### 错误信息
 
 错误描述包括：对外的错误描述和对内的错误描述两部分。
 
-##### 对外错误描述
+#### 对外错误描述
 
 - 统一大写开头，结尾不要加`.`
 - 要简洁，并能准确说明问题
@@ -72,7 +91,7 @@ Go net/http 包提供了 60 个 HTTP 码，大致分为如下 5 类：
 }
 ```
 
-##### 对内错误描述
+#### 对内错误描述
 
 - 告诉用户他们可以做什么，而不是告诉他们不能做什么。
 - 当声明一个需求时，用 must 而不是 should。例如，must be greater than 0、must match regex '[a-z]+'。
@@ -86,33 +105,7 @@ Go net/http 包提供了 60 个 HTTP 码，大致分为如下 5 类：
 - 错误描述用小写字母开头，结尾不要加标点符号。
 - 错误信息是直接暴露给用户的，不能包含敏感信息
 
-### 具体错误码
-
-具体错误码可参考：[错误码](40_error-code.md)，该错误码描述是通过程序自动生成的。
-
-## errors包
-
-设计一个错误包时，需要包含以下功能：
-
-- 支持错误堆栈：
-- 支持不同打印格式：如%+v、%v、%s等格式，可以根据需要打印不同丰富度的错误信息
-  - %s/%v：只打印可向用户展示的 External Message
-  - %-v：打印调用栈中最后一个错误的详细信息
-  - %+v：打印调用栈中所有错误的详细信息
-  - %#-v：同 %-v，只是以 JSON 的格式输出
-  - %#+v：同 %+v，只是以 JSON 的格式输出
-
-- 支持 Wrap/Unwrap 功能：也就是在已有的错误上，追加一些新的信息，如 errors.Wrap(err, "open file failed") 。Wrap 通常用在调用函数中，调用函数可以基于被调函数报错时的错误 Wrap 一些自己的信息、丰富报错信息，方便后期的错误定位。
-- 有 is 方法：在实际开发中，经常需要判断某个 error 是否是指定的 error。因为有了 wrapping  error，这样判断就会有问题。因为根本不知道返回的 err 是不是一个嵌套的 error，嵌套了几层。这种情况下，错误包就需要提供 Is 函数：func Is(err, target error) bool当 err 和 target 是同一个，或 err 是一个 wrapping error 时，如果 target 也包含在这个嵌套 error  链中，返回 true，否则返回 fasle。
-- 把 error 转为另外一个 error：
-- 非格式化创建和格式化创建：
-
-```go
-errors.New("file not found") // 非格式化创建
-errors.Errorf("file %s not found", "iam-apiserver") // 格式化创建
-```
-
-## 规范
+## 操作规范
 
 ### 命名规范
 
@@ -240,6 +233,118 @@ if err != nil {
 - 只在 main 包中使用，只有当程序完全不可运行时使用 panic，例如无法打开文件、无法连接 DB、配置文件错误等导致程序无法正常运行。
 - 使用 log.Fatal 来记录错误，这样就可以由 log 来结束程序，或将 panic 抛出的异常记录到日志文件中，方便排查问题。
 - 在业务逻辑/包中禁止使用 panic，否则否则在调用该包时会出现莫名的 panic。包内建议采用 error 而不是 panic 来传递错误。
+
+## errors 包
+
+处理错误也离不开错误包，业界有很多优秀的、开源的错误包可供选择，如 Go 标准库自带的 errors 包、github.com/pkg/errors包。但是这些包目前还不支持错误码，很难满足生产级应用的需求。所以，在实际开发中，有必要开发出适合自己错误码设计的错误包。
+
+### 功能需求
+
+设计一个错误包时，需要包含以下功能：
+
+- 支持错误堆栈：
+- 支持不同打印格式：如%+v、%v、%s等格式，可以根据需要打印不同丰富度的错误信息
+  - %s/%v：只打印可向用户展示的 External Message
+  - %-v：打印调用栈中最后一个错误的详细信息
+  - %+v：打印调用栈中所有错误的详细信息
+  - %#-v：同 %-v，只是以 JSON 的格式输出
+  - %#+v：同 %+v，只是以 JSON 的格式输出
+
+- 支持 Wrap/Unwrap 功能：也就是在已有的错误上，追加一些新的信息，如 errors.Wrap(err, "open file failed") 。Wrap 通常用在调用函数中，调用函数可以基于被调函数报错时的错误 Wrap 一些自己的信息、丰富报错信息，方便后期的错误定位。
+- 有 is 方法：在实际开发中，经常需要判断某个 error 是否是指定的 error。因为有了 wrapping  error，这样判断就会有问题。因为根本不知道返回的 err 是不是一个嵌套的 error，嵌套了几层。这种情况下，错误包就需要提供 Is 函数：func Is(err, target error) bool当 err 和 target 是同一个，或 err 是一个 wrapping error 时，如果 target 也包含在这个嵌套 error  链中，返回 true，否则返回 fasle。
+- 把 error 转为另外一个 error：
+- 非格式化创建和格式化创建：
+
+```go
+errors.New("file not found") // 非格式化创建
+errors.Errorf("file %s not found", "iam-apiserver") // 格式化创建
+```
+
+### 实现
+
+通过在文件 errors.go 中增加新的 withCode 结构体，来引入一种新的错误类型，该错误类型可以记录错误码、错误堆栈、错误原因和具体的错误信息。
+
+```go
+type withCode struct {
+    err   error // error 错误
+    code  int // 业务错误码
+    cause error // cause error
+    *stack // 错误堆栈
+}
+```
+
+### 使用
+
+```go
+package main
+
+import (
+    "fmt"
+
+    "github.com/rebirthmonkey/pkg/errors"
+    code "github.com/marmotedu/sample-code"
+)
+
+func main() {
+    if err := getUser(); err != nil {
+        fmt.Printf("%+v\n", err)
+        // do some business process based on the error type
+        if errors.IsCode(err, code.ErrEncodingFailed) {
+            fmt.Println("this is a ErrEncodingFailed error")
+        }
+
+        // we can also find the cause error
+        fmt.Println(errors.Cause(err))
+    }
+}
+
+func getUser() error {
+    if err := queryDatabase(); err != nil {
+        return errors.WrapC(err, code.ErrEncodingFailed, "get user 'wukong' failed.")
+    }
+
+    return nil
+}
+
+func queryDatabase() error {
+    return errors.WithCode(code.ErrDatabase, "user 'wukong' not found.")
+}
+```
+
+上述代码中，通过 WithCode 函数来创建新的 withCode 类型的错误。通过 WrapC 来将一个 error 封装成一个 withCode 类型的错误。通过 IsCode 来判断一个 error 链中是否包含指定的 code。
+
+可能会问，这些错误信息中的 100101 业务错误码，还有 Database error 这种对外展示的报错信息等等，是从哪里获取的？首先，withCode 中包含了 int 类型的业务错误码，例如100101。其次，当使用 github.com/rebirthmonkey/pkg/errors 包时，需要调用 Register 或 MustRegister，将一个 Coder 注册到 github.com/rebithmonkey/pkg/errors 开辟的内存中，数据结构为：
+
+```go
+var codes = map[int]Coder{}
+```
+
+Coder 是一个接口，定义为：
+
+```go
+type Coder interface {
+  // HTTP status that should be used for the associated error code.
+  HTTPStatus() int
+
+  // External (user) facing error text.
+  String() string
+
+  // Reference returns the detail documents for user.
+  Reference() string
+
+  // Code returns the code of the coder
+  Code() int
+}
+```
+
+
+这样 withCode 的 Format 方法，就能够通过 withCode 中的code 字段获取到对应的 Coder，并通过 Coder 提供的HTTPStatus、String、Reference、Code 函数，来获取 withCode 中 code 的详细信息，最后格式化打印。
+
+这里有 2 个注册函数：Register 和 MustRegister，二者唯一区别是：当重复定义同一个业务错误码时，MustRegister 会 panic，这样可以防止后面注册的错误覆盖掉之前注册的错误。在实际开发中，建议使用 MustRegister。
+
+XXX() 和 MustXXX() 的函数命名方式，是一种 Go 代码设计技巧，在 Go 代码中经常使用，例如 Go 标准库中 regexp 包提供的 Compile 和 MustCompile 函数。和 XXX 相比，MustXXX 会在某种情况不满足时 panic。因此使用 MustXXX 的开发者看到函数名就会有一个心理预期：使用不当，会造成程序 panic。
+
+最后，建议在实际的生产环境中，可以使用 JSON 格式打印日志，JSON 格式的日志可以非常方便的供日志系统解析。开发者可以根据需要，选择 `%#-v` 或 `%#+v` 两种格式。
 
 ## Lab
 

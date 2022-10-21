@@ -131,7 +131,7 @@ glog_file.go  glog.go  glog_test.go  LICENSE   README
 
 一个 Go 应用包含 3 大部分：Go 应用、项目管理和文档。所以，本项目目录也可以分为这 3 大类。同时，Go 应用又贯穿开发阶段、测试阶段和部署阶段，相应的应用类的目录，又可以按开发流程分为更小的子类。当然了，这些我建议的目录，Go 项目目录中还有一些不建议的目录。所以整体来看，目录结构可以按下图的方式来分类。
 
-<img src="figures/image-20221019090819483.png" alt="image-20221019090819483" style="zoom:50%;" />
+<img src="figures/image-20221019094120364.png" alt="image-20221019094120364" style="zoom:50%;" />
 
 #### 开发
 

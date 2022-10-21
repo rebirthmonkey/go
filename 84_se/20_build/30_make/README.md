@@ -2,7 +2,7 @@
 
 ## 简介
 
-Makefile 是高效管理项目的有效手段之一，可以通过 Makefile 来管理项目的启动、编译、打包、部署，为此需要编写 Makefile 文件。
+Makefile 是高效管理项目的有效手段之一，可以通过 Makefile 来管理项目的启动、编译、打包、部署，为此需要编写 Makefile 文件。通常而言，Go 项目的 Makefile 应该实现以下功能：格式化代码、静态代码检查、单元测试、代码构建、文件清理、帮助等。如果通过 Docker 部署，还需要实现 Docker 镜像打包功能。因为 Go 是跨平台的语言，所以构建和 Docker 打包命令还需要支持不同的 CPU 架构和平台。为了能够更好地控制 Makefile 命令的行为，还需要支持 Options。
 
 ## 功能
 
@@ -34,7 +34,7 @@ Makefile 是高效管理项目的有效手段之一，可以通过 Makefile 来�
 - 清理类
   - clean: Remove all files that are created by building.  
 
-## 结构
+## 目录结构
 
 对于大型项目来说，需要管理的内容很多，所有管理功能都集成在一个 Makefile 中，可能会导致 Makefile 很大，难以阅读和维护，所以建议采用分层的设计方法。
 
@@ -42,7 +42,7 @@ Makefile 是高效管理项目的有效手段之一，可以通过 Makefile 来�
 
 在如下的 Makefile 组织方式中，根目录下的 Makefile 聚合了项目所有的管理功能。同时，还将这些功能进行分类，把相同类别的放在同一个 Makefile 中，这样可以使得 Makefile  更容易维护。对于复杂的命令，则编写成独立的 shell 脚本，并在 Makefile 命令中调用这些 shell 脚本。
 
-<img src="figures/5c524e0297b6d6e4e151643d2e1bbbf7.png" alt="img" style="zoom: 25%;" />
+<img src="figures/image-20221020155512440.png" alt="image-20221020155512440" style="zoom:50%;" />
 
 具体目录结构如下：
 
