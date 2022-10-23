@@ -277,7 +277,7 @@ Config 结构体会在 App 启动后幻化为 App 自身的 runtime 结构体，
 
 - preparedapiserver.Run()：运行 preparedapiserver，如 `preparedapiserver.Run()`
 
-##Lab
+##操作
 
 ```bash
 go run cmd/apiserver.go -c configs/config.yaml
@@ -285,4 +285,4 @@ go run cmd/apiserver.go -c configs/config.yaml
 
 ## Question
 
-介绍 Cobra Command 加载的 flat、config-file 的逻辑及顺序？
+针对当前代码应用，描述 Cobra Command 加载的 flag、config-file 的逻辑及顺序，并给与验证说明。

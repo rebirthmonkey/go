@@ -1,4 +1,4 @@
-# GIN
+# Gin
 
 ## 简介
 
@@ -842,12 +842,6 @@ type ObjectMeta struct {
 }
 ```
 
-
-
-
-
-
-
 ### 统一返回
 
 要想返回一个固定格式的消息，最好的方式就是使用同一个返回函数。因为 API 接口都是通过同一个函数来返回的，其返回格式自然是统一的。apiserver 使用 WriteResponse函数来返回结果，WriteResponse 函数定义如下：
@@ -970,6 +964,10 @@ curl --insecure -X DELETE http://127.0.0.1:8080/v1/users/user99
 ```
 
 > 执行完后使用`kill -9 $!`结束后台任务
+
+### Question
+
+根据代码，请描述当前应用中，如何实现多接口同时运行，采用了什么机制？并且给出代码予以说明。
 
 ## Ref
 
