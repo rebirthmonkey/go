@@ -2,7 +2,7 @@
 
 ## API 简介
 
-API（Application Programming Interface，应用程序编程接口）是一些预先定义的函数或者接口，目的是提供应用程序与开发人员基于某软件或硬件得以访问一组例程的能力，而又无须访问源码，或理解内部工作机制的细节。这些接口充当软件中介，为应用程序之间的交互和对话建立特定的定义和规则。API 负责将响应从用户传递到系统，然后从系统返回给用户。
+API（Application Programming Interface）是一些预先定义的函数或者接口，目的是提供应用程序与开发人员基于某软件或硬件得以访问一组例程的能力，而又无须访问源码，或理解内部工作机制的细节。这些接口充当软件中介，为应用程序之间的交互和对话建立特定的定义和规则。API 负责将响应从用户传递到系统，然后从系统返回给用户。
 
 假设我们正在预订一个酒店。我们在电脑上访问酒店预订页面，连接到互联网的这个页面会将数据（我们的请求）发送到服务器。然后，服务器检索数据、解析它，一旦所需的操作得到执行，它就会向我们发送一个响应，并在我们的界面上提供信息。这个过程需要 API 才能实现。API 指定了一个应用程序（网页或移动应用）可以向另一个应用程序发出的请求类型，并进一步确定：如何发出这些请求、使用哪些数据格式、以及用户必须遵循的实践。
 
@@ -16,6 +16,15 @@ REST （REpresentational State Transfer）是由 Roy Fielding 在他的论文《
 
 REST 规范把所有内容都视为资源，也就是说网络上一切皆资源。REST 对资源的操作包括获取、创建、修改和删除，这些操作正好对应 HTTP 提供的 GET、POST、PUT 和 DELETE 方法。由于 REST 天生和 HTTP 相辅相成，因此 HTTP 协议已经成了实现 RESTful  API 事实上的标准。REST 风格虽然适用于很多传输协议，但在实际开发中，REST 由于天生和 HTTP 协议相辅相成，因此 HTTP 协议已经成了实现  RESTful API 事实上的标准。在 HTTP 协议中通过 POST、DELETE、PUT、GET 方法来对应 REST  资源的增、删、改、查操作，具体的对应关系如下：
 
+|        | Collection资源（/users）                                   | Member资源(/users/:username) |
+| ------ | ---------------------------------------------------------- | ---------------------------- |
+| GET    | 获取一个Collection下所有Member的信息                       | 获取一个Member的状态表征     |
+| PUT    | 用另外一个Collection替换这个Collection。不常用，不建议使用 | 更新一个Member的状态表征     |
+| POST   | 在Collection中新建一个Member                               | 没有这类操作                 |
+| DELETE | 删除整个Collection，可以用来批量删除资源                   | 删除这个Member               |
+
+例如 User REST：
+
 | HTTP 方法 | 行为                     | URI          | 示例说明                  |
 | --------- | ------------------------ | ------------ | ------------------------- |
 | GET       | 获取资源列表             | /users       | 获取用户列表              |
@@ -27,14 +36,9 @@ REST 规范把所有内容都视为资源，也就是说网络上一切皆资源
 REST 风格的 API 具有一些天然的优势，例如通过 HTTP 协议降低了客户端的耦合，具有极好的开放性。因此越来越多的开发者使用 REST 这种风格设计 API，REST 规范中有如下几个核心：
 
 - 以资源（resource）为中心：所有的东西都抽象成资源，所有的行为都应该是在资源上的 CRUD 操作。资源对应着面向对象里的对象，资源使用 URI 标识，每个资源实例都有一个唯一的 URI 标识。如有一个用户，用户名是 admin，那么它的 URI 标识就可以是 /users/admin。
-- 资源是有状态的：使用 JSON/XML 等在 HTTP Body 里表征资源的状态。客户端通过四个 HTTP 动词对服务器端资源进行操作，实现“表现层状态转化”。
+- 资源是有状态的：使用 JSON/XML 等在 HTTP Body 里表征资源的状态。
+- 使用标准的方法来更改资源的状态：客户端通过四个 HTTP 动词对服务器端资源进行操作，实现“表现层状态转化”。
 - 无状态：这里的无状态是指每个 RESTful API 请求都包含了所有足够完成本次操作的信息，服务器端无须保持 session 信息。无状态对于服务端的弹性扩容是很重要的。
-
-1. REST 中一切实体都被抽象成资源，每个资源有一个唯一的标识 —— URI，所有的行为都应该是在资源上的 CRUD 操作
-2. 使用标准的方法来更改资源的状态，常见的操作有：资源的增删改查操作
-3. 无状态：这里的无状态是指每个 RESTful API 请求都包含了所有足够完成本次操作的信息，服务器端无须保持 Session
-
-> 无状态对于服务端的弹性扩容是很重要的。
 
 ### RPC
 
@@ -44,7 +48,7 @@ RPC（Remote Procedure  Call）是一种通信协议，该协议允许运行于�
 
 RPC 的调用过程如下：
 
-<img src="figures/image-20220913091707795.png" alt="image-20220913091707795" style="zoom:50%;" />
+<img src="figures/image-20221021192744762.png" alt="image-20221021192744762" style="zoom:50%;" />
 
 1. Client 通过本地调用，调用 Client Stub
 2. Client Stub 将参数打包（也叫 Marshalling）成一个消息，然后发送这个消息
@@ -87,7 +91,7 @@ RPC 相比 REST 的优点主要有 3 点：
 
 媒体类型是独立于平台的类型，设计用于分布式系统间的通信，媒体类型用于传递信息，一个正式的规范定义了这些信息应该如何表示。HTTP 的 REST 能够提供多种不同的响应形式，常见的是 XML 和 JSON。JSON 无论从形式上还是使用方法上都更简单。相比 XML，JSON 的内容更加紧凑，数据展现形式直观易懂，开发测试都非常方便，所以在媒体类型选择上，选择了 JSON 格式，这也是很多大公司所采用的格式。
 
-## REST API规范
+## REST规范
 
 REST 是一种规范，而 RESTful API 则是满足这种规范的 API 接口，其设计原则包括：
 
@@ -129,8 +133,8 @@ API 通常的命名方式有 3 种：
   - Collection：一组资源的集合，如系统里有很多用户（User）, 这些用户的集合就是 Collection。Collection 的 URI 标识应该是“域名/资源名复数”，如 `https://iam.api.rebirthmonkey.com/users`。
   - Member：单个特定资源，如系统中特定名字的用户，也就是 Collection 中的一个 Member。Member 的 URI 标识应该是 “域名/资源名复数/资源名称”，如 `https:// iam.api.rebirthmonkey/users/admin`。
 - URI 命名：
-  - URI 结尾不应包含/。
-  - URI 中不能出现下划线 _，**必须用中杠线 - 代替**。
+  - URI 结尾不应包含 `/`。
+  - URI 中不能出现下划线 `_`，**必须用中杠线 - 代替**。
   - URI 路径用小写，不要用大写。
 - URI 层级避免过深：超过 2 层的资源嵌套会很乱，建议将其他资源转化为“?参数：，如：
 
@@ -147,7 +151,13 @@ API 通常的命名方式有 3 种：
 
 将 REST 资源操作映射为 HTTP 方法，基本上 REST 都是使用 HTTP 协议原生的 GET、PUT、POST、DELETE 来标识对资源的 CRUD 操作的，形成的规范如下：
 
-<img src="figures/image-20220827165808088.png" alt="image-20220827165808088" style="zoom: 33%;" />
+| HTTP方法 | **行为**                 | **URI**      | **示例说明**              |
+| -------- | ------------------------ | ------------ | ------------------------- |
+| GET      | 获取资源列表             | /users       | 获取用户列表              |
+| GET      | 获取一个具体的资源       | /users/admin | 获取 admin 用户的详细信息 |
+| POST     | 创建一个新的资源         | /users       | 创建一个新用户            |
+| PUT      | 以整体的方式更新一个资源 | /users/admin | 更新 user 为 admin 的用户 |
+| DELETE   | 删除服务器上的一个资源   | /users/admin | 删除 user 为 admin 的用户 |
 
 在使用 HTTP 时，有以下 2 点需要注意：
 
@@ -171,7 +181,9 @@ REST 资源的查询接口，通常都需要实现分页、过滤、排序、搜
 - 排序：用户很多时候会根据创建时间或其他因素列出一个 Collection 中前 100 个 Member，这时可以在 URI 参数中指明排序参数，如 `/users?sort=age,`desc`。
 - 搜索：当一个资源的 Member 太多时，可能想通过搜索快速找到所需要的 Member，或想搜有没有名字为 xxx 的某类资源，这时就需要提供搜索功能，搜索建议按模糊匹配来搜索。
 
-## 框架组成
+## Web 框架
+
+### 简介
 
 一个 Web  程序的编写往往要涉及更多的方面，目前各种各样的中间件能够完成一些任务。但许多时候，我们总是希望他人帮我们完成更多的事情，于是就产生了许多的 Web 框架。根据架构的不同，这些框架大致可分为两大类：
 
@@ -180,7 +192,7 @@ REST 资源的查询接口，通常都需要实现分页、过滤、排序、搜
 
 对于究竟该选择微架构还是全能型架构，仍有较多的争议。像 [The Case for Go Web Frameworks](https://medium.com/@richardeng/the-case-for-go-web-frameworks-a791fcd79d47#.7qe9n08aw) 一文就力挺全能型架构，并且其副标题就是“Idiomatic Go is not a religion”，但该文也收到了较多的反对意见。总体上来说，Go 语言社区已越来越偏向使用微架构型框架，当将来 `context` 包进入标准库后，`http.Handler` 本身就定义了较完善的中间件编写规范，这种使用微架构的趋势可能更加明显，并且各种微架构的实现方式有望进一步走向统一，这样其实 `http` 包就是一个具有庞大生态系统的微架构框架。
 
-### 参数类型
+#### 参数类型
 
 HTTP 具有以下 5 种参数类型：
 
@@ -190,7 +202,7 @@ HTTP 具有以下 5 种参数类型：
 - HTTP 头参数（header）：例如 `curl -X POST -H 'Content-Type:  application/json' -d '{"username":"colin","password":"colin1234"}'  http://mydomain.com/login`，Content-Type 就是 HTTP 头参数。
 - 消息体参数（body）：例如 `curl -X POST -H 'Content-Type: application/json' -d  '{"username":"colin","password":"colin1234"}'  http://mydomain.com/login`，username 和 password 就是消息体参数。
 
-### 核心功能
+#### 核心功能
 
 <img src="figures/image-20220723172644378.png" alt="image-20220723172644378" style="zoom:33%;" />
 
@@ -206,15 +218,15 @@ HTTP 具有以下 5 种参数类型：
 - RequestID：为了方便定位和跟踪某一次请求，需要支持 RequestID，定位和跟踪 RequestID 主要是为了排障。
 - 跨域：当前的软件架构很多采用了前后端分离的架构。在前后端分离的架构中，前端访问地址和后端访问地址往往是不同的，浏览器为了安全，会针对这种情况设置跨域请求，所以 Web 服务需要能够处理浏览器的跨域请求。
 
-## net/http 框架
+### net/http 框架
 
 - [net/http](10_net-http/README.md)
 
-## Gin 框架
+### Gin 框架
 
 - [Gin](20_gin/README.md)
 
-## gRPC 框架
+### gRPC 框架
 
 - [gRPC](30_grpc/README.md)：gRPC (Google Remote Procedure Call) 是基于 RCP 架构的变体。该技术遵循一个使用 HTTP 2.0 协议的 RPC API 实现，但 HTTP 不会呈现给 API 开发人员或服务器。因此，开发人员无需担心 RPC 概念如何映射到 HTTP，从而降低了复杂性。
 

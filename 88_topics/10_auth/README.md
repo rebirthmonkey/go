@@ -19,7 +19,12 @@
 
 ### Basic
 
-Basic 是最简单的认证方式，它简单地将“用户名:密码”进行 base64 编码后，放到 HTTP Authorization Header 中。HTTP 请求到达后端服务后，后端服务会解析出 Authorization Header 中的 base64 字符串，解码获取用户名和密码，并将用户名和密码跟数据库中记录的值进行比较，如果匹配则认证通过。
+Basic 是最简单的认证方式，它简单地将“用户名:密码”进行 base64 编码后，放到 HTTP Authorization Header 中。HTTP 请求到达后端服务后，后端服务会解析出 Authorization Header 中的 base64 字符串，解码获取用户名和密码，并将用户名和密码跟数据库中记录的值进行比较，如果匹配则认证通过。其具体使用方式如下：
+
+```shell
+basic=`echo -n 'admin:Admin@2021'|base64`
+curl -XPOST -H"Authorization: Basic ${basic}" http://127.0.0.1:8080/login
+```
 
 通过 base64 编码，可以将密码以非明文的方式传输，增加一定的安全性。但 base64 不是加密技术，入侵者仍然可以截获 base64 字符串，并反编码获取用户名和密码。另外，即使 Basic 认证中密码被加密，入侵者仍可通过加密后的用户名和密码进行重放攻击。所以，Basic 认证虽然简单，但极不安全。使用 Basic 认证的唯一方式就是将它和 SSL 配合使用，来确保整个认证过程是安全的。
 
@@ -117,6 +122,8 @@ Bearer 认证，也被称为令牌认证，是一种 HTTP 身份验证方法。B
 
 JWT 是 Bearer Token 的一个具体实现，由 JSON 数据格式组成，通过 Hash 散列算法生成一个字符串，该字符串可以用来进行授权和信息交换。使用 JWT Token 进行认证有很多优点，比如说无需在服务端存储用户数据，可以减轻服务端压力；而且采用 JSON 数据格式，比较易读。除此之外，使用 JWT  Token 还有跨语言、轻量级等优点。
 
+##### 认证流程
+
 用 JWT Token 进行认证具体可以分为 4 步：
 
 - 客户端使用用户名和密码请求登录。
@@ -126,15 +133,17 @@ JWT 是 Bearer Token 的一个具体实现，由 JSON 数据格式组成，通�
 
 <img src="figures/image-20220914155333949.png" alt="image-20220914155333949" style="zoom:50%;" />
 
-##### Header
+##### 组成部分
 
-JWT 由三部分组成，分别是 Header、Payload 和 Signature，它们之间用圆点.连接，例如：
+JWT 由三部分组成，分别是 Header、Payload 和 Signature，它们之间用圆点 `.` 连接，例如：
 
 ```shell
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2NDI4NTY2MzcsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MzUwODA2MzcsInN1YiI6ImFkbWluIn0.Shw27RKENE_2MVBq7-c8OmgYdF92UmdwS8xE-Fts2FM
 ```
 
 <img src="figures/image-20220914155350215.png" alt="image-20220914155350215" style="zoom:50%;" />
+
+###### Header
 
 JWT Token 的 Header 中包含两部分信息：一是 Token 的类型，二是 Token 所使用的加密算法。例如：
 
@@ -165,7 +174,7 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
 }
 ```
 
-##### Payload
+###### Payload
 
 Payload 中携带 Token 的具体内容由 3 部分组成：JWT 标准中注册的声明（可选）、公共的声明、私有的声明。
 
@@ -203,7 +212,7 @@ NjA0MTUxNzg3LCJpc3MiOiJpYW1jdGwiLCJuYmYiOjE2MDQxNTE3ODd9
 
 除此之外，还有公共的声明和私有的声明。公共的声明可以添加任何的需要的信息，一般添加用户的相关信息或其他业务需要的信息，注意不要添加敏感信息；私有声明是客户端和服务端所共同定义的声明，因为 base64 是对称解密的，所以一般不建议存放敏感信息。
 
-##### Signature
+###### Signature
 
 Signature 是 Token 的签名部分，通过如下方式生成：将 Header 和 Payload 分别 base64 编码后，用 . 连接。然后再使用 Header 中声明的加密方式，利用 secretKey 对连接后的字符串进行加密，加密后的字符串即为最终的  Signature。secretKey 是密钥，保存在服务器中，一般通过配置文件来保存。这里要注意，密钥一定不能泄露。密钥泄露后，入侵者可以使用该密钥来签发 JWT Token，从而入侵系统。最后生成的 Token 如下：
 
@@ -235,7 +244,101 @@ jwt=`echo -n 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTEzMTQyMjMsImlkI
 curl -XGET -H "Content-Type: application/json" -H "Authorization: Bearer ${jwt}"  http://127.0.0.1:8080/ping/
 ```
 
+## apiserver 示例
 
+从认证的角度，apiserver 需要使用 “用户名:密码” 这种认证方式，即 Basic 认证。也需要提供 Bearer Token 的认证方式，目前最受欢迎的 Token 格式是 JWT Token。
+
+ 
+
+### API 接口
+
+密钥相关接口
+
+| **接口名称**              | **接口功能** |
+| ------------------------- | ------------ |
+| POST  /v1/secrets         | 创建密钥     |
+| DELETE  /v1/secrets/:name | 删除密钥     |
+| PUT  /v1/secrets/:name    | 修改密钥属性 |
+| GET  /v1/secrets/:name    | 查询密钥信息 |
+| GET  /v1/secrets          | 查询密钥列表 |
+
+#### 实际操作
+
+以下 6 步操作：
+
+- 登录 apiserver，获取 token。
+
+```shell
+curl -s -XPOST -H"Authorization: Basic `echo -n 'admin:Admin@2021'|base64`" http://127.0.0.1:8080/login | jq -r .token
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzUwNTk4NDIsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MjcyODM4NDIsInN1YiI6ImFkbWluIn0.gTS0n-7njLtpCJ7mvSnct2p3TxNTUQaduNXxqqLwGfI
+
+# 这里，为了便于使用，我将token 设置为环境变量：
+TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzUwNTk4NDIsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MjcyODM4NDIsInN1YiI6ImFkbWluIn0.gTS0n-7njLtpCJ7mvSnct2p3TxNTUQaduNXxqqLwGfI
+```
+
+- 创建一个名为 secret0 的 secret：请求返回头中返回了 X-Request-Id Header，X-Request-Id 唯一标识这次请求。如果这次请求失败，就可以将 X-Request-Id 提供给运维或开发，通过 X-Request-Id 定位出失败的请求，进行排障。另外 X-Request-Id 在微服务场景中，也可以透传给其他服务，从而实现请求调用链。
+
+```shell
+curl -v -XPOST -H "Content-Type: application/json" -H"Authorization: Bearer ${TOKEN}" -d'{"metadata":{"name":"secret0"},"expires":0,"description":"admin secret"}' http://127.0.0.1:8080/v1/secrets
+* About to connect() to iam.api.marmotedu.com port 8080 (#0)
+*   Trying 127.0.0.1...
+* Connected to iam.api.marmotedu.com (127.0.0.1) port 8080 (#0)
+> POST /v1/secrets HTTP/1.1
+> User-Agent: curl/7.29.0
+> Host: iam.api.marmotedu.com:8080
+> Accept: */*
+> Content-Type: application/json
+> Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzUwNTk4NDIsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MjcyODM4NDIsInN1YiI6ImFkbWluIn0.gTS0n-7njLtpCJ7mvSnct2p3TxNTUQaduNXxqqLwGfI
+> Content-Length: 72
+> 
+* upload completely sent off: 72 out of 72 bytes
+< HTTP/1.1 200 OK
+< Content-Type: application/json; charset=utf-8
+< X-Request-Id: ff825bea-53de-4020-8e68-4e87574bd1ba
+< Date: Mon, 26 Jul 2021 07:20:26 GMT
+< Content-Length: 313
+< 
+* Connection #0 to host 127.0.0.1 left intact
+{"metadata":{"id":60,"instanceID":"secret-jedr3e","name":"secret0","createdAt":"2021-07-26T15:20:26.885+08:00","updatedAt":"2021-07-26T15:20:26.907+08:00"},"username":"admin","secretID":"U6CxKs0YVWyOp5GrluychYIRxDmMDFd1mOOD","secretKey":"fubNIn8jLA55ktuuTpXM8Iw5ogdR2mlf","expires":0,"description":"admin secret"}
+
+```
+
+- 获取 secret0 的详细信息：
+
+```shell
+curl -XGET -H"Authorization: Bearer ${TOKEN}" http://127.0.0.1:8080/v1/secrets/secret0
+{"metadata":{"id":60,"instanceID":"secret-jedr3e","name":"secret0","createdAt":"2021-07-26T15:20:26+08:00","updatedAt":"2021-07-26T15:20:26+08:00"},"username":"admin","secretID":"U6CxKs0YVWyOp5GrluychYIRxDmMDFd1mOOD","secretKey":"fubNIn8jLA55ktuuTpXM8Iw5ogdR2mlf","expires":0,"description":"admin secret"}
+```
+
+- 更新 secret0 的描述：
+
+```shell
+curl -XPUT -H"Authorization: Bearer ${TOKEN}" -d'{"metadata":{"name":"secret"},"expires":0,"description":"admin secret(modify)"}' http://127.0.0.1:8080/v1/secrets/secret0
+{"metadata":{"id":60,"instanceID":"secret-jedr3e","name":"secret0","createdAt":"2021-07-26T15:20:26+08:00","updatedAt":"2021-07-26T15:23:35.878+08:00"},"username":"admin","secretID":"U6CxKs0YVWyOp5GrluychYIRxDmMDFd1mOOD","secretKey":"fubNIn8jLA55ktuuTpXM8Iw5ogdR2mlf","expires":0,"description":"admin secret(modify)"}
+```
+
+- 取 secret 列表：
+
+```shell
+curl -XGET -H"Authorization: Bearer ${TOKEN}" http://127.0.0.1:8080/v1/secrets
+{"totalCount":1,"items":[{"metadata":{"id":60,"instanceID":"secret-jedr3e","name":"secret0","createdAt":"2021-07-26T15:20:26+08:00","updatedAt":"2021-07-26T15:23:35+08:00"},"username":"admin","secretID":"U6CxKs0YVWyOp5GrluychYIRxDmMDFd1mOOD","secretKey":"fubNIn8jLA55ktuuTpXM8Iw5ogdR2mlf","expires":0,"description":"admin secret(modify)"}]}
+```
+
+- 删除 secret0：
+
+```shell
+curl -XDELETE -H"Authorization: Bearer ${TOKEN}" http://127.0.0.1:8080/v1/secrets/secret0
+null
+```
+
+
+
+ 
+
+
+
+ 
 
 ## Ref
 
