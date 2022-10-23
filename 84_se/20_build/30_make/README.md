@@ -134,7 +134,85 @@ make clean
 
 ## apiserver 示例
 
-- [apiserver 示例](80_server/README.md)：为 apiserver 示例添加 Makefile 自动化构建。
+[apiserver 示例](80_server/README.md)：为 apiserver 示例添加 Makefile 自动化构建。
+
+### Docker 镜像构建
+
+在实际开发中，使用 Dockerfile 来构建是最常用，也最标准的镜像构建方法。Dockerfile 是 Docker 用来构建镜像的文本文件，里面包含了一系列用来构建镜像的指令。
+
+docker build 命令会读取 Dockerfile 的内容，并将 Dockerfile 的内容发送给 Docker 引擎，最终 Docker 引擎会解析 Dockerfile 中的每一条指令，构建出需要的镜像。
+
+docker build的命令格式为：docker build [OPTIONS] PATH | URL | -。PATH、URL、-指出了构建镜像的上下文（context），context 中包含了构建镜像需要的 Dockerfile 文件和其他文件。默认情况下，Docker 构建引擎会查找 context 中名为 Dockerfile 的文件，但可以通过 -f, --file 选项，手动指定 Dockerfile 文件。例如：
+
+```shell
+docker build -f Dockerfile -t dockerhunb.com/rebirthmonkey/apiserver-amd64:test .
+```
+
+#### 构建流程
+
+- 需要编写一个 Dockerfile 文件，以下是 apiserver 的 Dockerfile 文件。这里选择 centos:centos8 作为基础镜像，是因为 centos:centos8 镜像中包含了基本的排障工具，例如 vi、cat、curl、mkdir 等工具。
+
+```dockerfile
+FROM BASE_IMAGE
+LABEL maintainer="<rebirthmonkey@gmail.com>"
+
+WORKDIR /opt/apiserver
+
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+      echo "Asia/Shanghai" > /etc/timezone && \
+      mkdir -p /var/log/apiserver
+
+COPY apiserver /opt/apiserver/bin/
+
+ENTRYPOINT ["/opt/apiserver/bin/apiserver"]
+CMD ["-c", "/etc/apiserver/apiserver.yaml"]
+```
+
+- 执行 docker build 命令来构建镜像。
+
+```shell
+docker build -f Dockerfile -t dockerhunb.com/rebirthmonkey/apiserver-amd64:test .
+```
+
+- 将所有指令构建出的镜像层合并，形成 build 的最后结果。最后一次 commit 生成的镜像 ID 就是最终的镜像ID。
+
+### K8s 资源定义
+
+在 k8s 集群中部署应用，需要编写 k8s 资源的 YAML 定义文件，如 Service、Deployment、ConfigMap、Secret、StatefulSet 等。
+
+#### YAML 编写
+
+YAML文件很复杂，完全从 0 开始编写一个 YAML 定义文件，工作量大、容易出错，也没必要。比较推荐的方式是，使用一些工具来自动生成所需的 YAML。
+
+- 使用 `kubectl run·命令获取 YAML 模板：
+
+```shell
+kubectl run --dry-run=client --image=nginx nginx -o yaml > my-nginx.yaml
+cat my-nginx.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+```
+
+- 导出集群中已有的资源描述：如果想创建一个 k8s 资源，并且发现该资源跟集群中已经创建的资源描述相近或者一致的时候，可以选择导出集群中已经创建资源的 YAML 描述，并基于导出的 YAML 文件进行修改，获得所需的 YAML。
+
+```shell
+kubectl get deployment apiserver -o yaml > apiserver.yaml
+```
+
+- 使用 k8s YAML 的一些工具，如：kubeval、kube-score
 
 ## Ref
 

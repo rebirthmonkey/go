@@ -340,6 +340,119 @@ curl -XDELETE -H"Authorization: Bearer ${TOKEN}" http://127.0.0.1:8080/v1/secret
 null
 ```
 
+### Basic
+
+apiserver 通过创建需要的认证策略，并加载到需要认证的 API 路由上，来实现 API 认证。
+
+Basic认证通过用户名和密码来进行认证，通常用在登录接口 /login 中。
+
+### JWT
+
+Basic 认证通过用户名和密码来进行认证，通常用在登录接口 /login 中。用户登录成功后，会返回 JWT Token，前端会保存该 JWT Token 在浏览器的 Cookie 或 LocalStorage 中，供后续请求使用。后续请求时，均会携带该 Token，以完成 Bearer 认证。
+
+在 `apisefver/server/gin.go` 中：
+
+```go
+jwtStrategy, _ := newJWTAuth().(auth.JWTStrategy)
+g.POST("/login", jwtStrategy.LoginHandler)
+g.POST("/logout", jwtStrategy.LogoutHandler)
+```
+
+通过 newJWTAuth 函数创建了 auth.JWTStrategy 类型的变量，该变量包含了一些认证相关函数
+
+#### LoginHandler
+
+LoginHandler 实现了 JWT 认证，完成登录认证，获取 Token。从 LoginHandler 函数的代码实现中（`github.com/appleboy/gin-jwt` 包的 `auth_jwt.go`）中可以知道，LoginHandler 函数会执行 Authenticator 函数，来完成 Basic 认证。如果认证通过，则会签发 JWT Token，并执行  PayloadFunc 函数设置 Token Payload。
+
+如果设置了 SendCookie=true，还会在 Cookie 中添加认证相关的信息，例如 Token、Token 的生命周期等，最后执行 LoginResponse 方法返回 Token 和 Token 的过期时间。
+
+Authenticator、PayloadFunc、LoginResponse 这 3 个函数，是在创建 JWT 认证策略时指定的：
+
+- Authenticator 函数需要获取用户名和密码。它首先会判断是否有 Authorization 请求头，如果有，则调用 parseWithHeader 函数获取用户名和密码，否则调用 parseWithBody 从 Body 中获取用户名和密码。如果都获取失败，则返回认证失败错误。获取到用户名和密码之后，程序会从数据库中查询出该用户对应的加密后的密码，这里假设是 xxxx。最后 authenticator 函数调用 user.Compare 来判断 xxxx 是否和通过 user.Compare 加密后的字符串相匹配，如果匹配则认证成功，否则返回认证失败。
+- PayloadFunc 函数会设置 JWT Token 中 Payload 部分的 iss、aud、sub、identity 字段，供后面使用。
+- LoginResponse 函数用来在 Basic 认证成功之后返回Token和Token的过期时间给调用者。登录成功后，apiserver 会返回 Token 和 Token 的过期时间，前端可以将这些信息缓存在 Cookie 中或 LocalStorage 中，之后的请求都可以使用 Token 来进行认证。使用 Token 进行认证，不仅能够提高认证的安全性，还能够避免查询数据库，从而提高认证效率。
+
+#### 代码实现
+
+JWT 认证策略的 AuthFunc 函数实现：
+
+```go
+func (j JWTStrategy) AuthFunc() gin.HandlerFunc {
+    return j.MiddlewareFunc()
+}
+```
+
+跟随代码，可以定位到 MiddlewareFunc 函数最终调用了 github.com/appleboy/gin-jwt 包 GinJWTMiddleware 结构体的 middlewareImpl 方法：
+
+```go
+func (mw *GinJWTMiddleware) middlewareImpl(c *gin.Context) {
+    claims, err := mw.GetClaimsFromJWT(c)
+    if err != nil {
+        mw.unauthorized(c, http.StatusUnauthorized, mw.HTTPStatusMessageFunc(err, c))
+        return
+    }
+
+    if claims["exp"] == nil {
+        mw.unauthorized(c, http.StatusBadRequest, mw.HTTPStatusMessageFunc(ErrMissingExpField, c))
+        return
+    }
+
+    if _, ok := claims["exp"].(float64); !ok {
+        mw.unauthorized(c, http.StatusBadRequest, mw.HTTPStatusMessageFunc(ErrWrongFormatOfExp, c))
+        return
+    }
+
+    if int64(claims["exp"].(float64)) < mw.TimeFunc().Unix() {
+        mw.unauthorized(c, http.StatusUnauthorized, mw.HTTPStatusMessageFunc(ErrExpiredToken, c))
+        return
+    }
+
+    c.Set("JWT_PAYLOAD", claims)
+    identity := mw.IdentityHandler(c)
+
+    if identity != nil {
+        c.Set(mw.IdentityKey, identity)
+    }
+
+    if !mw.Authorizator(identity, c) {
+        mw.unauthorized(c, http.StatusForbidden, mw.HTTPStatusMessageFunc(ErrForbidden, c))
+        return
+    }
+
+    c.Next()
+}
+```
+
+分析上面的代码，可以知道，middlewareImpl 的 Bearer 认证流程为：
+
+- 调用 GetClaimsFromJWT 函数，从 HTTP 请求中获取 Authorization Header，并解析出 Token 字符串，进行认证，最后返回 Token Payload。
+- 校验 Payload 中的 exp 是否超过当前时间，如果超过就说明 Token 过期，校验不通过。
+- 给 gin.Context 中添加 JWT_PAYLOAD 键，供后续程序使用。
+- 通过以下代码，在 gin.Context 中添加 IdentityKey 键，IdentityKey 键可以在创建 GinJWTMiddleware 结构体时指定，这里设置为 middleware.UsernameKey，也就是 username。
+
+```go
+identity := mw.IdentityHandler(c)
+
+if identity != nil {
+    c.Set(mw.IdentityKey, identity)
+}
+```
+
+- 调用 Authorizator 方法，Authorizator 是一个 callback 函数，成功时返回真，失败时返回假。Authorizator 也是在创建 GinJWTMiddleware 时指定的，例如：
+
+```go
+func authorizator() func(data interface{}, c *gin.Context) bool {    
+  return func(data interface{}, c *gin.Context) bool {       
+    if v, ok := data.(string); ok {               log.L(c).Infof("user `%s` is authenticated.", v)     
+      return true                    
+    }                                 
+    return false                     
+  }    
+}
+```
+
+
+
 ## Ref
 
 1. [JWT Token](https://github.com/appleboy/gin-jwt)
