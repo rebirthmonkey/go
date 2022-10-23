@@ -375,15 +375,33 @@ go run example4.go
 
 - [rebirthmonkey/go/pkg/errors Gin Server](example5.go)：通过 gin/util 包解析错误并返回。同时，`log.L(ctx).Info()` 会把 context 中的信息传给 log，用于输出更详细信息。
 
-```bash
+```shell
 go run example5.go
+# 新建终端，并在新建的终端继续
+curl -X GET http://127.0.0.1:8080/ping
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run example5.go &
+sleep 10
 curl -X GET http://127.0.0.1:8080/ping
 ```
 
 - [rebirthmonkey/go/pkg/panic Gin Server](example6.go)：展示 log.Panic() 后会中断程序，停止后续操作（包括return）
 
+```shell
+go run example6.go 
+# 新建终端，并在新建的终端继续
+curl -X GET http://127.0.0.1:8080/ping
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
-go run example6.go
+go run example6.go &
+sleep 10
 curl -X GET http://127.0.0.1:8080/ping
 ```
 

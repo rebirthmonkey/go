@@ -123,9 +123,9 @@ go test
 
 - [自动生成测试文件](90_gotests/math_test.go)：单元测试
 
-```shell
+```bash
 cd 90_gotests
 gotests -all -w .
-# 在 math_test.go 中不全数据，添加测试内容
+# 在 math_test.go 中补全数据，添加测试内容
 go test
 ```

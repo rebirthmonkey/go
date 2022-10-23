@@ -23,12 +23,20 @@ swag init -g cmd/main.go
 
 ### run & check
 
-```bash
-go run cmd/main.go &
-sleep 3
+```shell
+go run cmd/main.go
+# 新建终端，并在新建的终端继续
 curl http://127.0.0.1:8080/user/123/xxx
 curl http://127.0.0.1:8080/docs/index.html
-ps aux | grep -i cmd/main |  grep -v grep | awk {'print $2'} | xargs kill -9
+```
+
+或者在同一个终端窗口中执行
+
+```bash
+go run cmd/main.go &
+sleep 10
+curl http://127.0.0.1:8080/user/123/xxx
+curl http://127.0.0.1:8080/docs/index.html
 ```
 
 

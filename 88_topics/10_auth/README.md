@@ -33,9 +33,17 @@ curl -XPOST -H"Authorization: Basic ${basic}" http://127.0.0.1:8080/login
 ```shell
 cd 10_basic
 go run example.go auth.go basic.go
+# 新建终端，并在新建的终端继续
+basic=`echo -n 'admin:admin'|base64`
+curl -XGET -H "Authorization: Basic ${basic}" http://127.0.0.1:8080/ping
 ```
 
-```shell
+或者在同一个终端窗口中执行
+
+```bash
+cd 10_basic
+go run example.go auth.go basic.go &
+sleep 10
 basic=`echo -n 'admin:admin'|base64`
 curl -XGET -H "Authorization: Basic ${basic}" http://127.0.0.1:8080/ping
 ```
@@ -147,7 +155,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJ
 
 JWT Token 的 Header 中包含两部分信息：一是 Token 的类型，二是 Token 所使用的加密算法。例如：
 
-```shell
+```json
 {
   "typ": "JWT",  
   "alg":  "HS256"
@@ -166,7 +174,7 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
 
 在某些场景下，可能还会有 kid 选项，用来标识一个密钥 ID，例如：
 
-```shell
+```json
 {    
   "alg": "HS256",
   "kid": "XhbY3aCrfjdYcP1OFJRu9xcno8JzSbUIvGE2",
@@ -192,7 +200,7 @@ Payload 中携带 Token 的具体内容由 3 部分组成：JWT 标准中注册�
 
 本例中的 payload 内容为：
 
-```shell
+```json
 {
   "aud": "iam.authz.marmotedu.com",
   "exp": 1604158987,
@@ -331,14 +339,6 @@ curl -XGET -H"Authorization: Bearer ${TOKEN}" http://127.0.0.1:8080/v1/secrets
 curl -XDELETE -H"Authorization: Bearer ${TOKEN}" http://127.0.0.1:8080/v1/secrets/secret0
 null
 ```
-
-
-
- 
-
-
-
- 
 
 ## Ref
 

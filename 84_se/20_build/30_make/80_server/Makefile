@@ -99,7 +99,7 @@ test:
 ## test: Run unit test.
 .PHONY: test.api
 test.api:
-	@./tests/api/test.sh api::test::user
+	@./test/api/test.sh api::test::user
 
 ## tidy: run go mod tidy
 .PHONY: tidy

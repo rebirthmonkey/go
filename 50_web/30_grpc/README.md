@@ -217,12 +217,21 @@ type server struct {
 
 运行
 
+```shell
+cd 12_productinfo
+go run server/main.go 
+# 新建终端，并在新建的终端继续
+cd 12_productinfo
+go run client/main.go
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
 cd 12_productinfo
 go run server/main.go &
-sleep 3
+sleep 10
 go run client/main.go
-ps aux | grep -i server/main.go |  grep -v grep | awk {'print $2'} | xargs kill -9
 ```
 
 ### route-guide
@@ -236,17 +245,31 @@ ps aux | grep -i server/main.go |  grep -v grep | awk {'print $2'} | xargs kill 
   - An interface type (or *stub*) for clients to call with the methods defined in the `RouteGuide` service.
   - An interface type for servers to implement, also with the methods defined in the `RouteGuide` service.
 
+```shell
+cd 14_route-guide/routeguide
+protoc --go_out=. --go_opt=paths=source_relative \
+    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
+    routeguide.proto
+ls
+cd ..
+go run server/server.go
+# 新建终端，并在新建的终端继续
+cd 14_route-guide/routeguide
+go run client/client.go
+```
+
+或者在同一个终端窗口中执行
+
 ```bash
 cd 14_route-guide/routeguide
 protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-    route_guide.proto
+    routeguide.proto
 ls
 cd ..
-go run server/main.go &
-sleep 3
-go run client/main.go
-ps aux | grep -i server/main.go |  grep -v grep | awk {'print $2'} | xargs kill -9
+go run server/server.go &
+sleep 10
+go run client/client.go
 ```
 
 #### 创建 server 端
