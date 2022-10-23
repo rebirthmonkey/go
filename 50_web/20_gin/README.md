@@ -571,7 +571,7 @@ go run 80_app/82_bind-json-mw.go
 
 ```bash
 go run 80_app/82_bind-json-mw.go &
-sleep 5
+sleep 10
 ```
 
 ### Advanced Topics

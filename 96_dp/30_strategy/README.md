@@ -63,7 +63,7 @@ curl -XGET -H "Content-Type: application/json" -H "Authorization: Bearer ${jwt}"
 ```bash
 cd 30_gin-auth
 go run example.go auth.go basic.go jwt.go &
-sleep 10
+sleep 15
 basic=`echo -n 'admin:admin'|base64`
 curl -XGET -H "Authorization: Basic ${basic}" http://127.0.0.1:8080/ping/basic/
 

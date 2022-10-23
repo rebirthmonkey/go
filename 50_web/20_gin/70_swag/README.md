@@ -34,7 +34,7 @@ curl http://127.0.0.1:8080/docs/index.html
 
 ```bash
 go run cmd/main.go &
-sleep 10
+sleep 15
 curl http://127.0.0.1:8080/user/123/xxx
 curl http://127.0.0.1:8080/docs/index.html
 ```

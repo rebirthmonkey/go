@@ -1508,13 +1508,13 @@ go install github.com/marmotedu/addlicense
 ##### Check
 
 ```bash
-addlicense --check -f ./scripts/boilerplate.txt . --skip-dirs=third_party
+addlicense --check -f ./80_server/scripts/boilerplate.txt . --skip-dirs=third_party
 ```
 
 ##### Add License
 
 ```bash
-addlicense -v -f ./scripts/boilerplate.txt . --skip-dirs=third_party
+addlicense -v -f ./80_server/scripts/boilerplate.txt . --skip-dirs=third_party
 ```
 
 ## Ref
