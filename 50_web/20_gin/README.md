@@ -661,7 +661,7 @@ curl http://127.0.0.1:8080/async
 
 ## apiserver 示例
 
-apiserver 实例是一个 Web Service，通过一个名为 apiserver 的进程，对外提供 RESTful API 接口，完成 User  REST 资源的增删改查。
+我们的 apiserver 示例，基于之前的 App Option&Config，本例中需要添加上 Gin 的 HTTP 及 HTTPS 两个 web service。apiserver 实例是一个 Web Service，通过一个名为 apiserver 的进程，对外提供 RESTful API 接口，完成 User  REST 资源的增删改查。
 
 ### API 处理流程
 
@@ -687,71 +687,6 @@ User REST API 接口如下，其中 `DELETE /v1/users` 与 `PUT /v1/users/:name/
 | PUT  /v1/users/:name                 | 修改用户属性 |
 | GET /v1/users/:name                  | 查询用户信息 |
 | GET /v1/users                        | 查询用户列表 |
-
-#### 操作
-
-- Run：
-
-```shell
-go run cmd/apiserver.go -c configs/config.yaml
-```
-
-- create：
-
-```shell
-curl -X POST -H "Content-Type: application/json" \
--d '{"metadata":{"name":"user99", "password":"admin"},"description":"admin user"}' \
-http://127.0.0.1:8080/v1/users
-```
-
-- list：
-
-```shell
-curl -X GET http://127.0.0.1:8080/v1/users
-```
-
-- get：
-
-```shell
-curl -X GET http://127.0.0.1:8080/v1/users/user99
-```
-
-- update：
-
-```shell
-curl -X PUT -H "Content-Type: application/json" \
--d '{"metadata":{"name":"user99"},"nickname":"xxx"}' \
-http://127.0.0.1:8080/v1/users/user99
-```
-
-- delete：
-
-```shell
-curl -X DELETE http://127.0.0.1:8080/v1/users/user99
-```
-
-- 一次性测试所有命令
-
-```bash
-go run cmd/apiserver.go -c configs/config.yaml &
-sleep 15
-#create
-curl -X POST -H "Content-Type: application/json" \
--d '{"metadata":{"name":"user99", "password":"admin"},"description":"admin user"}' \
-http://127.0.0.1:8080/v1/users
-# list
-curl -X GET http://127.0.0.1:8080/v1/users
-# get
-curl -X GET http://127.0.0.1:8080/v1/users/user99
-# update
-curl -X PUT -H "Content-Type: application/json" \
--d '{"metadata":{"name":"user99"},"nickname":"xxx"}' \
-http://127.0.0.1:8080/v1/users/user99
-# delete
-curl -X DELETE http://127.0.0.1:8080/v1/users/user99
-```
-
-> 执行完后使用`kill -9 $!`结束后台任务
 
 ### Controller/Service/Repo
 
@@ -815,13 +750,6 @@ controller 存放请求处理相关，service 存放具体的业务逻辑处理�
 - 生成密钥 ID 和密钥 Key 。
 - 调用 Service s.srv 的 Create 方法，完成密钥的创建。
 - 返回 HTTP 请求参数。
-
-### Insecure & Secure Server
-
-我们的 apiserver 示例，基于之前的 App Option&Config，本例中需要添加上 Gin 的 HTTP 及 HTTPS 两个 web service：
-
-- Gin HTTP 服务[在此](96_insecure/README.md)。
-- Gin HTTPS 服务[在此](97_secure/README.md)。
 
 ### 健康检查
 
@@ -944,7 +872,104 @@ func WriteResponse(c *gin.Context, err error, data interface{}) {
 
 可以看到，WriteResponse 函数会判断 err 是否为 nil。如果不为 nil，则将 err 解析为 errors 包中定义的 Coder 类型的错误，并调用 Coder 接口提供的 Code()、String()、Reference() 方法，获取该错误的业务码、对外展示的错误信息和排障文档。如果 err 为 nil，则调用 c.JSON 返回 JSON 格式的数据。
 
+### 操作
 
+#### HTTP 操作
+
+- Run：
+
+```shell
+go run cmd/apiserver.go -c configs/config.yaml
+```
+
+- create：
+
+```shell
+curl -X POST -H "Content-Type: application/json" \
+-d '{"metadata":{"name":"user99", "password":"admin"},"description":"admin user"}' \
+http://127.0.0.1:8080/v1/users
+```
+
+- list：
+
+```shell
+curl -X GET http://127.0.0.1:8080/v1/users
+```
+
+- get：
+
+```shell
+curl -X GET http://127.0.0.1:8080/v1/users/user99
+```
+
+- update：
+
+```shell
+curl -X PUT -H "Content-Type: application/json" \
+-d '{"metadata":{"name":"user99"},"nickname":"xxx"}' \
+http://127.0.0.1:8080/v1/users/user99
+```
+
+- delete：
+
+```shell
+curl -X DELETE http://127.0.0.1:8080/v1/users/user99
+```
+
+- 一次性测试所有命令
+
+```bash
+go run cmd/apiserver.go -c configs/config.yaml &
+sleep 15
+#create
+curl -X POST -H "Content-Type: application/json" \
+-d '{"metadata":{"name":"user99", "password":"admin"},"description":"admin user"}' \
+http://127.0.0.1:8080/v1/users
+# list
+curl -X GET http://127.0.0.1:8080/v1/users
+# get
+curl -X GET http://127.0.0.1:8080/v1/users/user99
+# update
+curl -X PUT -H "Content-Type: application/json" \
+-d '{"metadata":{"name":"user99"},"nickname":"xxx"}' \
+http://127.0.0.1:8080/v1/users/user99
+# delete
+curl -X DELETE http://127.0.0.1:8080/v1/users/user99
+```
+
+> 执行完后使用`kill -9 $!`结束后台任务
+
+#### HTTPS 操作
+
+与 insecure server 唯一不同之处在于，curl 命令需要加上 --insecure flag
+
+```shell
+curl --insecure -X GET https://127.0.0.1:8443/v1/users
+```
+
+一次性测试所有命令
+
+```bash
+cat configs/config.yaml | sed "s#{{CERT-FILE}}#$(pwd)/configs/cert/server.pem#g" | sed "s#{{PRIVATE-KEY-FILE}}#$(pwd)/configs/cert/server.key#g"  > configs/config-out.yaml
+go run cmd/apiserver.go -c configs/config-out.yaml
+sleep 15
+#create
+curl --insecure -X POST -H "Content-Type: application/json" \
+-d '{"metadata":{"name":"user99", "password":"admin"},"description":"admin user"}' \
+http://127.0.0.1:8080/v1/users
+# list
+curl --insecure -X GET http://127.0.0.1:8080/v1/users
+# get
+curl --insecure -X GET http://127.0.0.1:8080/v1/users/user99
+# update
+curl --insecure -X PUT -H "Content-Type: application/json" \
+-d '{"metadata":{"name":"user99"},"nickname":"xxx"}' \
+http://127.0.0.1:8080/v1/users/user99
+# delete
+curl --insecure -X DELETE http://127.0.0.1:8080/v1/users/user99
+```
+
+> 执行完后使用`kill -9 $!`结束后台任务
 
 ## Ref
 
