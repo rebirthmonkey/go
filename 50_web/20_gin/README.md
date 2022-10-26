@@ -154,7 +154,7 @@ Go 的 `net/http` 设计的一大特点是特别容易构建中间件，Gin 框�
 - 只将一些通用的、必要的功能做成中间件。
 - 在编写中间件时，一定要保证中间件的代码质量和性能。
 
-<img src="figures/image-20221023073442887.png" alt="image-20221023073442887" style="zoom:50%;" />
+<img src="figures/image-20221024155855460.png" alt="image-20221024155855460" style="zoom:50%;" />
 
 ### 基本使用
 

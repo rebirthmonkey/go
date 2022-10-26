@@ -19,7 +19,7 @@
 - 密钥（Secret）：实现对密钥的增、删、改、查操作。
 - 策略（Policy）：实现对策略的增、删、改、查、批量删除操作。
 
-![image-20221023091716563](figures/image-20221023091716563.png)
+<img src="figures/image-20221024160507988.png" alt="image-20221024160507988" style="zoom:50%;" />
 
 ### API 接口
 
