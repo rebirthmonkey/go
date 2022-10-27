@@ -277,7 +277,7 @@ Config 结构体会在 App 启动后幻化为 App 自身的 runtime 结构体，
 
 - preparedapiserver.Run()：运行 preparedapiserver，如 `preparedapiserver.Run()`
 
-##操作
+## 操作
 
 ```bash
 go run cmd/apiserver.go -c configs/config.yaml
