@@ -388,6 +388,10 @@ go run 20_gorm/12_gorm-model.go -H 127.0.0.1:3306 -u root -p P@ssw0rd -d test
 
 apiserver 示例后端需要持久化存储，所以采用 MySQL Gorm 作为其持久化存储引擎，具体介绍[在此](80_server/README.md)。
 
+### Question
+
+Gorm 默认的 Table Name 都是复数，但如果查询 MySQL，会发现所创建的 Table 为单数，请解释原因，并且附上相关代码予以说明。
+
 ## Ref
 
 1. [Go MySQL](https://zetcode.com/golang/mysql/)
