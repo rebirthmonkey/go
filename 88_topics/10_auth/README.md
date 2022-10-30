@@ -344,13 +344,13 @@ null
 
 apiserver 通过创建需要的认证策略，并加载到需要认证的 API 路由上，来实现 API 认证。
 
-Basic认证通过用户名和密码来进行认证，通常用在登录接口 /login 中。
+Basic认证通过用户名和密码来进行认证，通常用在登录接口 /login 和用户管理 /v1/users 中。
 
 ### JWT
 
 Basic 认证通过用户名和密码来进行认证，通常用在登录接口 /login 中。用户登录成功后，会返回 JWT Token，前端会保存该 JWT Token 在浏览器的 Cookie 或 LocalStorage 中，供后续请求使用。后续请求时，均会携带该 Token，以完成 Bearer 认证。
 
-在 `apisefver/server/gin.go` 中：
+在 `apiserver/server/gin.go` 中：
 
 ```go
 jwtStrategy, _ := newJWTAuth().(auth.JWTStrategy)

@@ -46,14 +46,6 @@ require (
 )
 
 require (
-	github.com/marmotedu/addlicense v1.0.0 // indirect
-	github.com/marmotedu/errors v1.0.2 // indirect
-	github.com/yuin/goldmark v1.4.13 // indirect
-	golang.org/x/mod v0.6.0 // indirect
-)
-
-require (
-	bitbucket.org/bigwhite/c v1.0.0
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect

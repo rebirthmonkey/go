@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rebirthmonkey/pkg/log"
+	"github.com/rebirthmonkey/go/pkg/log"
 )
 
 type BasicStrategy struct {
@@ -28,7 +28,7 @@ func NewBasicStrategy(compare func(username string, password string) bool) Basic
 
 func (b BasicStrategy) AuthFunc() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		log.Info("start BasicStrategy AuthFunc()")
+		log.Info("[BasicStrategy] Authentication")
 		auth := strings.SplitN(c.Request.Header.Get("Authorization"), " ", 2)
 
 		if len(auth) != 2 || auth[0] != "Basic" {

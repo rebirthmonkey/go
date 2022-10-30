@@ -10,6 +10,7 @@ import (
 	"github.com/rebirthmonkey/go/pkg/log"
 
 	userCtl "github.com/rebirthmonkey/go/88_topics/10_auth/80_server/apiserver/user/controller/gin/v1"
+	userRepo "github.com/rebirthmonkey/go/88_topics/10_auth/80_server/apiserver/user/repo"
 	userRepoMysql "github.com/rebirthmonkey/go/88_topics/10_auth/80_server/apiserver/user/repo/mysql"
 )
 
@@ -27,6 +28,7 @@ func installRouterMiddleware(g *gin.Engine) {
 
 // installController installs Gin handlers
 func installController(g *gin.Engine) *gin.Engine {
+
 	v1 := g.Group("/v1")
 	{
 		log.Info("[GinServer] registry userHandler")
@@ -41,8 +43,12 @@ func installController(g *gin.Engine) *gin.Engine {
 			if err != nil {
 				log.Fatalf("failed to create Mysql repo: %s", err.Error())
 			}
+			userRepo.SetClient(userRepoClient)
 
 			userController := userCtl.NewController(userRepoClient)
+
+			basicStrategy := newBasicAuth()
+			userv1.Use(basicStrategy.AuthFunc())
 
 			userv1.POST("", userController.Create)
 			userv1.DELETE(":name", userController.Delete)
