@@ -60,7 +60,7 @@ wrk -t50 -c1000 -d5s -T5s --latency http://192.168.1.10:8080/v1/users
 ```bash
 cd ../../../50_web/20_gin/96_insecure/
 go run cmd/apiserver.go -c configs/config.yaml &
-sleep 10
+sleep 15
 wrk -t50 -c1000 -d5s -T5s --latency http://127.0.0.1:8080/healthz
 wrk -t50 -c1000 -d5s -T5s --latency http://127.0.0.1:8080/healthz
 ```

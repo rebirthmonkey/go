@@ -6,7 +6,7 @@
 
 Follow this [manuel](https://tecadmin.net/install-go-on-ubuntu/)
 
-- `https://golang.org/doc/install`：从这里下载，建议安装 1.14.4 版本
+- `https://golang.org/doc/install`：从这里下载，建议安装 1.18.7 版本
 - `sudo tar -xvf go1.10.1.linux-amd64.tar.gz`
 - `sudo mv go /usr/local`
 - `go version`: check installation
