@@ -134,16 +134,16 @@ JWT 是 Bearer Token 的一个具体实现，由 JSON 数据格式组成，通�
 
 用 JWT Token 进行认证具体可以分为 4 步：
 
-- 客户端使用用户名和密码请求登录。
-- 服务端收到请求后，会去验证用户名和密码。如果用户名和密码跟数据库记录不一致，则验证失败。如果一致则验证通过，服务端会签发一个 JWT Token 返回给客户端。
-- 客户端收到回复后会将 Token 缓存起来，比如放在浏览器 Cookie 中或 LocalStorage 中，之后每次请求都会携带该 Token。
+- 客户端使用用户名和密码登录。
+- 服务端收到请求后，会去验证用户名和密码。如果用户名、密码一致则验证通过，服务端会签发一个 JWT Token 返回给客户端。
+- 客户端收到回复后会将 Token 缓存起来，比如放在浏览器 Cookie 中或 LocalStorage 中，之后每次请求都会携带该 JWT Token。
 - 服务端收到请求后，会验证请求中的 Token，验证通过则进行业务逻辑处理，处理完后返回处理后的结果。
 
 <img src="figures/image-20220914155333949.png" alt="image-20220914155333949" style="zoom:50%;" />
 
-##### 组成部分
+##### JWT 组成
 
-JWT 由三部分组成，分别是 Header、Payload 和 Signature，它们之间用圆点 `.` 连接，例如：
+JWT 由 3 部分 Header、Payload 和 Signature 组成，它们之间用圆点 `.` 连接，例如：
 
 ```shell
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2NDI4NTY2MzcsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MzUwODA2MzcsInN1YiI6ImFkbWluIn0.Shw27RKENE_2MVBq7-c8OmgYdF92UmdwS8xE-Fts2FM
@@ -165,12 +165,20 @@ JWT Token 的 Header 中包含两部分信息：一是 Token 的类型，二是 
 - typ：说明 Token 类型是 JWT。
 - alg：说明 Token 的加密算法，这里是 HS256。
 
-这里需要将 Header 进行 base64 编码：
+这里需要将 Header 进行 base64 编码（对称加密）：
 
 ```shell
-$ echo -n '{"typ":"JWT","alg":"HS256"}'|base64
+echo -n '{"typ":"JWT","alg":"HS256"}'|base64
 eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
 ```
+
+反向进行 base64 解码：
+
+```shell
+echo -n 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9'|base64 --decode
+{"typ":"JWT","alg":"HS256"}%
+```
+
 
 在某些场景下，可能还会有 kid 选项，用来标识一个密钥 ID，例如：
 
@@ -184,28 +192,28 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
 
 ###### Payload
 
-Payload 中携带 Token 的具体内容由 3 部分组成：JWT 标准中注册的声明（可选）、公共的声明、私有的声明。
+Payload 由 3 部分组成：JWT 标准中注册的声明（可选）、公共的声明、私有的声明。
 
 标准中注册的声明：
 
 | **字段名**           | **描述**                                                     |
 | -------------------- | ------------------------------------------------------------ |
-| iss(Issuer)          | JWT Token的签发者，其值应为大小写敏感的字符串或Uri           |
+| iss(Issuer)          | JWT Token的签发者，其值应为大小写敏感的字符串或URI           |
 | sub(Subject)         | 主题，sub可以用来鉴别一个用户                                |
 | exp(Expiration Time) | JWT Token过期时间                                            |
-| aud(Audience)        | 接收JWT  Token的一方，其值应为大小写敏感的字符串或Uri，一般可以为特定的App、服务或模块。服务器端的安全策略在签发时和验证时，aud必须是一致的 |
+| aud(Audience)        | 接收JWT  Token的一方，其值应为大小写敏感的字符串或URI，一般可以为特定的App、服务或模块。服务器端的安全策略在签发时和验证时，aud必须是一致的 |
 | iat(Issued  At)      | JWT Token签发时间                                            |
 | nbf(Not  Before)     | JWT Token生效时间                                            |
 | Jti(JWT  ID)         | JWT Token ID，令牌的唯一标志符，通常用于一次性消费的Token    |
 
 本例中的 payload 内容为：
 
-```json
+```shell
 {
-  "aud": "iam.authz.marmotedu.com",
+  "aud": "wukong.com",
   "exp": 1604158987,
   "iat": 1604151787,
-  "iss": "iamctl",
+  "iss": "apiserver",
   "nbf": 1604151787
 }
 ```
@@ -213,22 +221,29 @@ Payload 中携带 Token 的具体内容由 3 部分组成：JWT 标准中注册�
 将 Payload 进行 base64 编码：
 
 ```shell
-$ echo -n '{"aud":"iam.authz.marmotedu.com","exp":1604158987,"iat":1604151787,"iss":"iamctl","nbf":1604151787}'|base64
-eyJhdWQiOiJpYW0uYXV0aHoubWFybW90ZWR1LmNvbSIsImV4cCI6MTYwNDE1ODk4NywiaWF0Ijox
-NjA0MTUxNzg3LCJpc3MiOiJpYW1jdGwiLCJuYmYiOjE2MDQxNTE3ODd9
+echo -n '{"aud":"wukong.com","exp":1604158987,"iat":1604151787,"iss":"apiserver","nbf":1604151787}'|base64
+eyJhdWQiOiJ3dWtvbmcuY29tIiwiZXhwIjoxNjA0MTU4OTg3LCJpYXQiOjE2MDQxNTE3ODcsImlzcyI6ImFwaXNlcnZlciIsIm5iZiI6MTYwNDE1MTc4N30=
 ```
 
-除此之外，还有公共的声明和私有的声明。公共的声明可以添加任何的需要的信息，一般添加用户的相关信息或其他业务需要的信息，注意不要添加敏感信息；私有声明是客户端和服务端所共同定义的声明，因为 base64 是对称解密的，所以一般不建议存放敏感信息。
+反向进行 base64 解码：
+
+```shell
+echo -n 'eyJhdWQiOiJ3dWtvbmcuY29tIiwiZXhwIjoxNjA0MTU4OTg3LCJpYXQiOjE2MDQxNTE3ODcsImlzcyI6ImFwaXNlcnZlciIsIm5iZiI6MTYwNDE1MTc4N30=' | base64 --decode
+{"aud":"wukong.com","exp":1604158987,"iat":1604151787,"iss":"apiserver","nbf":1604151787}%
+```
+
+
+除此之外，还有公共的声明和私有的声明。公共的声明可以添加任何的需要的信息，一般添加用户的相关信息或其他业务需要的信息，注意不要添加敏感信息。私有声明是客户端和服务端所共同定义的声明，因为 base64 是对称解密的，所以一般不建议存放敏感信息。
 
 ###### Signature
 
-Signature 是 Token 的签名部分，通过如下方式生成：将 Header 和 Payload 分别 base64 编码后，用 . 连接。然后再使用 Header 中声明的加密方式，利用 secretKey 对连接后的字符串进行加密，加密后的字符串即为最终的  Signature。secretKey 是密钥，保存在服务器中，一般通过配置文件来保存。这里要注意，密钥一定不能泄露。密钥泄露后，入侵者可以使用该密钥来签发 JWT Token，从而入侵系统。最后生成的 Token 如下：
+Signature 是 Token 的签名部分，通过如下方式生成：将 Header 和 Payload 分别 base64 编码后，用 . 连接。然后再使用 Header 中声明的加密方式，利用 KID（secretKey）对连接后的字符串进行加密，加密后的字符串即为最终的 Signature。secretKey 是密钥，保存在服务器中，一般通过配置文件来保存。这里要注意，密钥一定不能泄露。密钥泄露后，入侵者可以使用该密钥来签发 JWT Token，从而入侵系统。最后生成的 Token 如下：
 
 ```shell
-eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJpYW0uYXV0aHoubWFybW90ZWR1LmNvbSIsImV4cCI6MTYwNDE1ODk4NywiaWF0IjoxNjA0MTUxNzg3LCJpc3MiOiJpYW1jdGwiLCJuYmYiOjE2MDQxNTE3ODd9.LjxrK9DuAwAzUD8-9v43NzWBN7HXsSLfebw92DKd1JQ
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJ3dWtvbmcuY29tIiwiZXhwIjoxNjA0MTU4OTg3LCJpYXQiOjE2MDQxNTE3ODcsImlzcyI6ImFwaXNlcnZlciIsIm5iZiI6MTYwNDE1MTc4N30=.LjxrK9DuAwAzUD8-9v43NzWBN7HXsSLfebw92DKd1JQ
 ```
 
-签名后服务端会返回生成的 Token，客户端下次请求会携带该 Token。服务端收到 Token 后会解析出 header.payload，然后用相同的加密算法和密钥对 header.payload 再进行一次加密，得到 Signature。并且，对比加密后的 Signature 和收到的 Signature 是否相同，如果相同则验证通过，不相同则返回 HTTP 401 Unauthorized 错误。
+签名后服务端会返回生成的 Token，客户端下次请求会携带该 Token。服务端收到 Token 后会解析出 header.payload，然后用相同的加密算法和密钥对“header.payload”再进行一次加密，得到 Signature。并且，对比加密后的 Signature 和收到的 Signature 是否相同，如果相同则验证通过，不相同则返回 HTTP 401 Unauthorized 错误。
 
 #### Lab
 
@@ -237,30 +252,47 @@ cd 20_jwt
 go run example.go auth.go jwt.go
 ```
 
-- 通过用户名、密码 获取 JWT
+- 通过用户名、密码 获取 JWT：在 Gin JWT 中，如果没注明 securetKey，则会使用默认 securetKey。
 
 ```shell
 curl -XPOST -H'Content-Type: application/json' -d'{"username":"admin","password":"admin"}' http://127.0.0.1:8080/login/jwt 
-{"code":200,"expire":"2022-04-30T18:23:43+08:00","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTEzMTQyMjMsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY1MTMxMDYyM30.AugP8KBMBD7nOmEi03-JKBZ5v1Oo18MGVFE5HpgCS9I"}
+{"code":200,"expire":"2022-11-01T09:19:46+08:00","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjcyNjU1ODYsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY2NzI2MTk4Nn0.rhGsfoMELJbOvid9BB8tuHK5ZWONIcWLNvmR2z590W8"}%
 
-jwt=`echo -n 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTEzMTQyMjMsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY1MTMxMDYyM30.AugP8KBMBD7nOmEi03-JKBZ5v1Oo18MGVFE5HpgCS9I'`
+echo -n 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' |base64 --decode
+{"alg":"HS256","typ":"JWT"}%
+
+echo -n 'eyJleHAiOjE2NjcyNjU1ODYsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY2NzI2MTk4Nn0' |base64 --decode
+{"exp":1667265586,"id":"admin","orig_iat":166726198%
 ```
 
 - 使用 JWT 认证、并获取 REST 资源
 
 ```shell
+jwt=`echo -n 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjcyNjU1ODYsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY2NzI2MTk4Nn0.rhGsfoMELJbOvid9BB8tuHK5ZWONIcWLNvmR2z590W8'`
+
 curl -XGET -H "Content-Type: application/json" -H "Authorization: Bearer ${jwt}"  http://127.0.0.1:8080/ping/
+{"message":"pong","userID":"admin","userName":"admin"}%
 ```
 
 ## apiserver 示例
 
 从认证的角度，apiserver 需要使用 “用户名:密码” 这种认证方式，即 Basic 认证。也需要提供 Bearer Token 的认证方式，目前最受欢迎的 Token 格式是 JWT Token。
 
- 
+### Basic
 
-### API 接口
+apiserver 通过创建需要的认证策略，并加载到需要认证的 API 路由上，来实现 API 认证。Basic 认证通过用户名和密码来进行认证，用在登录接口 /login 和用户管理 /v1/users 上。具体测试可运行：
 
-密钥相关接口
+```shell
+./tests/api/auth.sh api::test::basic
+```
+
+### JWT
+
+Basic 认证通过用户名和密码来进行认证，通常用在登录接口 /login 中。用户登录成功后，会返回 JWT Token，前端会保存该 JWT Token 在浏览器的 Cookie 或 LocalStorage 中，供后续请求使用。后续请求时，均会携带该 Token，以完成 Bearer 认证。
+
+#### API 接口
+
+JWT auth 需要 secret 接口，用于创建在 JWT 中加密需要的秘钥（secret id）。
 
 | **接口名称**              | **接口功能** |
 | ------------------------- | ------------ |
@@ -270,85 +302,13 @@ curl -XGET -H "Content-Type: application/json" -H "Authorization: Bearer ${jwt}"
 | GET  /v1/secrets/:name    | 查询密钥信息 |
 | GET  /v1/secrets          | 查询密钥列表 |
 
-#### 实际操作
-
-以下 6 步操作：
-
-- 登录 apiserver，获取 token。
+验证 API 接口可运行：
 
 ```shell
-curl -s -XPOST -H"Authorization: Basic `echo -n 'admin:Admin@2021'|base64`" http://127.0.0.1:8080/login | jq -r .token
-
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzUwNTk4NDIsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MjcyODM4NDIsInN1YiI6ImFkbWluIn0.gTS0n-7njLtpCJ7mvSnct2p3TxNTUQaduNXxqqLwGfI
-
-# 这里，为了便于使用，我将token 设置为环境变量：
-TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzUwNTk4NDIsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MjcyODM4NDIsInN1YiI6ImFkbWluIn0.gTS0n-7njLtpCJ7mvSnct2p3TxNTUQaduNXxqqLwGfI
+./tests/api/test.sh api::test::secret
 ```
 
-- 创建一个名为 secret0 的 secret：请求返回头中返回了 X-Request-Id Header，X-Request-Id 唯一标识这次请求。如果这次请求失败，就可以将 X-Request-Id 提供给运维或开发，通过 X-Request-Id 定位出失败的请求，进行排障。另外 X-Request-Id 在微服务场景中，也可以透传给其他服务，从而实现请求调用链。
-
-```shell
-curl -v -XPOST -H "Content-Type: application/json" -H"Authorization: Bearer ${TOKEN}" -d'{"metadata":{"name":"secret0"},"expires":0,"description":"admin secret"}' http://127.0.0.1:8080/v1/secrets
-* About to connect() to iam.api.marmotedu.com port 8080 (#0)
-*   Trying 127.0.0.1...
-* Connected to iam.api.marmotedu.com (127.0.0.1) port 8080 (#0)
-> POST /v1/secrets HTTP/1.1
-> User-Agent: curl/7.29.0
-> Host: iam.api.marmotedu.com:8080
-> Accept: */*
-> Content-Type: application/json
-> Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzUwNTk4NDIsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MjcyODM4NDIsInN1YiI6ImFkbWluIn0.gTS0n-7njLtpCJ7mvSnct2p3TxNTUQaduNXxqqLwGfI
-> Content-Length: 72
-> 
-* upload completely sent off: 72 out of 72 bytes
-< HTTP/1.1 200 OK
-< Content-Type: application/json; charset=utf-8
-< X-Request-Id: ff825bea-53de-4020-8e68-4e87574bd1ba
-< Date: Mon, 26 Jul 2021 07:20:26 GMT
-< Content-Length: 313
-< 
-* Connection #0 to host 127.0.0.1 left intact
-{"metadata":{"id":60,"instanceID":"secret-jedr3e","name":"secret0","createdAt":"2021-07-26T15:20:26.885+08:00","updatedAt":"2021-07-26T15:20:26.907+08:00"},"username":"admin","secretID":"U6CxKs0YVWyOp5GrluychYIRxDmMDFd1mOOD","secretKey":"fubNIn8jLA55ktuuTpXM8Iw5ogdR2mlf","expires":0,"description":"admin secret"}
-
-```
-
-- 获取 secret0 的详细信息：
-
-```shell
-curl -XGET -H"Authorization: Bearer ${TOKEN}" http://127.0.0.1:8080/v1/secrets/secret0
-{"metadata":{"id":60,"instanceID":"secret-jedr3e","name":"secret0","createdAt":"2021-07-26T15:20:26+08:00","updatedAt":"2021-07-26T15:20:26+08:00"},"username":"admin","secretID":"U6CxKs0YVWyOp5GrluychYIRxDmMDFd1mOOD","secretKey":"fubNIn8jLA55ktuuTpXM8Iw5ogdR2mlf","expires":0,"description":"admin secret"}
-```
-
-- 更新 secret0 的描述：
-
-```shell
-curl -XPUT -H"Authorization: Bearer ${TOKEN}" -d'{"metadata":{"name":"secret"},"expires":0,"description":"admin secret(modify)"}' http://127.0.0.1:8080/v1/secrets/secret0
-{"metadata":{"id":60,"instanceID":"secret-jedr3e","name":"secret0","createdAt":"2021-07-26T15:20:26+08:00","updatedAt":"2021-07-26T15:23:35.878+08:00"},"username":"admin","secretID":"U6CxKs0YVWyOp5GrluychYIRxDmMDFd1mOOD","secretKey":"fubNIn8jLA55ktuuTpXM8Iw5ogdR2mlf","expires":0,"description":"admin secret(modify)"}
-```
-
-- 取 secret 列表：
-
-```shell
-curl -XGET -H"Authorization: Bearer ${TOKEN}" http://127.0.0.1:8080/v1/secrets
-{"totalCount":1,"items":[{"metadata":{"id":60,"instanceID":"secret-jedr3e","name":"secret0","createdAt":"2021-07-26T15:20:26+08:00","updatedAt":"2021-07-26T15:23:35+08:00"},"username":"admin","secretID":"U6CxKs0YVWyOp5GrluychYIRxDmMDFd1mOOD","secretKey":"fubNIn8jLA55ktuuTpXM8Iw5ogdR2mlf","expires":0,"description":"admin secret(modify)"}]}
-```
-
-- 删除 secret0：
-
-```shell
-curl -XDELETE -H"Authorization: Bearer ${TOKEN}" http://127.0.0.1:8080/v1/secrets/secret0
-null
-```
-
-### Basic
-
-apiserver 通过创建需要的认证策略，并加载到需要认证的 API 路由上，来实现 API 认证。
-
-Basic认证通过用户名和密码来进行认证，通常用在登录接口 /login 和用户管理 /v1/users 中。
-
-### JWT
-
-Basic 认证通过用户名和密码来进行认证，通常用在登录接口 /login 中。用户登录成功后，会返回 JWT Token，前端会保存该 JWT Token 在浏览器的 Cookie 或 LocalStorage 中，供后续请求使用。后续请求时，均会携带该 Token，以完成 Bearer 认证。
+#### 代码解析
 
 在 `apiserver/server/gin.go` 中：
 
@@ -360,7 +320,7 @@ g.POST("/logout", jwtStrategy.LogoutHandler)
 
 通过 newJWTAuth 函数创建了 auth.JWTStrategy 类型的变量，该变量包含了一些认证相关函数
 
-#### LoginHandler
+##### LoginHandler
 
 LoginHandler 实现了 JWT 认证，完成登录认证，获取 Token。从 LoginHandler 函数的代码实现中（`github.com/appleboy/gin-jwt` 包的 `auth_jwt.go`）中可以知道，LoginHandler 函数会执行 Authenticator 函数，来完成 Basic 认证。如果认证通过，则会签发 JWT Token，并执行  PayloadFunc 函数设置 Token Payload。
 
@@ -372,7 +332,7 @@ Authenticator、PayloadFunc、LoginResponse 这 3 个函数，是在创建 JWT �
 - PayloadFunc 函数会设置 JWT Token 中 Payload 部分的 iss、aud、sub、identity 字段，供后面使用。
 - LoginResponse 函数用来在 Basic 认证成功之后返回Token和Token的过期时间给调用者。登录成功后，apiserver 会返回 Token 和 Token 的过期时间，前端可以将这些信息缓存在 Cookie 中或 LocalStorage 中，之后的请求都可以使用 Token 来进行认证。使用 Token 进行认证，不仅能够提高认证的安全性，还能够避免查询数据库，从而提高认证效率。
 
-#### 代码实现
+##### AuthFunc
 
 JWT 认证策略的 AuthFunc 函数实现：
 
@@ -451,7 +411,62 @@ func authorizator() func(data interface{}, c *gin.Context) bool {
 }
 ```
 
+#### 实际操作
 
+以下 8 步操作：
+
+- 通过 `configs/apiserver.sql` 初始化数据库
+- 启动 apiserver：`make run`
+- 登录 apiserver，获取 JWT token。
+
+```shell
+curl -s -XPOST -H"Authorization: Basic `echo -n 'admin:Admin@2021'|base64`" http://127.0.0.1:8080/login | jq -r .token
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzUwNTk4NDIsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MjcyODM4NDIsInN1YiI6ImFkbWluIn0.gTS0n-7njLtpCJ7mvSnct2p3TxNTUQaduNXxqqLwGfI
+
+# 这里为了便于使用，将 token 设置为环境变量：
+TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzUwNTk4NDIsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MjcyODM4NDIsInN1YiI6ImFkbWluIn0.gTS0n-7njLtpCJ7mvSnct2p3TxNTUQaduNXxqqLwGfI
+```
+
+- 创建一个名为 secret99 的 secret：
+
+```shell
+curl -XPOST -H"Content-Type: application/json" -H"Authorization: Bearer ${TOKEN}" -d'{"metadata":{"name":"secret99"},"expires":0,"description":"test secret"}' http://127.0.0.1:8080/v1/secrets
+
+{"metadata":{"id":22,"instanceID":"secret-53e537","name":"secret99","createdAt":"2022-11-01T08:53:05.397+08:00","updatedAt":"2022-11-01T08:53:05.408+08:00"},"username":"admin","secretID":"uDbHGSVcPjwZiYDn1Gn8SAsjytQQHjOQBflK","secretKey":"CeKSgaRavHrF1R5Vwgg63AzRVDhIZvUu","expires":0,"description":"test secret"}%
+```
+
+- 获取 secret99 的详细信息：
+
+```shell
+curl -XGET -H"Authorization: Bearer ${TOKEN}" http://127.0.0.1:8080/v1/secrets/secret99
+
+{"metadata":{"id":22,"instanceID":"secret-53e537","name":"secret99","createdAt":"2022-11-01T08:53:05+08:00","updatedAt":"2022-11-01T08:53:05+08:00"},"username":"admin","secretID":"uDbHGSVcPjwZiYDn1Gn8SAsjytQQHjOQBflK","secretKey":"CeKSgaRavHrF1R5Vwgg63AzRVDhIZvUu","expires":0,"description":"test secret"}%
+```
+
+- 更新 secret99 的描述：
+
+```shell
+curl -XPUT -H"Authorization: Bearer ${TOKEN}" -d'{"metadata":{"name":"secret99"},"expires":0,"description":"test secret(modify)"}' http://127.0.0.1:8080/v1/secrets/secret99
+
+{"metadata":{"id":22,"instanceID":"secret-53e537","name":"secret99","createdAt":"2022-11-01T08:53:05+08:00","updatedAt":"2022-11-01T08:53:05+08:00"},"username":"admin","secretID":"uDbHGSVcPjwZiYDn1Gn8SAsjytQQHjOQBflK","secretKey":"CeKSgaRavHrF1R5Vwgg63AzRVDhIZvUu","expires":0,"description":"test secret(modify)"}%
+```
+
+- 取 secret 列表：
+
+```shell
+curl -XGET -H"Authorization: Bearer ${TOKEN}" http://127.0.0.1:8080/v1/secrets
+
+{"totalCount":2,"items":[{"metadata":{"id":22,"instanceID":"secret-53e537","name":"secret99","createdAt":"2022-11-01T08:53:05+08:00","updatedAt":"2022-11-01T08:55:19+08:00"},"username":"admin","secretID":"uDbHGSVcPjwZiYDn1Gn8SAsjytQQHjOQBflK","secretKey":"CeKSgaRavHrF1R5Vwgg63AzRVDhIZvUu","expires":0,"description":"test secret(modify)"}]}%
+```
+
+- 删除 secret99：
+
+```shell
+curl -XDELETE -H"Authorization: Bearer ${TOKEN}" http://127.0.0.1:8080/v1/secrets/secret99
+
+null
+```
 
 ## Ref
 

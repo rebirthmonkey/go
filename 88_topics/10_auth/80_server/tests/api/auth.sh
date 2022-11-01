@@ -67,34 +67,52 @@ api::test::login()
   basic=`echo -n 'admin:Admin@2021'|base64`
   HeaderBasic="-HAuthorization: Basic ${basic}"  # 注意 -H 与 Authorization 间不能有空格，否则解析会有问题
 
-  ${CCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_AUTHSERVER}/login \
+  ${CCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/login \
     -d'{"username":"admin","password":"Admin@2021"}' |  jq '.token' | sed 's/"//g'
 }
 
 api::test::jwt()  # 运行：./tests/api/auth.sh api::test::jwt
 {
-  # 1. 用 admin 的用户名、密码，获得 JWT token
+  # 0. 创建 admin 的 basic auth header, admin 密码为 "Admin@2021"
+  basic=`echo -n 'admin:Admin@2021'|base64`
+  HeaderBasic="-HAuthorization: Basic ${basic}"  # 注意 -H 与 Authorization 间不能有空格，否则解析会有问题
+
+  # 1. 用 admin 的 basic，如果有 test01 用户先清空
+  ${DCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v1/users/test01; echo
+
+  # 2. 用 admin 的 basic，创建 test01 用户
+  ${CCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v1/users \
+    -d'{"metadata":{"name":"test01"},"password":"User@2022","nickname":"01","email":"test01@gmail.com","phone":"1306280xxxx"}'; echo
+
+  # 3. 用 admin 的 basic，获得 admin 的 JWT token
   JWT="-HAuthorization: Bearer $(api::test::login)"
 
-  # 2. 用 admin 的 JWT，如果有 secret0 密钥则先清空
-  ${DCURL} "${Header}" "${JWT}" http://${INSECURE_AUTHSERVER}/v1/secrets/secret0; echo
+  # 4. 用 admin 的 JWT，如果有 secret1 密钥则先清空
+  ${DCURL} "${Header}" "${JWT}" http://${INSECURE_SERVER}/v1/secrets/secret1; echo
 
-  # 3. 用 admin 的 JWT，创建 secret0 密钥
-  ${CCURL} "${Header}" "${JWT}" http://${INSECURE_AUTHSERVER}/v1/secrets \
-    -d'{"metadata":{"name":"secret0"},"expires":0,"description":"admin secret"}'; echo
+  # 5. 用 admin 的 JWT，创建用于 test01 的密钥 secret1
+  ${CCURL} "${Header}" "${JWT}" http://${INSECURE_SERVER}/v1/secrets \
+    -d'{"metadata":{"name":"secret1"},"username":"test01", "expires":0,"description":"test01 secret"}'; echo
 
-  # 4. 用 admin 的 JWT，列出所有密钥
-  ${RCURL} "${Header}" "${JWT}" http://${INSECURE_AUTHSERVER}/v1/secrets; echo
+  # 6. 获取 test01 的秘钥 secret1
+  basic01=`echo -n 'test01:User@2022'|base64`
+  HeaderBasic01="-HAuthorization: Basic ${basic01}"
+  token=`${CCURL} "${Header}" "${HeaderBasic01}" http://${INSECURE_SERVER}/login \
+    -d'{"username":"test01","password":"User@2022"}' |  jq '.token' | sed 's/"//g'`
+  JWT01="-HAuthorization: Bearer ${token}"
 
-  # 6. 用 admin 的 JWT，获取 secret0 密钥的详细信息
-  ${RCURL} "${Header}" "${JWT}" http://${INSECURE_AUTHSERVER}/v1/secrets/secret0; echo
+  # 7. 用 test01 的秘钥 secret1，列出所有密钥
+  ${RCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v1/secrets; echo
 
-  # 7. 用 admin 的 JWT，修改 secret0 密钥
-  ${UCURL} "${Header}" "${JWT}" http://${INSECURE_AUTHSERVER}/v1/secrets/secret0 \
-    -d'{"expires":0,"description":"admin secret(modified)"}'; echo
+  # 8. 用 secret1 获取 secret1 密钥的详细信息
+  ${RCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v1/secrets/secret1; echo
 
-  # 8. 用 admin 的 JWT，删除 secret0 密钥
-  ${DCURL} "${Header}" "${JWT}" http://${INSECURE_AUTHSERVER}/v1/secrets/secret0; echo
+  # 9. 用 secret1，修改 secret1 密钥
+  ${UCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v1/secrets/secret1 \
+    -d'{"expires":0,"description":"test01 secret(modified)"}'; echo
+
+#  # 10. 用 secret1 删除 secret1 密钥
+#  ${DCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v1/secrets/secret1; echo
 
   api::log::info "$(echo -e '\033[32mcongratulations, /v1/user test passed!\033[0m')"
 }

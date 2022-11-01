@@ -34,7 +34,7 @@ api::test::healthz()
   ${RCURL} http://${INSECURE_SERVER}/healthz
 }
 
-api::test::user()
+api::test::user() # 用于无 auth 验证
 {
   # 1. 如果有 test00 用户先清空
   ${DCURL} http://${INSECURE_SERVER}/v1/users/test00; echo
@@ -55,6 +55,31 @@ api::test::user()
 
   # 6. 删除 test00 用户
   ${DCURL} http://${INSECURE_SERVER}/v1/users/test00; echo
+
+  api::log::info "$(echo -e '\033[32mcongratulations, /v1/user test passed!\033[0m')"
+}
+
+api::test::secret()  # 运行：./tests/api/test.sh api::test::secret
+{
+  # 1. 如果有 secret0 密钥则先清空
+  ${DCURL} "${Header}" http://${INSECURE_SERVER}/v1/secrets/secret0; echo
+
+  # 2. 创建 secret0 密钥
+  ${CCURL} "${Header}" http://${INSECURE_SERVER}/v1/secrets \
+    -d'{"metadata":{"name":"secret0"},"expires":0,"description":"admin secret"}'; echo
+
+  # 3. 列出所有 secret
+  ${RCURL} "${Header}" http://${INSECURE_SERVER}/v1/secrets; echo
+
+  # 4. 获取 secret0 密钥的详细信息
+  ${RCURL} "${Header}" http://${INSECURE_SERVER}/v1/secrets/secret0; echo
+
+  # 5. 修改 secret0 密钥
+  ${UCURL} "${Header}" http://${INSECURE_SERVER}/v1/secrets/secret0 \
+    -d'{"expires":0,"description":"admin secret(modified)"}'; echo
+
+  # 6. 删除 secret0 密钥
+  ${DCURL} "${Header}" http://${INSECURE_SERVER}/v1/secrets/secret0; echo
 
   api::log::info "$(echo -e '\033[32mcongratulations, /v1/user test passed!\033[0m')"
 }

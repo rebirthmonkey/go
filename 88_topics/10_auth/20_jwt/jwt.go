@@ -13,8 +13,8 @@ type JWTStrategy struct {
 
 var _ AuthStrategy = &JWTStrategy{}
 
-func NewJWTStrategy(gjwt ginjwt.GinJWTMiddleware) JWTStrategy {
-	return JWTStrategy{gjwt}
+func NewJWTStrategy(ginJWT ginjwt.GinJWTMiddleware) JWTStrategy {
+	return JWTStrategy{ginJWT}
 }
 
 func (strategy JWTStrategy) AuthFunc() gin.HandlerFunc {

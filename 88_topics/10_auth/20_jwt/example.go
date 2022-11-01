@@ -83,19 +83,19 @@ func main() {
 		TimeFunc:      time.Now,
 	})
 
-	authStrategy := NewJWTStrategy(*ginJWT)
+	jwtStrategy := NewJWTStrategy(*ginJWT)
 
-	ginEngine.POST("/login/jwt", authStrategy.LoginHandler)
+	ginEngine.POST("/login/jwt", jwtStrategy.LoginHandler)
 
 	auth := ginEngine.Group("/ping")
-	auth.Use(authStrategy.AuthFunc())
+	auth.Use(jwtStrategy.AuthFunc())
 	{
 		auth.GET("/", func(c *gin.Context) {
 			claims := jwt.ExtractClaims(c)
-			log.Println("the claims is:", claims)
+			log.Println("the payload (claims) is:", claims)
 			user, _ := c.Get(identityKey)
 			c.JSON(200, gin.H{
-				"userID":   claims[identityKey],
+				"userID":   claims[identityKey].(string),
 				"userName": user.(*User).Username,
 				"message":  "pong",
 			})

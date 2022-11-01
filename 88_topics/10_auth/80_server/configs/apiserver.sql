@@ -66,3 +66,37 @@ DELIMITER ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 
+
+--
+-- Table structure for table `secret`
+--
+
+DROP TABLE IF EXISTS `secret`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `secret` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `instanceID` varchar(32) DEFAULT NULL,
+  `name` varchar(45) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `secretID` varchar(36) NOT NULL,
+  `secretKey` varchar(255) NOT NULL,
+  `expires` int(64) unsigned NOT NULL DEFAULT 1534308590,
+  `description` varchar(255) NOT NULL,
+  `extendShadow` longtext DEFAULT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `instanceID_UNIQUE` (`instanceID`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `secret`
+--
+LOCK TABLES `secret` WRITE;
+/*!40000 ALTER TABLE `secret` DISABLE KEYS */;
+INSERT INTO `secret` VALUES (1,'secret-yj8m30','secret0','admin','jpIC5R6jmP92llitEY051mxd13iDGbUOwenO','czdr1pHGyuUXTCcc18l13jkON9UOnhYC',0,'admin secret','{}',now(),now());
+/*!40000 ALTER TABLE `secret` ENABLE KEYS */;
+UNLOCK TABLES;
+
