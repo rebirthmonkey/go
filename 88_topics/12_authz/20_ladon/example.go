@@ -19,7 +19,7 @@ func main() {
 		Effect:      ladon.AllowAccess,
 	}
 
-	r.POST("/check", func(c *gin.Context) {
+	r.POST("/authz", func(c *gin.Context) {
 		accessRequest := &ladon.Request{}
 		var message string
 		if err := c.BindJSON(accessRequest); err != nil {
