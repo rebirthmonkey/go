@@ -538,7 +538,7 @@ curl http://127.0.0.1:8080/test
 
 #### Basic Auth
 
-- [Middleware with Basic Auth](46_middleware-basic-auth.go)：使用现有 Basic Auth Middleware
+- [Middleware with Basic Auth](20_mw/10_middleware-basic-auth.go)：使用现有 Basic Auth Middleware
 
 Basic Auth 必须采用浏览器登录 `http://127.0.0.1:8080/auth`
 
@@ -551,7 +551,7 @@ curl http://127.0.0.1:8080/auth --user user:password
 或者在同一个终端窗口中执行
 
 ```bash
-go run 46_middleware-basic-auth.go &
+go run 10_middleware-basic-auth.go &
 sleep 10
 curl http://127.0.0.1:8080/auth --user user:password
 ```
@@ -683,7 +683,6 @@ User REST API 接口如下，其中 `DELETE /v1/users` 与 `PUT /v1/users/:name/
 | POST /v1/users                       | 创建用户     |
 | DELETE  /v1/users                    | 批量删除用户 |
 | DELETE  /v1/users/:name              | 删除用户     |
-| PUT  /v1/users/:name/change_password | 修改用户密码 |
 | PUT  /v1/users/:name                 | 修改用户属性 |
 | GET /v1/users/:name                  | 查询用户信息 |
 | GET /v1/users                        | 查询用户列表 |
