@@ -28,8 +28,5 @@ func (a *controller) Authorize(c *gin.Context) {
 
 	res := a.srv.NewAuthorizerService().Authorize(&request)
 
-	// auth := authorization.NewAuthorizer(authorizer.NewAuthorization(a.store))
-	// rsp := auth.Authorize(&request)
-
 	util.WriteResponse(c, nil, res)
 }

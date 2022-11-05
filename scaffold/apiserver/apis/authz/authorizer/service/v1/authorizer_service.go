@@ -6,7 +6,7 @@ package v1
 
 import (
 	"github.com/ory/ladon"
-	"github.com/rebirthmonkey/pkg/log"
+	"github.com/rebirthmonkey/go/pkg/log"
 
 	model "github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/authorizer/model/v1"
 	"github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/authorizer/repo"
@@ -34,7 +34,7 @@ func newAuthorizerService(repo repo.Repo) AuthorizerService {
 }
 
 func (a *authorizerService) Authorize(request *ladon.Request) (response *model.Response) {
-	log.Debug("[authorizer/service] authorize request", log.Any("request", request))
+	log.Info("[Authorizer] start authorization")
 
 	if err := a.warden.IsAllowed(request); err != nil {
 		return &model.Response{

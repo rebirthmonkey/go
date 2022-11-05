@@ -31,7 +31,7 @@ insecure::authz-noauth()
 
   # 3 创建 wkpolicy 策略
   ${CCURL} "${Header}" "${token}" http://${INSECURE_SERVER}/v1/policies \
-    -d'{"metadata":{"name":"wkpolicy"},"policyShadow":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
+    -d'{"metadata":{"name":"wkpolicy"},"policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
 
   # 4. 调用 /v1/authz 完成资源鉴权
   $CCURL "${Header}" http://${INSECURE_AUTHZ_SERVER}/v1/authz \

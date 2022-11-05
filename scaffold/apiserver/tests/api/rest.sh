@@ -80,7 +80,7 @@ insecure::policy()  # 运行：./tests/api/rest.sh policy
   ${UCURL} "${Header}" http://${INSECURE_SERVER}/v1/policies/policy0 \
     -d'{"policy":{"description":"One policy to rule them all(modified).","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
 
-  # 6. 删除 policy0 密钥
+  # 6. 删除 policy0 策略
   ${DCURL} "${Header}" http://${INSECURE_SERVER}/v1/policies/policy0; echo
 }
 

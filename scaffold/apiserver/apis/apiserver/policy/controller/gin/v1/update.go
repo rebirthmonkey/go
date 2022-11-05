@@ -33,7 +33,7 @@ func (s *controller) Update(c *gin.Context) {
 		return
 	}
 
-	policy.Policy = r.Policy
+	policy.AuthzPolicy = r.AuthzPolicy
 	policy.Extend = r.Extend
 
 	if err := s.srv.NewPolicyService().Update(policy); err != nil {

@@ -6,7 +6,6 @@ package rest
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"sync"
@@ -41,17 +40,17 @@ func newLadonPolicyRepo(cfg *gin.CompletedConfig) authzRepo.LadonPolicyRepo {
 }
 
 func (p *ladonPolicyRepo) List() ([]*ladon.DefaultPolicy, error) {
-	log.Info("[Policy/repo/cache] List ladonPolicy")
+	log.Info("[Authorizer] PolicyRepo: list")
 
 	response, err := http.Get(p.policyRestURL)
 	if err != nil {
-		log.Error("[Policy/repo/rest] List: HTTP Response error")
+		log.Error("[AuthzPolicy/repo/rest] List: HTTP Response error")
 		return nil, nil
 	}
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Error("[Policy/repo/rest] List: HTTP Body error")
+		log.Error("[AuthzPolicy/repo/rest] List: HTTP Body error")
 		return nil, nil
 	}
 
@@ -59,25 +58,15 @@ func (p *ladonPolicyRepo) List() ([]*ladon.DefaultPolicy, error) {
 
 	err = json.Unmarshal(body, &policyList)
 	if err != nil {
-		log.Error("[Policy/repo/rest] List: HTTP JSON error")
+		log.Error("[AuthzPolicy/repo/rest] List: HTTP JSON error")
 		return nil, nil
 	}
 
 	var ladonPolicies []*ladon.DefaultPolicy
 
 	for _, v := range policyList.Items {
-		var policy ladon.DefaultPolicy
-
-		if err := json.Unmarshal([]byte(v.PolicyShadow), &policy); err != nil {
-			log.Warnf("failed to load policy for %s, error: %s", v.Name, err.Error())
-
-			continue
-		}
-
-		ladonPolicies = append(ladonPolicies, &policy)
+		ladonPolicies = append(ladonPolicies, &v.AuthzPolicy.DefaultPolicy)
 	}
-
-	fmt.Println("xxxxxxxxxxxxxxxx ladonPolicies", ladonPolicies)
 
 	return ladonPolicies, nil
 }
