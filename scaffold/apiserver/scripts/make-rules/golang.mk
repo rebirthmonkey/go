@@ -65,10 +65,15 @@ go.build: go.build.verify $(addprefix go.build., $(addprefix $(PLATFORM)., $(BIN
 go.build.multiarch: go.build.verify $(foreach p,$(PLATFORMS),$(addprefix go.build., $(addprefix $(p)., $(BINS))))
 
 
-.PHONY: go.run
-go.run:
-	@echo "===========> Running the application"
-	@$(GO) run cmd/apiserver.go -c configs/apiserver.yaml
+.PHONY: go.run-apiserver
+go.run-apiserver:
+	@echo "===========> Running the apiserver"
+	@$(GO) run cmd/apiserver/apiserver.go -c configs/apiserver.yaml
+
+.PHONY: go.run-authz
+go.run-authz:
+	@echo "===========> Running the authz"
+	@$(GO) run cmd/authz/authz.go -c configs/authz.yaml
 
 
 .PHONY: go.clean

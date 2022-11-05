@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# The root of the build/dist directory
-#IAM_ROOT=$(dirname "${BASH_SOURCE[0]}")/../..
-#[[ -z ${COMMON_SOURCED} ]] && source ${IAM_ROOT}/scripts/install/common.sh
-#INSECURE_SERVER=${IAM_APISERVER_HOST}:${IAM_APISERVER_INSECURE_BIND_PORT}
-#INSECURE_AUTHZSERVER=${IAM_AUTHZ_SERVER_HOST}:${IAM_AUTHZ_SERVER_INSECURE_BIND_PORT}
-
-API_ROOT=.
 INSECURE_SERVER="127.0.0.1:8080"
 #INSECURE_SERVER="127.0.0.1:30080"
 SECURE_SERVER="127.0.0.1:8443"
@@ -17,24 +10,12 @@ UCURL="curl -f -s -XPUT" # Update
 RCURL="curl -f -s -XGET" # Get
 DCURL="curl -f -s -XDELETE" # Delete
 
-# Print out some info that isn't a top level status line
-api::log::info() {
-  local V="${V:-0}"
-  if [[ ${IAM_VERBOSE} < ${V} ]]; then
-    return
-  fi
-
-  for message; do
-    echo "${message}"
-  done
-}
-
-api::test::healthz()
+insecure::healthz()
 {
   ${RCURL} http://${INSECURE_SERVER}/healthz
 }
 
-api::test::user() # 用于无 auth 验证
+insecure::user() # 用于无 auth 验证
 {
   # 1. 如果有 test00 用户先清空
   ${DCURL} http://${INSECURE_SERVER}/v1/users/test00; echo
@@ -55,11 +36,9 @@ api::test::user() # 用于无 auth 验证
 
   # 6. 删除 test00 用户
   ${DCURL} http://${INSECURE_SERVER}/v1/users/test00; echo
-
-  api::log::info "$(echo -e '\033[32mcongratulations, /v1/user test passed!\033[0m')"
 }
 
-api::test::secret()  # 运行：./tests/api/test.sh api::test::secret
+insecure::secret()  # 运行：./tests/api/rest.sh secret
 {
   # 1. 如果有 secret0 密钥则先清空
   ${DCURL} "${Header}" http://${INSECURE_SERVER}/v1/secrets/secret0; echo
@@ -80,11 +59,9 @@ api::test::secret()  # 运行：./tests/api/test.sh api::test::secret
 
   # 6. 删除 secret0 密钥
   ${DCURL} "${Header}" http://${INSECURE_SERVER}/v1/secrets/secret0; echo
-
-  api::log::info "$(echo -e '\033[32mcongratulations, /v1/user test passed!\033[0m')"
 }
 
-api::test::policy()  # 运行：./tests/api/test.sh api::test::policy
+insecure::policy()  # 运行：./tests/api/rest.sh policy
 {
   # 1. 如果有 policy0 密钥则先清空
   ${DCURL} "${Header}" http://${INSECURE_SERVER}/v1/policies/policy0; echo
@@ -105,11 +82,9 @@ api::test::policy()  # 运行：./tests/api/test.sh api::test::policy
 
   # 6. 删除 policy0 密钥
   ${DCURL} "${Header}" http://${INSECURE_SERVER}/v1/policies/policy0; echo
-
-  api::log::info "$(echo -e '\033[32mcongratulations, /v1/user test passed!\033[0m')"
 }
 
 
-if [[ "$*" =~ api::test:: ]];then
+if [[ "$*" =~ insecure:: ]];then
   eval $*
 fi

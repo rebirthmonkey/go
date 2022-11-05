@@ -19,6 +19,7 @@ require (
 	github.com/gosuri/uitable v0.0.4
 	github.com/hyahm/goconfig v0.0.0-20220416013428-af75691b369c
 	github.com/marmotedu/component-base v1.6.2
+	github.com/marmotedu/errors v1.0.2
 	github.com/marmotedu/iam v1.6.2
 	github.com/novalagung/gubrak v1.0.0
 	github.com/ory/ladon v1.2.0

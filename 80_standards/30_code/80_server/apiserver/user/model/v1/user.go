@@ -9,7 +9,7 @@ import (
 
 	"github.com/rebirthmonkey/go/pkg/auth"
 	"github.com/rebirthmonkey/go/pkg/metamodel"
-	"github.com/rebirthmonkey/go/pkg/util/idutil"
+	"github.com/rebirthmonkey/go/pkg/util"
 	"gorm.io/gorm"
 )
 
@@ -49,7 +49,7 @@ func (u *User) Compare(pwd string) (err error) {
 
 // AfterCreate run after create database record.
 func (u *User) AfterCreate(tx *gorm.DB) error {
-	u.InstanceID = idutil.GetInstanceID(u.ID, "user-")
+	u.InstanceID = util.GetInstanceID(u.ID, "user-")
 
 	return tx.Save(u).Error
 }

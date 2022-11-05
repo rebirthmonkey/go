@@ -43,8 +43,8 @@ func newPolicyRepo(cfg *mysql.CompletedConfig) policyRepoInterface.PolicyRepo {
 }
 
 // close closes the repo's DB engine.
-func (s *policyRepo) close() error {
-	dbEngine, err := s.dbEngine.DB()
+func (p *policyRepo) close() error {
+	dbEngine, err := p.dbEngine.DB()
 	if err != nil {
 		return errors.WithCode(errcode.ErrDatabase, err.Error())
 	}

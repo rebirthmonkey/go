@@ -79,13 +79,13 @@ func (u *userRepo) Create(user *model.User) error {
 
 // Delete deletes the user by the user identifier.
 func (u *userRepo) Delete(username string) error {
-	tmpUser := model.User{}
-	u.dbEngine.Where("name = ?", username).Find(&tmpUser)
-	if tmpUser.Name == "" {
-		err := errors.WithCode(errcode.ErrRecordNotFound, "the delete user not found")
-		log.Errorf("%s\n", err)
-		return err
-	}
+	//tmpUser := model.User{}
+	//u.dbEngine.Where("name = ?", username).Find(&tmpUser)
+	//if tmpUser.Name == "" {
+	//	err := errors.WithCode(errcode.ErrRecordNotFound, "the delete user not found")
+	//	log.Errorf("%s\n", err)
+	//	return err
+	//}
 
 	if err := u.dbEngine.Where("name = ?", username).Delete(&model.User{}).Error; err != nil {
 		return err

@@ -7,7 +7,7 @@ all: tools tidy clean build
 # ==============================================================================
 # Build options
 
-ROOT_PACKAGE=~/workspace/go/84_se/20_build/30_make/80_server
+ROOT_PACKAGE=~/workspace/go/scaffold/apiserver
 VERSION_PACKAGE=github.com/rebirthmonkey/go/pkg/version
 
 # ==============================================================================
@@ -86,10 +86,22 @@ clean:
 	@echo "===========> Cleaning all build output"
 	@-rm -vrf $(OUTPUT_DIR)
 
-## run: Run the application.
+## run: Run the whole application.
 .PHONY: run
 run:
-	@$(MAKE) go.run
+	@$(MAKE) go.run-apiserver
+	@$(MAKE) go.run-authz
+
+## run-apiserver: Run the apiserver.
+.PHONY: run-apiserver
+run-apiserver:
+	@$(MAKE) go.run-apiserver
+
+## run-authz: Run the authz.
+.PHONY: run-authz
+run-authz:
+	@$(MAKE) go.run-authz
+
 
 ## test: Run unit test.
 .PHONY: test

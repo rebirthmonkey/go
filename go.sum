@@ -778,6 +778,7 @@ github.com/markbates/safe v1.0.1/go.mod h1:nAqgmRi7cY2nqMc92/bSEeQA+R4OheNU2T1kN
 github.com/marmotedu/api v1.6.2/go.mod h1:iNLd08qf9U70od3S1nukqGiJsKY3VEDlbOjZJLuVCBk=
 github.com/marmotedu/component-base v1.6.2 h1:UtQkG0ZmAbVHVUdky5Sw68QLJno5ARSqslHu/xsVNl0=
 github.com/marmotedu/component-base v1.6.2/go.mod h1:rvpc1f0WN4iEUMN4pzU/nBOEEym0Yj2hQFA+mQxTRt4=
+github.com/marmotedu/errors v1.0.2 h1:qx9GtOljmAL+wLuemahe3WSWdXyEpJvLBlpXK8y2rdI=
 github.com/marmotedu/errors v1.0.2/go.mod h1:xNqbJJRD50/RGSjbfqF01CTLegWK+gtRgeJ6ExVzQQ8=
 github.com/marmotedu/iam v1.6.2 h1:MejFxvhRqa9kZMo7+XuW2qNUo2AsA8Mbq4s6v86Z3Uw=
 github.com/marmotedu/iam v1.6.2/go.mod h1:kFyt3T73JoJo4SZHZdCntJTla/VgtnU19UwgCjRrocM=
