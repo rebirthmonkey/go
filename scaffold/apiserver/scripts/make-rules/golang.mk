@@ -54,26 +54,22 @@ go.build.%:
 	$(eval ARCH := $(word 2,$(subst _, ,$(PLATFORM))))
 	@echo "===========> Building binary $(COMMAND) $(VERSION) for $(OS) $(ARCH)"
 	@mkdir -p $(OUTPUT_DIR)/platforms/$(OS)/$(ARCH)
-	@CGO_ENABLED=0 GOOS=$(OS) GOARCH=$(ARCH) $(GO) build $(GO_BUILD_FLAGS) -o $(OUTPUT_DIR)/platforms/$(OS)/$(ARCH)/$(COMMAND)$(GO_OUT_EXT) $(ROOT_PACKAGE)/cmd
-
+	@CGO_ENABLED=0 GOOS=$(OS) GOARCH=$(ARCH) $(GO) build $(GO_BUILD_FLAGS) -o $(OUTPUT_DIR)/platforms/$(OS)/$(ARCH)/$(COMMAND)$(GO_OUT_EXT) $(ROOT_PACKAGE)/cmd/$(COMMAND)
 
 .PHONY: go.build
 go.build: go.build.verify $(addprefix go.build., $(addprefix $(PLATFORM)., $(BINS)))
-
 
 .PHONY: go.build.multiarch
 go.build.multiarch: go.build.verify $(foreach p,$(PLATFORMS),$(addprefix go.build., $(addprefix $(p)., $(BINS))))
 
 
-.PHONY: go.run-apiserver
-go.run-apiserver:
-	@echo "===========> Running the apiserver"
-	@$(GO) run cmd/apiserver/apiserver.go -c configs/apiserver.yaml
+.PHONY: go.run.%
+go.run.%:
+	@echo "===========> Running $*"
+	@$(GO) run cmd/$*/$*.go -c configs/$*.yaml
 
-.PHONY: go.run-authz
-go.run-authz:
-	@echo "===========> Running the authz"
-	@$(GO) run cmd/authz/authz.go -c configs/authz.yaml
+.PHONY: go.run
+go.run:
 
 
 .PHONY: go.clean

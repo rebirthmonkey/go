@@ -8,7 +8,7 @@ DOCKER_SUPPORTED_API_VERSION ?= 1.31
 
 REGISTRY_PREFIX ?= wukongsun
 BASE_IMAGE = centos:centos8
-#BASE_IMAGE = golang:1.17
+#BASE_IMAGE = golang:1.18
 
 EXTRA_ARGS ?= --no-cache
 _DOCKER_BUILD_EXTRA_ARGS :=
@@ -49,7 +49,7 @@ image.daemon.verify:
 	fi
 
 .PHONY: image.build
-image.build: image.verify go.build.verify $(addprefix image.build., $(addprefix $(IMAGE_PLAT)., $(IMAGES)))
+image.build: image.verify $(addprefix image.build., $(addprefix $(IMAGE_PLAT)., $(IMAGES)))
 
 .PHONY: image.build.multiarch
 image.build.multiarch: image.verify go.build.verify $(foreach p,$(PLATFORMS),$(addprefix image.build., $(addprefix $(p)., $(IMAGES))))

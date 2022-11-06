@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authz
+  labels:
+    app: authz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authz
+  template:
+    metadata:
+      labels:
+        app: authz
+    spec:
+      volumes:
+        - name: vol-config
+          hostPath:
+            path: /Users/ruan/workspace/go/scaffold/apiserver/configs
+            type: Directory
+      containers:
+        - name: authz
+          image: wukongsun/authz-amd64:2cd18d6
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: vol-config
+              mountPath: /etc/apiserver
+          ports:
+            - containerPort: 8080
+              name: insecure
+              protocol: TCP
+            - containerPort: 8081
+              name: rpc
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authz
+spec:
+  selector:
+    app: authz
+  type: NodePort
+  ports:
+  - name: http
+    protocol: TCP
+    targetPort: 8090
+    port: 8090
+    nodePort: 30090
+  - name: rpc
+    protocol: TCP
+    targetPort: 8091
+    port: 8091
+    nodePort: 30091
+
+

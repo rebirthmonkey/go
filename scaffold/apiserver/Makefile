@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := all
 
 .PHONY: all
-all: tools tidy clean build
+all: tools clean build
 
 # ==============================================================================
 # Build options
@@ -49,26 +49,19 @@ export USAGE_OPTIONS
 # ==============================================================================
 # Targets
 
-## deploy: Deploy updated components to development env.
-.PHONY: deploy
-deploy: image
-	@$(MAKE) deploy.run
+## tools: install dependent tools.
+.PHONY: tools
+tools:
+	@$(MAKE) tools.install
 
-## undeploy: undeploy updated components to development env.
-.PHONY: undeploy
-undeploy:
-	@$(MAKE) deploy.clean
+## run: Run the whole application.
+.PHONY: run
+run:
+	@$(MAKE) go.run
 
-## image: Build docker images for host arch.
-.PHONY: image
-image:
-	@$(MAKE) image.build
-
-## push: Build docker images for host arch and push images to registry.
-.PHONY: push
-push:
-	@$(MAKE) image.push
-
+.PHONY: run.%
+run.%:
+	@$(MAKE) go.run.$*
 
 ## build: Build source code for host platform.
 .PHONY: build
@@ -86,43 +79,27 @@ clean:
 	@echo "===========> Cleaning all build output"
 	@-rm -vrf $(OUTPUT_DIR)
 
-## run: Run the whole application.
-.PHONY: run
-run:
-	@$(MAKE) go.run-apiserver
-	@$(MAKE) go.run-authz
+## image: Build docker images for host arch.
+.PHONY: image
+image:
+	@$(MAKE) image.build
 
-## run-apiserver: Run the apiserver.
-.PHONY: run-apiserver
-run-apiserver:
-	@$(MAKE) go.run-apiserver
-
-## run-authz: Run the authz.
-.PHONY: run-authz
-run-authz:
-	@$(MAKE) go.run-authz
+## push: Build docker images for host arch and push images to registry.
+.PHONY: push
+push:
+	@$(MAKE) image.push
 
 
-## test: Run unit test.
-.PHONY: test
-test:
-	@$(MAKE) go.test
+## deploy: Deploy updated components to development env.
+.PHONY: deploy
+#deploy: image
+deploy: 
+	@$(MAKE) deploy.run
 
-## test: Run unit test.
-.PHONY: test.api
-test.api:
-	@./tests/api/test.sh api::test::user
-
-## tidy: run go mod tidy
-.PHONY: tidy
-tidy:
-	@$(GO) mod tidy
-
-
-## tools: install dependent tools.
-.PHONY: tools
-tools:
-	@$(MAKE) tools.install
+## undeploy: undeploy updated components to development env.
+.PHONY: undeploy
+undeploy:
+	@$(MAKE) deploy.clean
 
 
 ## help: Show this help info.

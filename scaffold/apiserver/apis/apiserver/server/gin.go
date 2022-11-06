@@ -67,9 +67,9 @@ func installController(g *gin.Engine) *gin.Engine {
 		}
 
 		log.Info("[GINServer] registry secretHandler")
-		secretv1 := v1.Group("/secrets")
-		secretv1.Use(jwtStrategy.AuthFunc())
-		//secretv1 := v1.Group("/secrets", jwtStrategy.AuthFunc())
+		//secretv1 := v1.Group("/secrets")
+		//secretv1.Use(jwtStrategy.AuthFunc())
+		secretv1 := v1.Group("/secrets", jwtStrategy.AuthFunc())
 		{
 			secretRepoClient, _ := secretRepoMysql.Repo(config.CompletedMysqlConfig)
 			secretRepo.SetClient(secretRepoClient)

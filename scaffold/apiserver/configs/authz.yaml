@@ -12,8 +12,10 @@ apiserver:
 
   # HTTP 配置
   insecure:
-    bind-address: 0.0.0.0 # 如需要在 Docker 中运行，需设置为 0.0.0.0 表示使用全部网络接口，默认为 127.0.0.1
-    bind-port: 8080 # 提供非安全认证的监听端口，默认为 8080
+#    bind-address: 0.0.0.0
+    bind-address: host.docker.internal  # 在Docker内访问host上的
+#    bind-port: 8080 # 提供非安全认证的监听端口，默认为 8080
+    bind-port: 30080 # 在Docker内访问host上的
 
 # gin
 gin:
@@ -33,10 +35,10 @@ gin:
     bind-address: 0.0.0.0 # HTTPS 安全模式的 IP 地址，如需要在 Docker 中运行，需设置为 0.0.0.0
     bind-port: 8453 # 使用 HTTPS 安全模式的端口号，设置为 0 表示不启用 HTTPS，默认为 8443
     tls:
-      cert-file: /Users/ruan/workspace/go/scaffold/apiserver/configs/cert/server.pem # 包含 x509 证书的文件路径，用 HTTPS 认证
-#      cert-file: /etc/apiserver/cert/server.pem # 包含 x509 证书的文件路径，用 HTTPS 认证
-      private-key-file: /Users/ruan/workspace/go/scaffold/apiserver/configs/cert/server.key # TLS 私钥
-#      private-key-file: /etc/apiserver/cert/server.key # TLS 私钥
+#      cert-file: /Users/ruan/workspace/go/scaffold/apiserver/configs/cert/server.pem # 包含 x509 证书的文件路径，用 HTTPS 认证
+      cert-file: /etc/apiserver/cert/server.pem # 包含 x509 证书的文件路径，用 HTTPS 认证
+#      private-key-file: /Users/ruan/workspace/go/scaffold/apiserver/configs/cert/server.key # TLS 私钥
+      private-key-file: /etc/apiserver/cert/server.key # TLS 私钥
 
 # GRPC 服务配置
 grpc:

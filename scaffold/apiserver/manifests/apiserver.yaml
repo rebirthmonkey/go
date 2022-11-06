@@ -17,11 +17,11 @@ spec:
       volumes:
         - name: vol-config
           hostPath:
-            path: /Users/ruan/workspace/go/84_se/20_build/30_make/80_server/configs
+            path: /Users/ruan/workspace/go/scaffold/apiserver/configs
             type: Directory
       containers:
         - name: apiserver
-          image: wukongsun/apiserver-amd64:a46f731
+          image: wukongsun/apiserver-amd64:2cd18d6
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: vol-config

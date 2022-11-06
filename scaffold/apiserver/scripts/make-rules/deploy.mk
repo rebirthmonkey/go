@@ -4,12 +4,10 @@
 #
 
 KUBECTL := kubectl
-#NAMESPACE ?= iam
 NAMESPACE ?= default
 #CONTEXT ?= rebirthmonkey.dev
-
-#DEPLOYS=iam-apiserver iam-authz-server iam-pump iam-watcher
-DEPLOYS=apiserver
+#DEPLOYS=apiserver authz
+DEPLOYS=apiserver authz
 
 .PHONY: deploy.run.all
 deploy.run.all:
@@ -23,8 +21,8 @@ deploy.run: $(addprefix deploy.run., $(DEPLOYS))
 deploy.run.%:
 	$(eval ARCH := $(word 2,$(subst _, ,$(PLATFORM))))
 	@echo "===========> Deploying $* $(VERSION)-$(ARCH)"
-	# echo @$(KUBECTL) -n $(NAMESPACE) set image deployment/$* $*=$(REGISTRY_PREFIX)/$*-$(ARCH):$(VERSION)
-	$(KUBECTL) -n $(NAMESPACE) apply -f deployments/$*.yaml
+#    $(KUBECTL) -n $(NAMESPACE) apply -f manifests/$*.yaml set image deployment/$* $*=$(REGISTRY_PREFIX)/$*-$(ARCH):$(VERSION)
+	$(KUBECTL) -n $(NAMESPACE) apply -f manifests/$*.yaml
 
 .PHONY: deploy.clean
 deploy.clean: $(addprefix deploy.clean., $(DEPLOYS))
@@ -33,4 +31,4 @@ deploy.clean: $(addprefix deploy.clean., $(DEPLOYS))
 deploy.clean.%:
 	$(eval ARCH := $(word 2,$(subst _, ,$(PLATFORM))))
 	@echo "===========> Undeploying $* $(VERSION)-$(ARCH)"
-	@$(KUBECTL) -n $(NAMESPACE) delete -f deployments/$*.yaml
+	@$(KUBECTL) -n $(NAMESPACE) delete -f manifests/$*.yaml
