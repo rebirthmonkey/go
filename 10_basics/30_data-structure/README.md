@@ -656,9 +656,51 @@ go run 59_interface-general.go
 
 ## 类型转换
 
-### 基本
+在使用 Go 这样的强类型语言时，常常会遇到类型转换的问题。比如 int 类型转 int64，interface{} 转 struct 等。Go 存在 4 种类型转换分别为：显式、强制、断言、隐式。
 
-`b=type(a)` 如：`b = int32(a)`
+### 显示
+
+一个显式转换的表达式为 `Type(expression)`，其中 Type 是一种类型并且 expression 是可转换为该类型的表达式。普通变量类型`int`、`float`、`string `都可以使用 `Type(expression)` 这种形式来进行显示类型转换。
+
+```go
+var a int = 1
+var b float32 = 1.1
+fmt.Println(float32(a)*b)
+```
+
+### 强制
+
+强制类型转换通过修改变量类型，主要用于unsafe包和接口类型检测。指针的强制类型转换需要用到`unsafe`包中的函数实现：
+
+```go
+var a int = 10
+var b *int = &a
+var c *int64 = (*int64)(unsafe.Pointer(b))
+fmt.Println(*c)
+```
+
+### 断言 Assert
+
+断言通过判断变量是否可以转换成某一个类型，其格式为 `expression.(Type)`。expression 必须是接口类型，且自身类型与 Type 类型相符。
+
+- 单一返回值：expression.(Type) 返回一个值，如果失败则直接 panic。如果断言类型成立，则表达式返回值就是 T 类型的 x，如果断言失败就会触发 panic。
+
+```go
+var s = x.(T)
+```
+
+- 双返回值：expression.(Type) 的返回值为 2 个：value 和ok。匹配成功 ok 为 true、value 有值。匹配失败 ok 为false，value 无值。
+
+```go
+var a interface{} = 100
+if aa, ok := a.(int); ok {
+  fmt.Println(aa)
+}
+```
+
+### 隐式
+
+隐式类型转换日常使用并不会感觉到，但是运行中确实出现了类型转换，如 JSON 转换。Go 中大多数数据类型都可以转化为有效的 JSON 文本，除了 channel 通道、complex 复数、func 函数等。
 
 ### struct
 

@@ -16,7 +16,7 @@ type AuthzPolicy struct {
 	ladon.DefaultPolicy
 }
 
-// Policy represents a policy restful resource, include a ladon policy.
+// Policy represents a policy restful resource, include an authz policy.
 // It is also used as gorm model.
 type Policy struct {
 	// Standard object's metadata.
@@ -29,7 +29,7 @@ type Policy struct {
 	AuthzPolicy AuthzPolicy `json:"policy,omitempty" gorm:"-" validate:"omitempty"`
 	// AuthzPolicy ladon.DefaultPolicy `json:"policy,omitempty" gorm:"-" validate:"omitempty"`
 
-	// The ladon policy content, just a string format of ladon.DefaultPolicy. DO NOT modify directly.
+	// The AuthzPolicy content, just a string format of AuthzPolicy. DO NOT modify directly.
 	PolicyShadow string `json:"-" gorm:"column:policyShadow" validate:"omitempty"`
 }
 
@@ -45,16 +45,16 @@ type PolicyList struct {
 	Items []*Policy `json:"items"`
 }
 
-// TableName maps to mysql table name.
-func (p *Policy) TableName() string {
-	return "policy"
-}
-
-// String returns the string format of Policy.
+// String returns the string format of AuthzPolicy.
 func (ap AuthzPolicy) String() string {
 	data, _ := json.Marshal(ap)
 
 	return string(data)
+}
+
+// TableName maps to mysql table name.
+func (p *Policy) TableName() string {
+	return "policy"
 }
 
 // BeforeCreate run before create database record.
@@ -86,7 +86,7 @@ func (p *Policy) BeforeUpdate(tx *gorm.DB) error {
 	return nil
 }
 
-// AfterFind run after find to unmarshal a policy string into ladon.DefaultPolicy struct.
+// AfterFind run after find to unmarshal a policy string into AuthzPolicy struct.
 func (p *Policy) AfterFind(tx *gorm.DB) (err error) {
 	if err := p.ObjectMeta.AfterFind(tx); err != nil {
 		return err

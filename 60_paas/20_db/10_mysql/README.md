@@ -47,6 +47,8 @@ func (a *Animal) TableName() string {
 }
 ```
 
+##### Tag
+
 上面的代码中，通过 primaryKey 标签指定主键，使用 column 标签指定列名，通过给 Models 添加 TableName 方法指定表名。如果没有指定表名，则 Gorm 使用结构体名的蛇形复数作为表名。
 
 数据库表通常会包含 4 个字段：
@@ -336,7 +338,7 @@ db.AutoMigrate(&Product{})
 
 Gorm 的 AutoMigrate 方法只对新增的字段或索引进行变更，理论上是没有风险的。在实际的 Go 应用中，也有很多人使用 AutoMigrate 方法自动同步表结构。但更倾向于规范化、可感知的操作方式，所以在实际开发中，都是手动变更表结构的。当然，具体使用哪种方法，可以根据需要自行选择。
 
-### Gorm Hook
+### Hook
 
 Gorm 支持 hook 功能，例如下面这段代码在插入记录前执行 BeforeCreate 钩子：
 
@@ -350,7 +352,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 }
 ```
 
-Gorm 支持的钩子如下表：
+Gorm 支持的 Hook 如下表：
 
 | **钩子**     | **触发时机**   |
 | ------------ | -------------- |

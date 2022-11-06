@@ -45,13 +45,13 @@ func (p *ladonPolicyRepo) List() ([]*ladon.DefaultPolicy, error) {
 	response, err := http.Get(p.policyRestURL)
 	if err != nil {
 		log.Error("[AuthzPolicy/repo/rest] List: HTTP Response error")
-		return nil, nil
+		return nil, err
 	}
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		log.Error("[AuthzPolicy/repo/rest] List: HTTP Body error")
-		return nil, nil
+		return nil, err
 	}
 
 	var policyList model.PolicyList
@@ -59,14 +59,14 @@ func (p *ladonPolicyRepo) List() ([]*ladon.DefaultPolicy, error) {
 	err = json.Unmarshal(body, &policyList)
 	if err != nil {
 		log.Error("[AuthzPolicy/repo/rest] List: HTTP JSON error")
-		return nil, nil
+		return nil, err
 	}
 
-	var ladonPolicies []*ladon.DefaultPolicy
+	var ladonPolicyList []*ladon.DefaultPolicy
 
 	for _, v := range policyList.Items {
-		ladonPolicies = append(ladonPolicies, &v.AuthzPolicy.DefaultPolicy)
+		ladonPolicyList = append(ladonPolicyList, &v.AuthzPolicy.DefaultPolicy)
 	}
 
-	return ladonPolicies, nil
+	return ladonPolicyList, nil
 }

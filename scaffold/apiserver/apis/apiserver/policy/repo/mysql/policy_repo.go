@@ -6,14 +6,16 @@ package mysql
 
 import (
 	"fmt"
+
 	"github.com/rebirthmonkey/go/pkg/errcode"
 	"github.com/rebirthmonkey/go/pkg/errors"
 	"github.com/rebirthmonkey/go/pkg/log"
 	"github.com/rebirthmonkey/go/pkg/mysql"
-	model "github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/policy/model/v1"
-	policyRepoInterface "github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/policy/repo"
 	mysqlDriver "gorm.io/driver/mysql"
 	"gorm.io/gorm"
+
+	model "github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/policy/model/v1"
+	policyRepoInterface "github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/policy/repo"
 )
 
 // policyRepo stores the secret's info.
