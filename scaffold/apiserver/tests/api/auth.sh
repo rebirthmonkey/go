@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-#INSECURE_SERVER="127.0.0.1:8080"
-INSECURE_SERVER="127.0.0.1:30080"  # Docker port
+INSECURE_SERVER="127.0.0.1:8080"
+#INSECURE_SERVER="127.0.0.1:30080"  # Docker port
 SECURE_SERVER="127.0.0.1:8443"
 
 Header="-HContent-Type: application/json"
