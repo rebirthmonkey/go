@@ -19,16 +19,18 @@ EOF
 iamroot="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 wrkdir="${iamroot}/_output/wrk"
 jobname="apiserver"
-duration="300s"
-threads=$((3 * `grep -c processor /proc/cpuinfo`))
+duration="10s"
+#threads=$((3 * `grep -c processor /proc/cpuinfo`))
+threads=4
 
 source "${iamroot}/scripts/lib/color.sh"
 
 # Set wrk options
 iam::wrk::setup() {
   #concurrent="200 500 1000 3000 5000 10000 15000 20000 25000 50000 100000 200000 500000 1000000"
-  concurrent="200 500 1000 3000 5000 10000 15000 20000 25000 50000"
-  cmd="wrk -t${threads} -d${duration} -T30s --latency"
+#  concurrent="20 50 100 300 500 1000 1500 2000 2500 5000"
+  concurrent="20 50 100 300"
+  cmd="wrk -t${threads} -d${duration} -T5s --latency"
 }
 
 
