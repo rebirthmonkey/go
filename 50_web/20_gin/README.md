@@ -966,7 +966,7 @@ curl --insecure -X DELETE http://127.0.0.1:8080/v1/users/user99
 
 ### Question
 
-根据代码，请描述当前应用中，如何实现多接口同时运行，采用了什么机制？并且给出代码予以说明。
+根据代码，请描述当前应用中，如何实现多接口同时运行（包括 HTTP、HTTPS 和 GRPC 接口，同时 HTTP 和 HTTPS 接口中又可以支持不同的 endpoints 路径），采用了什么机制？并且给出代码予以说明。
 
 ## Ref
 

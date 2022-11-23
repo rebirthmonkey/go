@@ -392,7 +392,7 @@ apiserver 示例后端需要持久化存储，所以采用 MySQL Gorm 作为其�
 
 ### Question
 
-Gorm 默认的 Table Name 都是复数，但如果查询 MySQL，会发现所创建的 Table 为单数，请解释原因，并且附上相关代码予以说明。
+针对 [apiserver 示例](80_server/README.md)，Gorm 默认在 MySQL 中创建的 DB iam 中，创建的 Table 的名字都是复数，如 users。但如果查询 MySQL，会发现所创建的 Table 名称为单数，如 user。请解释原因，并且附上相关代码予以说明。
 
 ## Ref
 
