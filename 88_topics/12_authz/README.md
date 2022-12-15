@@ -246,15 +246,15 @@ go-admin 是一个基于 Gin + Vue + Element UI 的前后端分离权限管理�
 
 gin-vue-admin 是一个基于 Gin 和 Vue 开发的全栈前后端分离的后台管理系统，集成了 JWT 鉴权、动态路由、动态菜单、Casbin 鉴权、表单生成器、代码生成器、RBAC 权限管理模型等功能。
 
+## Lab
+
 ### ladon
 
-- [Ladon](20_ladon/README.md)：Ladon 是用 Go 语言编写的用于实现访问控制策略的库，类似于 RBAC 和 ACL。但与 RBAC 和 ACL 相比，Ladon 可以实现更细粒度的访问控制，并且能够在更为复杂的环境中（例如多租户、分布式应用程序和大型组织）工作。
+- [Ladon 示例](20_ladon/README.md)：Ladon 是用 Go 语言编写的用于实现访问控制策略的库，类似于 RBAC 和 ACL。但与 RBAC 和 ACL 相比，Ladon 可以实现更细粒度的访问控制，并且能够在更为复杂的环境中（例如多租户、分布式应用程序和大型组织）工作。因此，本课程选择 Ladon 作为基础，具体代码[在此](20_ladon/README.md)。
 
-## apiserver 示例
+### apiserver 示例
 
 apiserver 的鉴权通过提供 /v1/authz RESTful API 接口完成资源授权。/v1/authz 接口是通过 github.com/ory/ladon 来完成资源授权的。
-
-### 简介
 
 资源授权的流程可以分为 4 步：
 
@@ -265,7 +265,7 @@ apiserver 的鉴权通过提供 /v1/authz RESTful API 接口完成资源授权�
 
 <img src="figures/image-20221024160507988.png" alt="image-20221024160507988" style="zoom:50%;" />
 
-### Policy 接口
+#### Policy 接口
 
 可以看到，在上面的流程中，apiserver 使用到了 3 种资源：User、Secret、Policy。它们映射到程序设计中就是 3 种 REST 资源。
 
@@ -283,7 +283,9 @@ Policy 相关接口
 | GET  /v1/policies/:name    | 查询授权策略详细信息 |
 | GET  /v1/policies          | 查询授权策略列表     |
 
-### 代码解析
+#### 代码解析
+
+具体代码[在此](../../scaffold/apiserver/README.md)
 
 <img src="figures/image-20221103201632644.png" alt="image-20221103201632644" style="zoom:50%;" />
 
