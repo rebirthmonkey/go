@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-type Strategy interface {
+type IStrategy interface {
 	do(int, int) int
 }
 
@@ -24,11 +24,11 @@ func (*reduce) do(a, b int) int {
 
 // Operator 用于在不同的 strategy 间 switch.
 type Operator struct {
-	strategy Strategy
+	strategy IStrategy
 }
 
 // 设置策略
-func (operator *Operator) setStrategy(strategy Strategy) {
+func (operator *Operator) setStrategy(strategy IStrategy) {
 	operator.strategy = strategy
 }
 

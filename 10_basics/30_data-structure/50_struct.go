@@ -6,7 +6,12 @@ import (
 
 type student struct {
 	rollNo int
-	name string
+	name   string
+}
+
+type graduate struct {
+	level int
+	*student
 }
 
 func main() {
@@ -20,4 +25,10 @@ func main() {
 
 	pstud := &stud
 	fmt.Println("Student name is:", pstud.name)
+
+	grad := graduate{
+		level:   8,
+		student: &stud,
+	}
+	fmt.Println("Graduate student name is:", grad.name)
 }

@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"hungry"
-	"lazy"
+
+	"github.com/rebirthmonkey/go/96_dp/10_singleton/hungry"
+	"github.com/rebirthmonkey/go/96_dp/10_singleton/lazy"
 )
 
 func main() {

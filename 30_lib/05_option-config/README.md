@@ -420,7 +420,7 @@ go build -o wkctl ./example2.go
 ./wkctl hello xxx
 ```
 
-## apiserver
+## option/config/app 设计模式
 
-- [apiserver 示例](80_option-config/README.md)
+- [option/config/app 设计模式 & APIServer 示例](80_option-config/README.md)
 
