@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/scheme"
-	"github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/scheme/registry"
+	"github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/mgr"
+	"github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/mgr/registry"
 
 	_ "github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/plugina"
 	_ "github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/pluginb"
@@ -10,7 +10,7 @@ import (
 
 var (
 	plugins   = make(map[string]string)
-	schemeIns = scheme.Scheme{
+	schemeIns = mgr.Manager{
 		Plugins: plugins,
 	}
 )

@@ -1,14 +1,14 @@
-package scheme
+package mgr
 
 import (
 	"fmt"
 )
 
-type Scheme struct {
+type Manager struct {
 	Plugins map[string]string
 }
 
-func (s *Scheme) Show() {
+func (s *Manager) Show() {
 	for key, val := range s.Plugins {
 		fmt.Println("key: ", key, " value: ", val)
 	}

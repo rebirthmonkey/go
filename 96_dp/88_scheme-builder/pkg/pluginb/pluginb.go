@@ -17,13 +17,13 @@ limitations under the License.
 package plugina
 
 import (
-	"github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/scheme"
-	"github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/scheme/registry"
+	"github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/mgr"
+	"github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/mgr/registry"
 )
 
 func init() {
-	registry.Register(func(s *scheme.Scheme) error {
-		s.Plugins["pluginB"] = "yyy"
+	registry.Register(func(mgr *mgr.Manager) error {
+		mgr.Plugins["pluginB"] = "install pluginB"
 		return nil
 	})
 }
