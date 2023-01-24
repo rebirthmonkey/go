@@ -10,6 +10,7 @@ import (
 	"github.com/rebirthmonkey/go/pkg/errors"
 	"github.com/rebirthmonkey/go/pkg/gin/util"
 	"github.com/rebirthmonkey/go/pkg/log"
+
 	model "github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/user/model/v1"
 )
 
