@@ -34,7 +34,7 @@ Strategy 模式定义一组 strategy，将所有 strategy 都封装成一个 int
 
 ## Lab
 
-- [Strategy](10_strategy/main.go)
+- [Strategy](20_strategy/main.go)
 
 ```bash
 cd 10_strategy

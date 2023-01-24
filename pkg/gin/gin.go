@@ -48,7 +48,7 @@ func (s *PreparedServer) Run() error {
 	var eg errgroup.Group
 
 	eg.Go(func() error {
-		log.Infof("[GinServer] Start to listening the incoming requests on http address: %s", s.Insecure.Address)
+		log.Infof("[GinServer] Listen on HTTP: %s", s.Insecure.Address)
 
 		if err := s.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatalf("failed to start Gin HTTP server: %s", err.Error())
@@ -67,7 +67,7 @@ func (s *PreparedServer) Run() error {
 			return nil
 		}
 
-		log.Infof("[GinServer] Start to listening the incoming requests on https address: %s", s.Secure.Address)
+		log.Infof("[GinServer] Listen on HTTPS : %s", s.Secure.Address)
 
 		if err := s.secureServer.ListenAndServeTLS(cert, key); err != nil {
 			log.Fatalf("failed to start Gin HTTPS server: %s", err.Error())
