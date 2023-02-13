@@ -293,7 +293,7 @@ ListApplications(5, 0, "")
 - 可读性不佳：只支持用位置，不支持用关键字来区分参数，参数变多后，各参数含义很难一目了然。
 - 破坏兼容性：增加新参数后，原有调用代码必须进行对应修改，比如像上方的 `ListApplications(5, 0, "")` 一样，在 `owner` 参数的位置传递空字符串。
 
-为了解决这些问题，常见的做法是引入一个参数结构体（struct）传参。
+为了解决这些问题，常见的做法是引入可变传参和参数结构体（struct）传参。
 
 #### 可变传参
 
@@ -344,7 +344,7 @@ ListApplications(ListAppsOptions{limit: 5, offset: 0})
 
 ##### 可选参数
 
-不过，无论是使用普通传参还是结构体传参，都无法支持真正的可选参数。给 `ListApplications`  函数增加一个新选项：`hasDeployed`——根据应用是否已部署来过滤结果。
+不过，无论是使用普通传参还是结构体传参，都无法支持真正的可选参数。给 `ListApplications` 函数增加一个新选项：`hasDeployed`——根据应用是否已部署来过滤结果。
 
 参数结构体调整如下：
 
@@ -436,9 +436,18 @@ ListApplications(ListAppsOptions{limit: 5, offset: 0, hasDeployed: &wantHasDeplo
 
 #### 函数选项模式
 
-选项模式（Options Pattern）是 Go 中经常使用到的模式，它以“参数设置函数”来代替结构体传递给函数。如 grpc/grpc-go 的 NewServer 函数，uber-go/zap 的 New 函数都用到了选项模式。使用选项模式，可以创建一个带有默认值的 struct 变量，并选择性地修改其中一些参数的值。
+选项模式（Options Pattern）是 Go 中经常使用到的模式，它以“参数设置函数”来代替结构体传递给函数。如 grpc/grpc-go 的 NewServer 函数，uber-go/zap 的 New 函数都用到了选项模式。
 
-为了实现“函数式选项”模式，首先修改 `optionFunc` 函数的签名，使其接收类型为 `func(*options)` 的可变数量参数。
+使用选项模式，先要创建一个带有默认值的 options struct 变量，并选择性地修改其中一些参数的值。
+
+```go
+type options struct{
+  aaa string
+  bbb string
+}
+```
+
+接着，定义 `optionFunc` 函数的签名，使其接收类型为 `*options` 的可变数量参数。
 
 ```go
 type optionFunc func(*options)
@@ -448,7 +457,7 @@ func (f optionFunc) apply(o *options) {
 }
 ```
 
-然后，再定义一系列用于设置选项的参数设置函数，这些以 `With*` 命名，通过返回闭包函数来修改函数选项对象 `Option`。
+然后，再定义一系列用于设置选项的参数设置函数，这些以 `With*` 命名，通过返回闭包函数 optionFunc 来修改函数选项对象 `Option`。
 
 ```go
 func WithTimeout(t time.Duration) Option {
@@ -471,7 +480,7 @@ func WithCaching(cache bool) Option {
 NewConnect()
 // 选择性启用某些选项
 NewConnect(WithTimeout(8))
-NewConnect(WithTimeout(8), WithCachine(true))
+NewConnect(WithTimeout(8), WithCaching(true))
 ```
 
 Option 类型的选项参数需要实现 apply(*options) 函数，结合 WithTimeout、WithCaching 函数的返回值和 optionFunc 的 apply 方法实现，可以知道 o.apply(&options) 其实就是把 WithTimeout、WithCaching 传入的参数赋值给 options 结构体变量，以此动态地设置 options 结构体变量的属性。和使用“结构体传参”相比，“选项模式”有以下几个特点：
@@ -480,8 +489,6 @@ Option 类型的选项参数需要实现 apply(*options) 函数，结合 WithTim
 - 灵活性更强：可以方便地在每个 `With*` 函数里追加额外逻辑。
 - 向前兼容性好：任意增加新的选项都不会影响已有代码。
 - 更漂亮的 API：当参数结构体很复杂时，该模式所提供的 API 更漂亮，也更好用。
-
-
 
 ### 适配器模式
 

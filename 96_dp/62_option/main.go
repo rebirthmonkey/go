@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -59,4 +60,12 @@ func NewConnect(addr string, opts ...Option) (*Connection, error) {
 		cache:   options.caching,
 		timeout: options.timeout,
 	}, nil
+}
+
+func main() {
+	// 不使用任何参数
+	fmt.Println(NewConnect("127.0.0.1"))
+	// 选择性启用某些选项
+	fmt.Println(NewConnect("127.0.0.1", WithTimeout(8)))
+	fmt.Println(NewConnect("127.0.0.1", WithTimeout(8), WithCaching(true)))
 }

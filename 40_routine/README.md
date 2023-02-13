@@ -6,7 +6,7 @@ Go 直接内置了对并发的支持， Go 里的并发指的是能让某个函�
 
 ### 并发/并行
 
-并发(concurrency)与并行(parallelism)不同：
+并发（concurrency）与并行（parallelism）不同：
 
 - 并行：是让不同的代码片段同时在不同的物理处理器上执行，并行的关键是同时做很多事情。
 - 并发：是指同时管理很多事情，这些事情可能只做了一半就被暂停去做别的事情了。Go 采用并发通过切换多个线程达到减少物理处理器空闲等待的目的。
@@ -22,7 +22,7 @@ Go 直接内置了对并发的支持， Go 里的并发指的是能让某个函�
 
 <img src="figures/image-20221017192346270.png" alt="image-20221017192346270" style="zoom:50%;" />
 
-### goroutine 原理
+### goroutine原理
 
 goroutine 就是一段代码，一个函数入口，以及在堆上为其分配的一个堆栈。所以它非常廉价，可以很轻松的创建上万个 goroutine。但它们并不是被 OS 所调度执行，而是通过 Go 自己的调度器来多路派遣这些函数的执行，使得每个用`go`关键字执行的函数可以运行成为一个单位协程。
 
@@ -34,7 +34,7 @@ goroutine 就是一段代码，一个函数入口，以及在堆上为其分配�
 
 ## 协程通讯
 
-Go 的并发同步模型来自一个叫作 CSP（Communicating Sequential  Processes，CSP）的范型。CSP 是一种消息传递模型，通过在 goroutine  之间传递数据来传递消息，而不是对数据进行加锁来实现同步访问。
+Go 的并发同步模型来自一个叫作 CSP（Communicating Sequential  Processes，CSP）的范型。CSP 是一种消息传递模型，通过在 goroutine 之间传递数据来传递消息，而不是对数据进行加锁来实现同步访问。
 
 Go 中用于协程间通信和管理的有 channel 和 sync 包。比如 channel 可以通知协程做特定操作（退出、阻塞等），sync 可以加锁和同步。
 
@@ -141,7 +141,7 @@ fmt.Println()
 
 ### Context
 
-使用 Channel 每次都要在协程内部增加对 channel 的判断，也要在外部设置关闭条件。Context 是协程的上下文，主要用于跟踪协程的状态，可以做一些简单的协程控制，也能记录一些协程信息。通过 Context 可以进一步简化控制代码，且更为友好的是，大多数 go 库，如 http、各种 db driver、grpc 等都内置了对 ctx.Done() 的判断，只需要将 ctx 传入即可。
+使用 Channel 每次都要在协程内部增加对 channel 的判断，也要在外部设置关闭条件。Context 是协程的上下文，主要用于跟踪协程的状态，可以做一些简单的协程控制，也能记录一些协程信息。通过 Context 可以进一步简化控制代码，且更为友好的是，大多数 go 库，如 http、db driver、grpc 等都内置了对 ctx.Done() 的判断，只需要将 ctx 传入即可。
 
 ```go
 // 空的父context
@@ -185,20 +185,20 @@ time.Sleep(6 * time.Second)
 #### 分类
 
 - context.Background：是 context 默认值，一般用在主函数（入口函数）或最初的根 context，其他所有的 context 上下文都是基于它创建出来。
-- context.Todo：仅在不知道使用哪种 context 时使用。
+- context.TODO：仅在不知道使用哪种 context 时使用。
 
-但从其实现的源代码来看，Background 和 Todo 可以认为就是互为别名、基本没有差别，很多时候互用也没有任何关系。
+但从其实现的源代码来看，Background 和 TODO 可以认为就是互为别名、基本没有差别，很多时候互用也没有任何关系。
 
-#### 操作
+#### WithXXX
 
-- 新建 Context：返回一个空的 Context，这个 Context 一般用来做父 Context。
+新建 Context：返回一个空的 Context，这个 Context 一般用来做父 Context。
 
 ```go
 ctx := context.TODO()
 ctx := context.Background()
 ```
 
-- WithCancel：会根据传入的 Context 生成一个子 Context 和 cancel() 取消函数。当父 Context 有相关取消操作，或直接调用 cancel() 函数，子 Context 就会被取消。
+- WithCancel：根据传入的 Context 生成一个子 Context 和 cancel() 取消函数。当父 Context 有相关取消操作，或直接调用 cancel() 函数，子 Context 就会被取消。
 
 ```go
 // 一般操作比较耗时等，都会在输入参数里带上一个ctx
@@ -243,7 +243,7 @@ func demo(ctx context.Context) {
 - WithValue：用来保存一些如链路追踪等信息，比如 API 服务里会有来保存一些来源 IP、请求参数等。这个方法比较常用了，如 grpc-go 里的 metadata 就使用这个方法将结构体存储在 ctx 里。在使用 Value() 查找 key 对应的值时，如果没找到，就会从父 context 中查找，直某个父 context 中返回 nil 或找到对应的值。
 
 ```go
-//  传入父Context和(key, value)，相当于存一个kv
+// 传入父Context和(key, value)，相当于存一个kv
 ctx := context.WithValue(parentCtx, "name", 123)
 // 用法：将key对应的值取出
 v := ctx.Value("name")
