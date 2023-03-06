@@ -21,7 +21,7 @@ func main() {
 	time.Sleep(time.Second * 2)
 
 	msg := <-messages
-	fmt.Println(msg)
+	fmt.Println("the current value in the messages is:", msg)
 
 	time.Sleep(time.Second * 3)
 }
