@@ -17,8 +17,8 @@ limitations under the License.
 package plugina
 
 import (
-	"github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/mgr"
-	"github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/mgr/registry"
+	"github.com/rebirthmonkey/go/96_dp/88_builder/pkg/mgr"
+	"github.com/rebirthmonkey/go/96_dp/88_builder/pkg/mgr/registry"
 )
 
 func init() {

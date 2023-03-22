@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/mgr"
-	"github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/mgr/registry"
+	"github.com/rebirthmonkey/go/96_dp/88_builder/pkg/mgr"
+	"github.com/rebirthmonkey/go/96_dp/88_builder/pkg/mgr/registry"
 
-	_ "github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/plugina"
-	_ "github.com/rebirthmonkey/go/96_dp/88_scheme-builder/pkg/pluginb"
+	_ "github.com/rebirthmonkey/go/96_dp/88_builder/pkg/plugina"
+	_ "github.com/rebirthmonkey/go/96_dp/88_builder/pkg/pluginb"
 )
 
 var (
