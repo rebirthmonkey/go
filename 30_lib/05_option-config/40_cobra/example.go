@@ -8,7 +8,7 @@ import (
 
 func main() {
 	var version bool
-	var rootCmd = &cobra.Command{
+	rootCmd := &cobra.Command{
 		Use:   "wkctl",
 		Short: "wktcl command line tool - short",
 		Run: func(cmd *cobra.Command, args []string) {
@@ -19,7 +19,6 @@ func main() {
 		},
 	}
 
-	flags := rootCmd.Flags()
-	flags.BoolVarP(&version, "version", "v", false, "Print version information and quit")
+	rootCmd.Flags().BoolVarP(&version, "version", "v", false, "Print version information and quit")
 	_ = rootCmd.Execute()
 }

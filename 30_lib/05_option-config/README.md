@@ -1,13 +1,11 @@
 # Option-Config
 
-## 简介
-
 一个命令的基本格式为：`App ARG --FLAG`
 
 - ARG（argument）：代表非选项参数
 - FLAG：代表选项参数（也叫标志）
 
-### Arg
+## Arg
 
 提取命令行输入的参数
 
@@ -403,22 +401,37 @@ var cmd = &cobra.Command{
 
 这里介绍如何使用 Cobra 库来创建命令。使用 Cobra 库创建命令如果要用 Cobra 库编码实现一个应用程序，需要首先创建一个空的 main.go 文件和一个 rootCmd  文件，之后可以根据需要添加其他命令。具体步骤如下：
 
-- [Cobra框架1](40_cobra/example.go)
-- [Cobra框架2](40_cobra/example2.go)
+- [Cobra 解析 Flag](40_cobra/example.go)：定义一个 rootCmd，并为其添加 --version 的 flag。
 
-```bash
+```shell
 cd 40_cobra/
-go build -o wkctl ./example.go
-./wkctl
-./wkctl help
-./wkctl version
-./wkctl hello xxx
-go build -o wkctl ./example2.go
-./wkctl
-./wkctl help
-./wkctl version
-./wkctl hello xxx
+go run ./example.go  # 不会展示 version 信息
+go run ./example.go --version  # 会展示 version 信息
+go run ./example.go -v  # 会展示 version 信息
 ```
+
+- [Cobra 子命令](40_cobra/example2.go)：定义一个 rootCmd，并为其添加 version、hello 2 个子命令。
+
+```shell
+go run ./example2.go
+go run ./example2.go version # 使用 version 子命令
+go run ./example2.go hello xxx # 使用 hello 子命令
+```
+
+- [Cobra 同时解析配置文件](40_cobra/example3.go)：解析整个配置文件，并将结果放入 Config{} 结构体中。
+
+```shell
+go run ./example3.go --config config.yaml
+```
+
+- [Cobra 同时解析配置文件&Flag](40_cobra/example4.go)：如果有定义 flag，则优先使用 flag 的值。如果没有 flag，则使用配置文件中的值。
+
+```shell
+go run ./example4.go --config config.yaml  # 读取配置文件信息
+go run ./example4.go --config config.yaml --name Alice --age 18  # 虽然读取配置文件信息，但被 Flag 信息覆盖
+```
+
+
 
 ## option/config/app 设计模式
 

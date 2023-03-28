@@ -278,7 +278,8 @@ Config 结构体会在 App 启动后转化为 App 自身的 runtime 结构体，
 ## 操作
 
 ```bash
-go run cmd/apiserver.go -c configs/config.yaml
+go run cmd/apiserver.go -c configs/config.yaml  # 读取配置文件
+go run cmd/apiserver.go -c configs/config.yaml --healthz true
 ```
 
 ## Question
