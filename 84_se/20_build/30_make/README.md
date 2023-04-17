@@ -1,38 +1,21 @@
 # Makefile
 
-## 简介
-
 Makefile 是高效管理项目的有效手段之一，可以通过 Makefile 来管理项目的启动、编译、打包、部署，为此需要编写 Makefile 文件。通常而言，Go 项目的 Makefile 应该实现以下功能：格式化代码、静态代码检查、单元测试、代码构建、文件清理、帮助等。如果通过 Docker 部署，还需要实现 Docker 镜像打包功能。因为 Go 是跨平台的语言，所以构建和 Docker 打包命令还需要支持不同的 CPU 架构和平台。为了能够更好地控制 Makefile 命令的行为，还需要支持 Options。
 
 ## 功能
 
-- 代码生成类：
-  - gen: Generate all necessary files, such as error code files.  
-- 格式化类：
-  - format: Gofmt (reformat) package sources (exclude vendor dir if existed). 
-- 静态代码检查：
-  - lint: Check syntax and styling of  go sources.
-- 测试类：
-
-  - test: Run unit test.  
+- gen 代码生成类：Generate all necessary files, such as error code files.  
+- test 测试类：Run unit test.
   - cover: Run unit test and get test coverage. 
-- 构建类
-
-  - build: Build source code for host platform. 
+- build 构建类：Build source code for host platform. 
   - build.multiarch: Build source  code for multiple platforms.
-- Docker类
-
-  - image: Build docker images for host arch.  
-
-  - image.multiarch: Build docker images for multiple platforms. 
-
-  - push: Build docker images for host arch and push images to  registry.  
-
-  - push.multiarch: Build docker images for multiple platforms and push images to registry.  
-- 部署类
-  - deploy: Deploy  updated components to development env.  
-- 清理类
-  - clean: Remove all files that are created by building.  
+- clean 清理类：Remove all files that are created by building. 
+- deploy 部署类：Deploy  updated components to development env.  
+- Docker 类：
+  - image: Build docker images for host arch.
+  - image.multiarch: Build docker images for multiple platforms.
+  - push: Build docker images for host arch and push images to  registry.
+  - push.multiarch: Build docker images for multiple platforms and push images to registry.   
 
 ## 目录结构
 
@@ -60,7 +43,7 @@ Makefile 是高效管理项目的有效手段之一，可以通过 Makefile 来�
 
 ## 规则
 
-Makefile 的规则一般由 target、prerequisites 和 command 组成，用来指定源文件编译的先后顺序。Makefile 之所以受欢迎，核心原因就是 Makefile 规则，因为 Makefile 规则可以自动判断是否需要重新编译某个目标，从而确保目标仅在需要时编译。
+Makefile 之所以受欢迎，核心原因就是 Makefile 规则，因为 Makefile 规则可以自动判断是否需要重新编译某个目标，从而确保目标仅在需要时编译。Makefile 的规则一般由 target、prerequisites 和 command 组成，用来指定源文件编译的先后顺序。
 
 ```makefile
 target ...: prerequisites ...
@@ -72,6 +55,10 @@ target ...: prerequisites ...
 ### target
 
 可以是一个 object file（目标文件），也可以是一个执行文件，还可以是一个标签（label）。target  可使用通配符，当有多个目标时，目标之间用空格分隔。
+
+#### .PHONY
+
+在 Makefile 中，`.PHONY` 后面的 target 表示的是一个伪造的 target，而不是真实存在的文件 target。make 命令后面跟的参数如果出现在 .PHONY 定义的伪目标中，那就直接在 Makefile 中就执行伪目标的依赖和命令。不管 Makefile 同级目录下是否有该伪目标同名的文件，即使有也不会产生冲突。
 
 ### prerequisites
 
@@ -116,10 +103,6 @@ tools              install dependent tools.
 check-updates      Check outdated dependencies of the go projects.
 help               Show this help info.
 ```
-
-### .PHONY
-
-在 Makefile 中，`.PHONY`后面的 target 表示的是一个伪造的 target，而不是真实存在的文件 target。make 命令后面跟的参数如果出现在 .PHONY 定义的伪目标中，那就直接在 Makefile 中就执行伪目标的依赖和命令。不管 Makefile 同级目录下是否有该伪目标同名的文件，即使有也不会产生冲突。
 
 ## Lab
 
