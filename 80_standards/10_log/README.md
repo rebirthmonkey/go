@@ -173,7 +173,7 @@ wklog 是一个简单的 log 包实现，demo 中主要展示了 WithLevel() 和
 go run 20_wklog/example.go
 ```
 
-### 自研 pkg/log
+### 自研pkg/log
 
 是个可在生产环境使用的 log 包，需要设置的配置参数为：
 
