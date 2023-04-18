@@ -307,7 +307,7 @@ go run example3.go
 
 ### Cobra
 
-Cobra 既是一个可以创建 CLI 应用程序的库，也是一个可以生成应用和命令文件的程序。有许多大型项目都是用 Cobra 来构建应用程序的，如 Kubernetes、Docker、etcd、Rkt、Hugo 等。Cobra 建立在 commands、arguments 和 flags 结构之上。一个好的应用程序应该是易懂的，用户可以清晰地知道如何去使用这个应用程序。应用程序通常遵循如下模式：`APPNAME COMMAND ARG --FLAG`，如：`git clone URL  --bare`
+Cobra 既是一个可以创建 CLI 应用程序的库，也是一个可以生成应用和命令文件的程序。有许多大型项目都是用 Cobra 来构建应用程序的，如 Kubernetes、Docker、etcd、Rkt、Hugo 等。Cobra 建立在 commands、arguments 和 flags 结构之上。一个好的应用程序应该是易懂的，用户可以清晰地知道如何去使用这个应用程序。应用程序通常遵循如下模式：`APPNAME COMMAND ARG --FLAG`，如：`git clone URL --bare`
 
 - clone 是一个命令，
 - URL 是一个非选项参数，
@@ -428,7 +428,7 @@ go run ./example3.go --config config.yaml
 
 ```shell
 go run ./example4.go --config config.yaml  # 读取配置文件信息
-go run ./example4.go --config config.yaml --name Alice --age 18  # 虽然读取配置文件信息，但被 Flag 信息覆盖
+go run ./example4.go --config config.yaml --name Alice --age 18  # 虽然读取配置文件信息，但被Flag信息覆盖
 ```
 
 

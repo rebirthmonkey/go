@@ -79,7 +79,6 @@ go.clean:
 
 
 .PHONY: go.test
-#go.test: tools.verify.go-junit-report
 go.test:
 	@echo "===========> Run unit test"
 	@set -o pipefail;$(GO) test -race -cover -coverprofile=$(OUTPUT_DIR)/coverage.out \

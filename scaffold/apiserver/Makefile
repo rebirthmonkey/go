@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := all
 
 .PHONY: all
-all: tools clean build
+all: clean build
 
 # ==============================================================================
 # Build options
@@ -49,10 +49,6 @@ export USAGE_OPTIONS
 # ==============================================================================
 # Targets
 
-## tools: install dependent tools.
-.PHONY: tools
-tools:
-	@$(MAKE) tools.install
 
 ## run: Run the whole application.
 .PHONY: run
