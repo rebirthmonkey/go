@@ -42,7 +42,6 @@ mysql:
 log:
   name: apiserver # Logger的名字
   development: true # 是否是开发模式。如果是开发模式，会对DPanicLevel进行堆栈跟踪。
-#  level: debug # 日志级别，优先级从低到高依次为：debug, info, warn, error, dpanic, panic, fatal。
   level: info # 日志级别，优先级从低到高依次为：debug, info, warn, error, dpanic, panic, fatal。
   format: console # 支持的日志输出格式，目前支持console和json两种。console其实就是text格式。
   enable-color: true # 是否开启颜色输出，true:是，false:否

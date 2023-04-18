@@ -36,8 +36,6 @@ func main() {
 
 	cobra.OnInitialize(initConfig2)
 	rootCmd.PersistentFlags().StringVar(&cfgFile2, "config", "", "config file (default is $HOME/.myapp.yaml)")
-	//viper.BindPFlag("name", rootCmd.Flags().Lookup("name"))
-	//viper.BindPFlag("age", rootCmd.Flags().Lookup("age"))
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

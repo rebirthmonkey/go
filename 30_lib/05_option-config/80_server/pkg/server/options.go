@@ -33,12 +33,10 @@ func (s *ServerOptions) ApplyTo(c *Config) error {
 	} else {
 		c.Healthz = viper.GetBool("healthz")
 	}
-
 	return nil
 }
 
 // AddFlags adds flags for a specific APIServer to the specified FlagSet.
 func (s *ServerOptions) AddFlags(fs *pflag.FlagSet) {
-	//fs.BoolVar(&s.Healthz, "healthz", true, "Add self readiness check /healthz.")
 	fs.BoolVar(&Healthz, "healthz", false, "Add self readiness check /healthz.")
 }

@@ -3,7 +3,7 @@ package server
 import (
 	"fmt"
 
-	"github.com/rebirthmonkey/go/30_lib/05_option-config/80_option-config/pkg/server"
+	"github.com/rebirthmonkey/go/30_lib/05_option-config/80_server/pkg/server"
 )
 
 type Server struct {

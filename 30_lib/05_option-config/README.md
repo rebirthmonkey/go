@@ -435,5 +435,5 @@ go run ./example4.go --config config.yaml --name Alice --age 18  # 虽然读取�
 
 ## option/config/app 设计模式
 
-- [option/config/app 设计模式 & APIServer 示例](80_option-config/README.md)
+- [option/config/app 设计模式 & APIServer 示例](80_server/README.md)
 

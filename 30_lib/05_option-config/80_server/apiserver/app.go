@@ -1,8 +1,8 @@
 package apiserver
 
 import (
-	"github.com/rebirthmonkey/go/30_lib/05_option-config/80_option-config/apiserver/server"
-	"github.com/rebirthmonkey/go/30_lib/05_option-config/80_option-config/pkg/app"
+	"github.com/rebirthmonkey/go/30_lib/05_option-config/80_server/apiserver/server"
+	"github.com/rebirthmonkey/go/30_lib/05_option-config/80_server/pkg/app"
 )
 
 func NewApp(basename string) *app.App {
