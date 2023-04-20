@@ -1,2 +1,3 @@
 server:
-  healthz: false
+  healthz: true
+  mode: debug

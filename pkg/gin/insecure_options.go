@@ -7,15 +7,11 @@ import (
 	"strconv"
 )
 
-// InsecureOptions are for creating an unauthenticated, unauthorized, insecure port.
-// No one should be using these anymore.
 type InsecureOptions struct {
 	BindAddress string `json:"bind-address" mapstructure:"bind-address"`
 	BindPort    int    `json:"bind-port"    mapstructure:"bind-port"`
 }
 
-// NewInsecureOptions is for creating an unauthenticated, unauthorized, insecure port.
-// No one should be using these anymore.
 func NewInsecureOptions() *InsecureOptions {
 	return &InsecureOptions{
 		//BindAddress: "127.0.0.1",

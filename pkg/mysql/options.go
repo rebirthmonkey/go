@@ -2,7 +2,7 @@ package mysql
 
 import (
 	"fmt"
-	
+
 	"github.com/spf13/pflag"
 )
 
@@ -42,4 +42,5 @@ func (o *Options) ApplyTo(c *Config) error {
 }
 
 func (o *Options) AddFlags(fs *pflag.FlagSet) {
+	fs.StringVar(&o.Host, "mysql.host", o.Host, "MySQL Host.")
 }

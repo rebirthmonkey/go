@@ -17,8 +17,6 @@ type SecureOptions struct {
 	}
 }
 
-// NewSecureOptions is for creating an unauthenticated, unauthorized, insecure port.
-// No one should be using these anymore.
 func NewSecureOptions() *SecureOptions {
 	return &SecureOptions{
 		//BindAddress: "127.0.0.1",
@@ -26,8 +24,6 @@ func NewSecureOptions() *SecureOptions {
 	}
 }
 
-// Validate is used to parse and validate the parameters entered by the user at
-// the command line when the program starts.
 func (o *SecureOptions) Validate() []error {
 	var errors []error
 
@@ -58,13 +54,16 @@ func (o *SecureOptions) ApplyTo(c *Config) error {
 // AddFlags adds flags related to features for a specific api server to the
 // specified FlagSet.
 func (o *SecureOptions) AddFlags(fs *pflag.FlagSet) {
-	fs.StringVar(&o.BindAddress, "secure.bind-address", o.BindAddress, ""+
+	fs.StringVar(&o.BindAddress, "gin.secure.bind-address", o.BindAddress, ""+
 		"The IP address on which to serve the --secure.bind-port "+
 		"(set to 0.0.0.0 for all IPv4 interfaces and :: for all IPv6 interfaces).")
 
-	fs.IntVar(&o.BindPort, "secure.bind-port", o.BindPort, ""+
+	fs.IntVar(&o.BindPort, "gin.secure.bind-port", o.BindPort, ""+
 		"The port on which to serve secured, unauthenticated access. It is assumed "+
 		"that firewall rules are set up such that this port is not reachable from outside of "+
 		"the deployed machine and that port 443 on the iam public address is proxied to this "+
 		"port. This is performed by nginx in the default setup. Set to zero to disable.")
+
+	fs.StringVar(&o.TLS.CertFile, "gin.secure.tls.cert-file", o.TLS.CertFile, "TLS cert file.")
+	fs.StringVar(&o.TLS.PrivateKeyFile, "gin.secure.tls.private-key-file", o.TLS.PrivateKeyFile, "TLS private key.")
 }

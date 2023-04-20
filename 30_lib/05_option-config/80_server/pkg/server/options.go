@@ -2,41 +2,33 @@ package server
 
 import (
 	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
 )
 
-// ServerOptions contains the options while running a generic api server.
-type ServerOptions struct {
-	Healthz bool `json:"healthz"     mapstructure:"healthz"`
+type Options struct {
+	Healthz bool   `json:"healthz"     mapstructure:"healthz"`
+	Mode    string `json:"mode"     mapstructure:"mode"`
 }
 
-var Healthz bool
-
-// NewServerOptions creates a new ServerOptions object with default parameters.
-func NewServerOptions() *ServerOptions {
-	return &ServerOptions{
+func NewOptions() *Options {
+	return &Options{
 		Healthz: true,
+		Mode:    "",
 	}
 }
 
-// Validate checks validation of ServerOptions.
-func (s *ServerOptions) Validate() []error {
+func (o *Options) Validate() []error {
 	errors := []error{}
 
 	return errors
 }
 
-// ApplyTo applies the run options to the method receiver and returns self.
-func (s *ServerOptions) ApplyTo(c *Config) error {
-	if Healthz == false {
-		c.Healthz = s.Healthz
-	} else {
-		c.Healthz = viper.GetBool("healthz")
-	}
+func (o *Options) ApplyTo(c *Config) error {
+	c.Healthz = o.Healthz
+	c.Mode = o.Mode
 	return nil
 }
 
-// AddFlags adds flags for a specific APIServer to the specified FlagSet.
-func (s *ServerOptions) AddFlags(fs *pflag.FlagSet) {
-	fs.BoolVar(&Healthz, "healthz", false, "Add self readiness check /healthz.")
+func (o *Options) AddFlags(fs *pflag.FlagSet) {
+	fs.BoolVar(&o.Healthz, "server.healthz", o.Healthz, "healthz.")
+	fs.StringVar(&o.Mode, "server.mode", o.Mode, "Mode.")
 }

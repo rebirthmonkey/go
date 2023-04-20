@@ -2,18 +2,17 @@ package server
 
 import (
 	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
-
 	"github.com/rebirthmonkey/go/30_lib/05_option-config/80_server/pkg/server"
 )
 
 type Options struct {
-	ServerOptions *server.ServerOptions `json:"server"   mapstructure:"server"`
+	ServerOptions *server.Options `json:"server"   mapstructure:"server"`
 }
 
 // NewOptions creates a new Options object with default parameters.
 func NewOptions() *Options {
 	return &Options{
-		ServerOptions: server.NewServerOptions(),
+		ServerOptions: server.NewOptions(),
 	}
 }
 
@@ -36,6 +35,5 @@ func (o *Options) ApplyTo(c *Config) error {
 // Flags returns flags for a specific Server by section name.
 func (o *Options) Flags() (fss cliflag.NamedFlagSets) {
 	o.ServerOptions.AddFlags(fss.FlagSet("server"))
-
 	return fss
 }

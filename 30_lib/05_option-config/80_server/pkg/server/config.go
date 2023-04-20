@@ -4,6 +4,7 @@ package server
 // Its members are sorted roughly in order of importance for composers.
 type Config struct {
 	Healthz bool
+	Mode    string
 }
 
 // CompletedConfig is the completed configuration for Server.
@@ -15,6 +16,7 @@ type CompletedConfig struct {
 func NewConfig() *Config {
 	return &Config{
 		Healthz: true,
+		Mode:    "",
 	}
 }
 
@@ -28,6 +30,7 @@ func (c *Config) Complete() *CompletedConfig {
 func (c CompletedConfig) New() (*Server, error) {
 	s := &Server{
 		healthz: c.Healthz,
+		mode:    c.Mode,
 	}
 
 	s.init()

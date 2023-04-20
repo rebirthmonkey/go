@@ -55,7 +55,7 @@ func (o *Options) ApplyTo(c *Config) error {
 
 // Flags returns flags for a specific APIServer by section name.
 func (o *Options) Flags() (fss cliflag.NamedFlagSets) {
-	o.GinOptions.AddFlags()
+	o.GinOptions.AddFlags(fss.FlagSet("gin"))
 	o.GrpcOptions.AddFlags(fss.FlagSet("grpc"))
 	o.MysqlOptions.AddFlags(fss.FlagSet("msyql"))
 

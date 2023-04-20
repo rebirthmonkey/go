@@ -6,6 +6,7 @@ import (
 
 type Server struct {
 	healthz bool
+	mode    string
 }
 
 type PreparedServer struct {
@@ -24,9 +25,8 @@ func (s *Server) PrepareRun() *PreparedServer {
 	}
 }
 
-// Run spawns the http server. It only returns when the port cannot be listened on initially.
 func (s *PreparedServer) Run() error {
-	fmt.Println("[PreparedServer] Run")
+	fmt.Println("[PreparedServer] Run on mode:", s.mode)
 
 	if s.healthz {
 		fmt.Println("[Server] Activate healthz option")

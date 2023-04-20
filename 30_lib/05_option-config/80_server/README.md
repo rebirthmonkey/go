@@ -234,26 +234,8 @@ if !a.noConfig {
 
 - NewOptions()：创建 Options 结构体，因为创建时会自动填充默认值，所以不需要 Complete() 函数。
 - Options.Validate()：给 Options 的值做校验。
-- Options.ApplyTo(Config)：将 Options 的值转化、传递到 Config 结构体中。注意，如果需要提高命令行中 flag 的优先级（默认低于 configFile），则需要明示以下两部分代码修改：
-
-```go
-func (s *ServerOptions) ApplyTo(c *Config) error {
-	if Healthz == false {
-		c.Healthz = s.Healthz
-	} else {
-		c.Healthz = viper.GetBool("healthz")
-	}
-	return nil
-}
-```
-
+- Options.ApplyTo(Config)：将 Options 的值转化、传递到 Config 结构体中。
 - Options.Flags()/AddFlags()：为命令行添加针对 server、db、logs 等的 flag，并集成到 Options 中。
-
-```go
-func (s *ServerOptions) AddFlags(fs *pflag.FlagSet) {
-	fs.BoolVar(&Healthz, "healthz", false, "Add self readiness check /healthz.")
-}
-```
 
 ### config
 
@@ -297,7 +279,8 @@ Config 结构体会在 App 启动后转化为 App 自身的 runtime 结构体，
 
 ```bash
 go run cmd/apiserver.go -c configs/config.yaml  # 读取配置文件
-go run cmd/apiserver.go -c configs/config.yaml --healthz true  # 验证优先级别
+go run cmd/apiserver.go -c configs/config.yaml --server.healthz=true  # 千万注意，对于bool的flag需要使用=true
+go run cmd/apiserver.go -c configs/config.yaml --server.mode high --server.healthz=true
 ```
 
 ## Question

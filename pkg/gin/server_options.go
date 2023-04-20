@@ -4,25 +4,28 @@ import (
 	"github.com/spf13/pflag"
 )
 
-// ServerOptions contains the options while running a generic api server.
 type ServerOptions struct {
 	Mode        string   `json:"mode"        mapstructure:"mode"`
 	Healthz     bool     `json:"healthz"     mapstructure:"healthz"`
 	Middlewares []string `json:"middlewares" mapstructure:"middlewares"`
 }
 
-// NewServerOptions creates a new ServerOptions object with default parameters.
 func NewServerOptions() *ServerOptions {
-	defaults := NewConfig()
+	//defaults := NewConfig()
+
+	//return &ServerOptions{
+	//	Mode:        defaults.Mode,
+	//	Healthz:     defaults.Healthz,
+	//	Middlewares: defaults.Middlewares,
+	//}
 
 	return &ServerOptions{
-		Mode:        defaults.Mode,
-		Healthz:     defaults.Healthz,
-		Middlewares: defaults.Middlewares,
+		Mode:        "",
+		Healthz:     true,
+		Middlewares: []string{},
 	}
 }
 
-// Validate checks validation of ServerRunOptions.
 func (o *ServerOptions) Validate() []error {
 	errors := []error{}
 
@@ -38,16 +41,11 @@ func (o *ServerOptions) ApplyTo(c *Config) error {
 	return nil
 }
 
-// AddFlags adds flags for a specific APIServer to the specified FlagSet.
 func (o *ServerOptions) AddFlags(fs *pflag.FlagSet) {
-	// Note: the weird ""+ in below lines seems to be the only way to get gofmt to
-	// arrange these text blocks sensibly. Grrr.
-	fs.StringVar(&o.Mode, "server.mode", o.Mode, ""+
-		"Start the server in a specified server mode. Supported server mode: debug, test, release.")
+	fs.StringVar(&o.Mode, "gin.server.mode", o.Mode, "server mode")
 
-	fs.StringSliceVar(&o.Middlewares, "server.middlewares", o.Middlewares, ""+
+	fs.StringSliceVar(&o.Middlewares, "gin.server.middlewares", o.Middlewares, ""+
 		"List of allowed middlewares for server, comma separated. If this list is empty default middlewares will be used.")
 
-	fs.BoolVar(&o.Healthz, "server.healthz", o.Healthz, ""+
-		"Add self readiness check and install /healthz router.")
+	fs.BoolVar(&o.Healthz, "gin.server.healthz", o.Healthz, "healthz")
 }

@@ -1,7 +1,7 @@
 package gin
 
 import (
-	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
+	"github.com/spf13/pflag"
 )
 
 type Options struct {
@@ -39,11 +39,19 @@ func (o *Options) ApplyTo(c *Config) error {
 	return nil
 }
 
-// AddFlags returns flags for a specific APIServer by section name.
-func (o *Options) AddFlags() (fss cliflag.NamedFlagSets) {
-	o.ServerOptions.AddFlags(fss.FlagSet("server"))
-	o.InsecureOptions.AddFlags(fss.FlagSet("insecure"))
-	o.SecureOptions.AddFlags(fss.FlagSet("secure"))
+//// AddFlags returns flags for a specific APIServer by section name.
+//func (o *Options) AddFlags() (fss cliflag.NamedFlagSets) {
+//	o.ServerOptions.AddFlags(fss.FlagSet("server"))
+//	o.InsecureOptions.AddFlags(fss.FlagSet("insecure"))
+//	o.SecureOptions.AddFlags(fss.FlagSet("secure"))
+//
+//	return fss
+//}
 
-	return fss
+// AddFlags returns flags for a specific APIServer by section name.
+func (o *Options) AddFlags(nfs *pflag.FlagSet) {
+
+	o.ServerOptions.AddFlags(nfs)
+	o.InsecureOptions.AddFlags(nfs)
+	o.SecureOptions.AddFlags(nfs)
 }

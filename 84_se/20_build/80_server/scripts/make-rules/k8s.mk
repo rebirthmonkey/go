@@ -1,0 +1,39 @@
+
+# ==============================================================================
+# Options
+
+KUBECTL := kubectl
+
+#NAMESPACE ?= iam
+NAMESPACE ?= default
+
+#DEPLOYS=iam-apiserver iam-authz-server iam-pump iam-watcher
+DEPLOYS=apiserver
+
+
+# ==============================================================================
+# Targets
+
+.PHONY: k8s.deploy.all
+k8s.deploy.all:
+	@echo "===========> K8s Deploying all"
+	@$(MAKE) k8s.deploy
+
+.PHONY: k8s.deploy
+k8s.deploy: $(addprefix k8s.deploy., $(DEPLOYS))
+
+.PHONY: k8s.deploy.%
+k8s.deploy.%:
+	$(eval ARCH := $(word 2,$(subst _, ,$(PLATFORM))))
+	@echo "===========> K8s Deploying $* $(VERSION)-$(ARCH)"
+	# echo @$(KUBECTL) -n $(NAMESPACE) set image deployment/$* $*=$(REGISTRY_PREFIX)/$*-$(ARCH):$(VERSION)
+	$(KUBECTL) -n $(NAMESPACE) apply -f manifests/$*.yaml
+
+.PHONY: k8s.undeploy
+k8s.undeploy: $(addprefix k8s.undeploy., $(DEPLOYS))
+
+.PHONY: k8s.undeploy.%
+k8s.undeploy.%:
+	$(eval ARCH := $(word 2,$(subst _, ,$(PLATFORM))))
+	@echo "===========> K8s Undeploying $* $(VERSION)-$(ARCH)"
+	@$(KUBECTL) -n $(NAMESPACE) delete -f manifests/$*.yaml
