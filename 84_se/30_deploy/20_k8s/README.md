@@ -11,7 +11,7 @@
 - 上传配置文件到 TKE 集群的各个节点：整个 /configs 目录
 
 ```shell
-scp -i xxx.pem -r ./configs root@175.178.199.5:/data/apiserver  # k8s node
+scp -i xxx.pem -r ./configs root@175.178.199.5:/data/apiserver  #  k8s node
 ssh -i xxx.pem root@175.178.199.5
 ```
 
