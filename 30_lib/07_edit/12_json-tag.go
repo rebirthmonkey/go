@@ -17,12 +17,12 @@ type User2 struct {
 
 func main() {
 	u := &User2{
-		Name:      "Sammy the Shark",
-		Password:  "fisharegreat",
+		Name:      "Wukong",
+		Password:  "Password",
 		CreatedAt: time.Now(),
 	}
 
-	out, err := json.MarshalIndent(u, "", "  ")
+	out, err := json.MarshalIndent(u, "user", "-------")
 	if err != nil {
 		log.Println(err)
 		os.Exit(1)
