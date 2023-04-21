@@ -43,3 +43,4 @@ k8s.undeploy.%:
 	$(KUBECTL) -n $(NAMESPACE) delete -f manifests/cert.yaml
 	$(KUBECTL) -n $(NAMESPACE) delete -f manifests/config.yaml
 
+
