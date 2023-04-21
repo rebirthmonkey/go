@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: default
+data:
+  apiserver.yaml: |
+    # Copyright 2022 Wukong SUN <rebirthmonkey@gmail.com>. All rights reserved.
+    # Use of this source code is governed by a MIT style
+    # license that can be found in the LICENSE file.
+    
+    # gin
+    gin:
+      server: # server 配置
+        mode: debug # server mode: release, debug, test，默认 release
+        healthz: true # 是否开启健康检查，如果开启会安装 /healthz 路由，默认 true
+        middlewares: recovery,logger,secure,nocache,cors,dump # 加载的 gin 中间件列表，多个中间件，逗号(,)隔开
+        max-ping-count: 3 # http 服务启动后，自检尝试次数，默认 3
+    
+      # HTTP 配置
+      insecure:
+        bind-address: 0.0.0.0 # 如需要在 Docker 中运行，需设置为 0.0.0.0 表示使用全部网络接口，默认为 127.0.0.1
+        bind-port: 8080 # 提供非安全认证的监听端口，默认为 8080
+    
+      # HTTPS 配置
+      secure:
+        bind-address: 0.0.0.0 # HTTPS 安全模式的 IP 地址，如需要在 Docker 中运行，需设置为 0.0.0.0
+        bind-port: 8443 # 使用 HTTPS 安全模式的端口号，设置为 0 表示不启用 HTTPS，默认为 8443
+        tls:
+    #      cert-file: /Users/ruan/workspace/go/84_se/20_build/30_make/80_server/configs/cert/server.pem # 包含 x509 证书的文件路径，用 HTTPS 认证
+          cert-file: /etc/apiserver/cert/server.pem # 包含 x509 证书的文件路径，用 HTTPS 认证
+    #      private-key-file: /Users/ruan/workspace/go/84_se/20_build/30_make/80_server/configs/cert/server.key # TLS 私钥
+          private-key-file: /etc/apiserver/cert/server.key # TLS 私钥
+    
+    # GRPC 服务配置
+    grpc:
+      bind-address: 0.0.0.0 # grpc 安全模式的 IP 地址，如需要在 Docker 中运行，需设置为 0.0.0.0
+      bind-port: 8081 # grpc 安全模式的端口号，默认 8081
+    
+    # MySQL 数据库相关配置
+    mysql:
+    #  host: 0.0.0.0:3306 # MySQL 机器 ip 和端口，如需要在 Docker 中运行，需设置为 0.0.0.0:3306
+      host: host.docker.internal:3306 # 在Docker内访问host上的Mysql
+      username: root # MySQL 用户名(建议授权最小权限集)
+      password: P@ssw0rd # MySQL 用户密码
+      database: iam # iam 系统所用的数据库名
+    
+    log:
+      name: apiserver # Logger的名字
+      development: true # 是否是开发模式。如果是开发模式，会对DPanicLevel进行堆栈跟踪。
+      level: debug # 日志级别，优先级从低到高依次为：debug, info, warn, error, dpanic, panic, fatal。
+      format: console # 支持的日志输出格式，目前支持console和json两种。console其实就是text格式。
+      enable-color: true # 是否开启颜色输出，true:是，false:否
+      disable-caller: true # 是否开启 caller，如果开启会在日志中显示调用日志所在的文件、函数和行号
+      disable-stacktrace: false # 是否再panic及以上级别禁止打印堆栈信息
+      output-paths: stdout # 支持输出到多个输出，逗号分开。支持输出到标准输出（stdout）和文件。
+      error-output-paths: stderr # zap内部(非业务)错误日志输出路径，多个输出，逗号分开

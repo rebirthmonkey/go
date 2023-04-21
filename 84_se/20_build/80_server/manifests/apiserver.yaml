@@ -14,11 +14,21 @@ spec:
       labels:
         app: apiserver
     spec:
+#      volumes:
+#        - name: vol-config
+#          hostPath:
+#            path: /Users/ruan/workspace/go/84_se/20_build/80_server/configs
+#            type: Directory
       volumes:
         - name: vol-config
-          hostPath:
-            path: /Users/ruan/workspace/go/84_se/20_build/80_server/configs
-            type: Directory
+          configMap:
+            name: config
+        - name: vol-cert
+          secret:
+            secretName: cert
+#        - name: vol-secret
+#          secret:
+#            secretName: secret
       containers:
         - name: apiserver
           image: wukongsun/apiserver-amd64:a46f731
@@ -26,6 +36,10 @@ spec:
           volumeMounts:
             - name: vol-config
               mountPath: /etc/apiserver
+            - name: vol-cert
+              mountPath: /etc/apiserver/cert
+#            - name: vol-secret
+#              mountPath: /etc/cert/server.key
           ports:
             - containerPort: 8080
               name: insecure
