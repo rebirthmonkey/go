@@ -14,14 +14,14 @@ Go 程序被组织到 Go 包中，Go 包是同一目录中一起编译的 Go 源
 
 包指一个目录下的一组源文件，但这组源文件的包声明必须是一致的包名。所有语法可见性均定义在包这个级别，也就是一个目录/包下不同的源文件内的函数对于包来说同级，不会区分不同文件。
 
-- 每个包开始于一个与目录同名的.go文件：如 http 包应该在 http/ 目录下的 http.go 文件中定义
+- 每个包开始于一个与目录同名的 .go 文件：如 http 包应该在 http/ 目录下的 http.go 文件中定义
 - 不同的功能分布在不同的源文件中：如 message.go 包含 Request 和 Response 类型，负责 HTTP 序列化请求和响应；http.go 应该包含底层网络处理逻辑；client.go 包含 Client 类型，server.go 包含 Server 类型，实现 HTTP 业务逻辑、请求路由；
 
 #### 导入路径 vs. 包名
 
 包名可以与目录名不同，但尽量相同。
 
-如在使用实时分布式消息平台 nsq 提供的 go client api 时，导入的路径为 `import “github.com/bitly/go-nsq”`。但在使用其提供的函数时，却直接用 nsq 做前缀包名 `q, _ := nsq.NewConsumer("write_test", "ch", config)`。因为 import 导入的是包在 $GOPATH 下的目录路径，并非包名，而在代码中使用的是真正的包名。【1】
+如在使用实时分布式消息平台 nsq 提供的 go client api 时，导入的路径为 `import "github.com/bitly/go-nsq"`。但在使用其提供的函数时，却直接用 nsq 做前缀包名 `q, _ := nsq.NewConsumer("write_test", "ch", config)`。因为 import 导入的是包在 $GOPATH 下的目录路径，并非包名，而在代码中使用的是真正的包名。【1】
 
 #### 多源文件依赖
 
@@ -179,7 +179,7 @@ go env -w GO111MODULE=on
 #### 命令
 
 - init：把当前目录初始化为一个新模块，创建 go.mod 文件。
-- tidy：更新/细化 go.mod 文件，添加丢失的模块，并移除无用的模块。默认情况下，Go 不会移除 go.mod 文件中的无用依赖。当依赖包不再使用了，可以使用go mod  tidy 命令来清除它。它会check go.mod 中所有依赖的 pkg 并下载到 `$GOPATH/pkg/mod/`下。
+- tidy：更新/细化 go.mod 文件，添加丢失的模块，并移除无用的模块。默认情况下，Go 不会移除 go.mod 文件中的无用依赖。当依赖包不再使用了，可以使用go mod  tidy 命令来清除它。它会 check go.mod 中所有依赖的 pkg 并下载到 `$GOPATH/pkg/mod/`下。
 - downlowd：下载 go.mod 文件中记录的所有依赖包到`$GOPATH/pkg/mod/` 下。
 - vendor：将所有依赖包存到当前目录下的 vendor  目录下，将 `$GOPATH/pkg/mod/`下的依赖包复制到本地 vendor/ 目录下。
 - edit：编辑 go.mod 文件。
@@ -202,13 +202,13 @@ go run main.go
 go install  # 安装wkmodule可执行文件到 $GOPATH/bin
 ```
 
-- mod更新依赖：在 go.mod 所在目录
+- tidy：在 go.mod 所在目录更新依赖
 
 ```bash
 go mod tidy
 ```
 
-- mod使用指定版本
+- edit：使用指定版本
 
 ```bash
 go mod edit -require=bitbucket.org/bigwhite/c@v1.0.0 # 会更新go.mod require部分
@@ -243,11 +243,13 @@ cd wkapp2 && rm go.mod
 go mod init wkapp # 创建go.mod
 # 修改 go.mod 加入本地依赖
 ```
+```go
 require (
   github.com/rebirthmonkey/wklib2 v0.0.0
 )
 
 replace github.com/rebirthmonkey/wklib2 => ../wklib2
+```
 
 ```
 go mod tidy 

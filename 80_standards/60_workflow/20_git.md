@@ -1,4 +1,4 @@
-# Git 工作流
+# Git工作流
 
 ## 集中式工作流
 
@@ -6,7 +6,7 @@
 
 <img src="figures/image-20221020155002311.png" alt="image-20221020155002311" style="zoom:50%;" />
 
-在进行了一段时间的开发之后，远程仓库 master  分支的日志可能如下图所示：
+在进行了一段时间的开发之后，远程仓库 master 分支的日志可能如下图所示：
 
 ![img](figures/fbcc75ba5b91223f6bf243f0bc08bac7.png)
 
@@ -14,17 +14,17 @@
 
 ## 功能分支工作流
 
-功能分支工作流在开发新功能时，基于 master 分支新建一个功能分支，在功能分支上进行开发，而不是直接在本地的 master 分支开发，开发完成之后合并到 master 分支，如下图所示：
+功能分支工作流在开发新功能时，基于 master 分支新建一个功能分支，在功能分支上进行开发，而不是直接在本地的 master 分支开发，开发完成之后合并到 master 分支，如图所示：
 
 <img src="figures/image-20221020155049571.png" alt="image-20221020155049571" style="zoom:50%;" />
 
 相较于集中式工作流，这种工作流让不同功能在不同的分支进行开发，只在最后一步合并到 master 分支，不仅可以避免不同功能之间的相互影响，还可以使提交历史看起来更加简洁。
 
-在合并到 master 分支时，需要提交 PR（pull  request），而不是直接将代码 merge 到 master 分支。PR 流程不仅可以把分支代码提供给团队其他开发人员进行 CR（Code  Review），还可以在 PR 页面讨论代码。通过 CR ，可以确保合并到 master 的代码是健壮的；通过 PR 页面的讨论，可以使开发者充分参与到代码的讨论中，有助于提高代码的质量，并且提供了一个代码变更的历史回顾途径。
+在合并到 master 分支时，需要提交 PR（Pull Request），而不是直接将代码 merge 到 master 分支。PR 流程不仅可以把分支代码提供给团队其他开发人员进行 CR（Code  Review），还可以在 PR 页面讨论代码。通过 CR 可以确保合并到 master 的代码是健壮的。通过 PR 页面的讨论，可以使开发者充分参与到代码的讨论中，有助于提高代码的质量，并且提供了一个代码变更的历史回顾途径。
 
 功能分支的具体流程为：
 
-- 基于 master 分支新建一个功能分支，功能分支可以取一些有意义的名字，便于理解，例如 feature/rate-limiting。
+- 基于 master 分支新建一个功能分支，功能分支可以取一些有意义的名字以便于理解，例如 feature/rate-limiting。
 
 ```shell
 $ git checkout -b feature/rate-limiting
@@ -54,12 +54,12 @@ $ git push origin feature/rate-limiting
 Merge pull request 提供了 3 种 merge 方法：
 
 - Create a merge commit：GitHub 的底层操作是 git merge  --no-ff。feature 分支上所有的 commit 都会加到 master 分支上，并且会生成一个 merge commit。这种方式可以清晰地知道是谁做了提交，做了哪些提交，回溯历史的时候也会更加方便。
-- Squash and merge：GitHub 的底层操作是 git merge --squash。Squash and merge 会使该 pull request 上的所有 commit 都合并成一个 commit ，然后加到 master 分支上，但原来的 commit 历史会丢失。如果开发人员在 feature 分支上提交的 commit 非常随意，没有规范，那么可以选择这种方法来丢弃无意义的 commit。但是在大型项目中，每个开发人员都应该是遵循  commit 规范的，因此不建议在团队开发中使用 Squash and merge。
+- Squash and merge：GitHub 的底层操作是 git merge --squash。Squash and merge 会使该 pull request 上的所有 commit 都合并成一个 commit ，然后加到 master 分支上，但原来的 commit 历史会丢失。如果开发人员在 feature 分支上提交的 commit 非常随意、没有规范，那么可以选择这种方法来丢弃无意义的 commit。但是在大型项目中，每个开发人员都应该是遵循 commit 规范的，因此不建议在团队开发中使用 Squash and merge。
 - Rebase and merge：GitHub  的底层操作是 git rebase。这种方式会将 pull request 上的所有提交历史按照原有顺序依次添加到 master  分支的头部（HEAD）。因为 git rebase 有风险，在不完全熟悉 Git 工作流时，不建议 merge  时选择这个。
 
 在实际的项目开发中，推荐你使用 Create a merge commit 方式。
 
-## Git Flow 工作流
+## Git Flow工作流
 
 Git Flow 工作流是一个非常成熟的方案，也是非开源项目中最常用到的工作流。它定义了一个围绕项目发布的严格分支模型，通过为代码开发、发布和维护分配独立的分支来让项目的迭代流程更加顺畅，比较适合大型的项目或者迭代速度快的项目。
 
@@ -69,7 +69,7 @@ Git Flow 中定义了 5 种分支，分别是 master、develop、feature、relea
 | ---------- | ------------------------------------------------------------ |
 | master     | 该分支上的最新代码永远是发布状态，不能直接在该分支上开发。master 分支每合并一个 hotfix/release 分支，都会打一个版本标签。 |
 | develop    | 该分支上的代码是开发中的最新代码，该分支只做合并操作，不能直接在该分支上开发。 |
-| feature    | 在研发阶段用来做功能开发。一个新功能会基于 develop 分支新建一个 feature 分支，分支名建议命名为：feature/xxxx-xxx。功能开发完成之后，会合并到 develop 分支并删除。这里有一点需要注意，feature 分支在申请合并之前，最好是先 pull 一下 develop 分支，看一下有没有冲突，如果有就先解决冲突，然后再申请合并。 |
+| feature    | 在研发阶段用来做功能开发。一个新功能会基于 develop 分支新建一个 feature 分支，分支名建议命名为：feature/xxxx-xxx。功能开发完成后，会合并到 develop 分支并删除。这里有一点需要注意，feature 分支在申请合并之前，最好是先 pull 一下 develop 分支，看一下有没有冲突，如果有就先解决冲突，然后再申请合并。 |
 | release    | 在发布阶段用作版本发布的预发布分支，基于 develop 分支创建，分支名建议命名为：release/xxxx-xxx。例如：v1.0.0 版本的功能全部开发测试完成后，提交到 develop 分支，然后基于 develop 分支创建 release/1.0.0 分支，并提交测试，测试中遇到的问题在 release 分支修改。最终通过测试后，将 release 分支合并到 master 和 develop，并在 master 分支打上 v1.0.0 的版本标签，最后删除 release/1.0.0 分支。 |
 | hotfix     | 在维护阶段用作紧急 bug 修复分支，在 master 分支上创建，修复完成后合并到 master。分支名建议命名为 hotfix/xxxx-xxx。例如：当线上某个版本出现 Bug 后，从 master 检出对应版本的代码，创建 hotfix 分支，并在 hotfix 分支修复问题。问题修复后，将 hotfix 分支合并到 master 和 develop分支，并在 master 分支打上修复后的版本标签，最后删除 hotfix 分支。 |
 
@@ -120,11 +120,11 @@ func main() {
 
 ```shell
 $ git stash # 1. 开发工作只完成了一半，还不想提交，可以临时保存修改至堆栈区
-$ git checkout -b hotfix/print-error master # 2. 从 master 建立 hotfix 分支
-$ vi main.go # 3. 修复 bug，callmainfunction -> call main function
+$ git checkout -b hotfix/print-error master # 2. 从master建立hotfix分支
+$ vi main.go # 3. 修复bug，callmainfunction -> call main function
 $ git commit -a -m 'fix print message error bug' # 4. 提交修复
-$ git checkout develop # 5. 切换到 develop 分支
-$ git merge --no-ff hotfix/print-error # 6. 把 hotfix 分支合并到 develop 分支
+$ git checkout develop # 5. 切换到develop分支
+$ git merge --no-ff hotfix/print-error # 6. 把hotfix分支合并到develop分支
 $ git checkout master # 7. 切换到 master 分支
 $ git merge --no-ff hotfix/print-error # 8. 把 hotfix 分支合并到 master
 $ git tag -a v0.9.1 -m "fix log bug" # 9. master 分支打 tag
@@ -142,14 +142,13 @@ $ git stash pop # 14. 恢复到修复前的工作状态
 $ git commit -a -m "print 'hello world'"
 ```
 
-- 在 feature/print-hello-world 分支上做 code review
-  - 将 feature/print-hello-world push 到代码托管平台，例如 GitHub 上。
+- 在 feature/print-hello-world 分支上做 code review：将 feature/print-hello-world push 到代码托管平台，例如 GitHub 上。
 ```shell
 $ git push origin feature/print-hello-world
 ```
 
   - 在 GitHub 上，基于 feature/print-hello-world 创建 pull request
-  - code review 通过后，由代码仓库 matainer 将功能分支合并到 develop 分支。
+  - code review 通过后，由代码仓库 maintainer 将功能分支合并到 develop 分支。
 
 ```shell
 $ git checkout develop
@@ -188,13 +187,11 @@ $ git branch -d feature/print-hello-world
 
 Git Flow 工作流的优点是：Git Flow 工作流的每个分支分工明确，这可以最大程度减少它们之间的相互影响。因为可以创建多个分支，所以也可以并行开发多个功能。另外，和功能分支工作流一样，它也可以添加 code review，保障代码质量。因此，Git Flow 工作流比较适合开发团队相对固定，规模较大的项目。
 
-## Forking 工作流
+## Forking工作流
 
 Git Flow 是非开源项目中最常用的，而在开源项目中，最常用到的是 Forking 工作流，例如 Kubernetes、Docker 等项目用的就是这种工作流。
 
-fork 操作是在个人远程仓库新建一份目标远程仓库的副本，比如在 GitHub 上操作时，在项目的主页点击 fork 按钮，即可拷贝该目标远程仓库。
-
-Forking 工作流的流程如下：
+Fork 操作是在个人远程仓库新建一份目标远程仓库的副本，比如在 GitHub 上操作时，在项目的主页点击 fork 按钮，即可拷贝该目标远程仓库。Forking 工作流的流程如下：
 
 <img src="figures/image-20221020155148162.png" alt="image-20221020155148162" style="zoom:50%;" />
 
