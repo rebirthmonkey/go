@@ -16,16 +16,20 @@ spec:
     spec:
       volumes:
         - name: vol-config
-          hostPath:
-            path: /Users/ruan/workspace/go/scaffold/apiserver/configs
-            type: Directory
+          configMap:
+            name: config
+        - name: vol-cert
+          secret:
+            secretName: cert
       containers:
         - name: apiserver
-          image: wukongsun/apiserver-amd64:2cd18d6
+          image: wukongsun/apiserver-amd64:4aa5839
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: vol-config
               mountPath: /etc/apiserver
+            - name: vol-cert
+              mountPath: /etc/apiserver/cert
           ports:
             - containerPort: 8080
               name: insecure

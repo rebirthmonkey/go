@@ -66,13 +66,13 @@ func (s PreparedServer) Run() error {
 		return nil
 	})
 
-	//eg.Go(func() error {
-	//	if err := s.preparedGrpcServer.Run(); err != nil {
-	//		return err
-	//	}
-	//
-	//	return nil
-	//})
+	eg.Go(func() error {
+		if err := s.preparedGrpcServer.Run(); err != nil {
+			return err
+		}
+
+		return nil
+	})
 
 	if err := eg.Wait(); err != nil {
 		log.Fatal(err.Error())

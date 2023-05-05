@@ -6,7 +6,6 @@ DOCKER := docker
 DOCKER_SUPPORTED_API_VERSION ?= 1.31
 
 REGISTRY_PREFIX ?= wukongsun
-#BASE_IMAGE = centos:centos8
 BASE_IMAGE = golang:1.18
 
 EXTRA_ARGS ?= --no-cache

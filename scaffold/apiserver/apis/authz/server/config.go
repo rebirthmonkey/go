@@ -15,20 +15,18 @@ import (
 
 // Config is the running configuration structure of the server.
 type Config struct {
-	LogConfig       *log.Config
-	MysqlConfig     *mysql.Config
-	GinConfig       *gin.Config
-	GrpcConfig      *grpc.Config
-	ApiserverConfig *gin.Config
+	LogConfig   *log.Config
+	MysqlConfig *mysql.Config
+	GinConfig   *gin.Config
+	GrpcConfig  *grpc.Config
 }
 
 // CompletedConfig is the complete configuration structure of the server.
 type CompletedConfig struct {
-	CompletedLogConfig       *log.CompletedConfig
-	CompletedMysqlConfig     *mysql.CompletedConfig
-	CompletedGinConfig       *gin.CompletedConfig
-	CompletedGrpcConfig      *grpc.CompletedConfig
-	CompletedApiserverConfig *gin.CompletedConfig
+	CompletedLogConfig   *log.CompletedConfig
+	CompletedMysqlConfig *mysql.CompletedConfig
+	CompletedGinConfig   *gin.CompletedConfig
+	CompletedGrpcConfig  *grpc.CompletedConfig
 }
 
 var (
@@ -40,11 +38,10 @@ var (
 // on a given command line or configuration file option.
 func NewConfig() *Config {
 	return &Config{
-		LogConfig:       log.NewConfig(),
-		MysqlConfig:     mysql.NewConfig(),
-		GinConfig:       gin.NewConfig(),
-		GrpcConfig:      grpc.NewConfig(),
-		ApiserverConfig: gin.NewConfig(),
+		LogConfig:   log.NewConfig(),
+		MysqlConfig: mysql.NewConfig(),
+		GinConfig:   gin.NewConfig(),
+		GrpcConfig:  grpc.NewConfig(),
 	}
 }
 
@@ -53,11 +50,10 @@ func (c *Config) Complete() *CompletedConfig {
 
 	onceConfig.Do(func() {
 		config = CompletedConfig{
-			CompletedLogConfig:       c.LogConfig.Complete(),
-			CompletedMysqlConfig:     c.MysqlConfig.Complete(),
-			CompletedGinConfig:       c.GinConfig.Complete(),
-			CompletedGrpcConfig:      c.GrpcConfig.Complete(),
-			CompletedApiserverConfig: c.ApiserverConfig.Complete(),
+			CompletedLogConfig:   c.LogConfig.Complete(),
+			CompletedMysqlConfig: c.MysqlConfig.Complete(),
+			CompletedGinConfig:   c.GinConfig.Complete(),
+			CompletedGrpcConfig:  c.GrpcConfig.Complete(),
 		}
 	})
 

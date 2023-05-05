@@ -9,9 +9,8 @@ import (
 	"github.com/rebirthmonkey/go/pkg/gin/middleware"
 	"github.com/rebirthmonkey/go/pkg/log"
 
-	authorizerCtl "github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/authorizer/controller/v1"
-	authorizerRepo "github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/authorizer/repo"
-	authorizerRepoRest "github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/authorizer/repo/rest"
+	userCtl "github.com/rebirthmonkey/go/84_se/20_build/80_server/apiserver/user/controller/gin/v1"
+	userRepoMysql "github.com/rebirthmonkey/go/84_se/20_build/80_server/apiserver/user/repo/mysql"
 )
 
 // InitGin initializes the Gin server
@@ -28,21 +27,28 @@ func installRouterMiddleware(g *gin.Engine) {
 
 // installController installs Gin handlers
 func installController(g *gin.Engine) *gin.Engine {
-
 	v1 := g.Group("/v1")
 	{
-		log.Info("[GinServer] registry authorizer")
-		authzv1 := v1.Group("/authz")
+		log.Info("[GinServer] registry userHandler")
+		userv1 := v1.Group("/users")
 		{
-			authzRepoClient, err := authorizerRepoRest.Repo(config.CompletedApiserverConfig)
+			//userRepoClient, err := userRepoFake.Repo()
+			//if err != nil {
+			//	log.Fatalf("failed to create fake repo: %s", err.Error())
+			//}
+
+			userRepoClient, err := userRepoMysql.Repo(config.CompletedMysqlConfig)
 			if err != nil {
-				log.Fatalf("failed to create REST repo: %s", err.Error())
+				log.Fatalf("failed to create Mysql repo: %s", err.Error())
 			}
-			authorizerRepo.SetClient(authzRepoClient)
 
-			authorizerController := authorizerCtl.NewController(authzRepoClient)
+			userController := userCtl.NewController(userRepoClient)
 
-			authzv1.POST("", authorizerController.Authorize)
+			userv1.POST("", userController.Create)
+			userv1.DELETE(":name", userController.Delete)
+			userv1.PUT(":name", userController.Update)
+			userv1.GET(":name", userController.Get)
+			userv1.GET("", userController.List)
 		}
 	}
 	return g

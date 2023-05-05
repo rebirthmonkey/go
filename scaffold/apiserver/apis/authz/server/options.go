@@ -16,11 +16,10 @@ import (
 
 // Options is the options of a server.
 type Options struct {
-	LogOptions       *log.Options   `json:"log"   mapstructure:"log"`
-	MysqlOptions     *mysql.Options `json:"mysql"   mapstructure:"mysql"`
-	GinOptions       *gin.Options   `json:"gin"   mapstructure:"gin"`
-	GrpcOptions      *grpc.Options  `json:"grpc"   mapstructure:"grpc"`
-	ApiserverOptions *gin.Options   `json:"apiserver"   mapstructure:"apiserver"`
+	LogOptions   *log.Options   `json:"log"   mapstructure:"log"`
+	MysqlOptions *mysql.Options `json:"mysql"   mapstructure:"mysql"`
+	GinOptions   *gin.Options   `json:"gin"   mapstructure:"gin"`
+	GrpcOptions  *grpc.Options  `json:"grpc"   mapstructure:"grpc"`
 }
 
 var (
@@ -32,11 +31,10 @@ var (
 func NewOptions() *Options {
 	once.Do(func() {
 		opt = Options{
-			LogOptions:       log.NewOptions(),
-			MysqlOptions:     mysql.NewOptions(),
-			GinOptions:       gin.NewOptions(),
-			GrpcOptions:      grpc.NewOptions(),
-			ApiserverOptions: gin.NewOptions(),
+			LogOptions:   log.NewOptions(),
+			MysqlOptions: mysql.NewOptions(),
+			GinOptions:   gin.NewOptions(),
+			GrpcOptions:  grpc.NewOptions(),
 		}
 	})
 
@@ -51,7 +49,6 @@ func (o *Options) Validate() []error {
 	errs = append(errs, o.MysqlOptions.Validate()...)
 	errs = append(errs, o.GinOptions.Validate()...)
 	errs = append(errs, o.GrpcOptions.Validate()...)
-	errs = append(errs, o.ApiserverOptions.Validate()...)
 
 	return errs
 }
@@ -74,18 +71,14 @@ func (o *Options) ApplyTo(c *Config) error {
 		log.Panic(err.Error())
 	}
 
-	if err := o.ApiserverOptions.ApplyTo(c.ApiserverConfig); err != nil {
-		log.Panic(err.Error())
-	}
-
 	return nil
 }
 
 // Flags returns flags for a specific APIServer by section name.
 func (o *Options) Flags() (fss cliflag.NamedFlagSets) {
-	o.GinOptions.AddFlags()
+	o.GinOptions.AddFlags(fss.FlagSet("gin"))
 	o.GrpcOptions.AddFlags(fss.FlagSet("grpc"))
-	o.MysqlOptions.AddFlags(fss.FlagSet("msyql"))
+	o.MysqlOptions.AddFlags(fss.FlagSet("mysql"))
 	o.LogOptions.AddFlags(fss.FlagSet("log"))
 
 	return fss

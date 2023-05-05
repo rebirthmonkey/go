@@ -8,6 +8,11 @@
 
 - 上传镜像到 docker.io
 
+```shell
+make docker-build
+make docker-push
+```
+
 - 本地 kubectl switch 到云上的 context
 
 ```shell
