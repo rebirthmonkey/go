@@ -3,11 +3,7 @@
 # Options
 
 KUBECTL := kubectl
-
-#NAMESPACE ?= iam
 NAMESPACE ?= default
-
-#DEPLOYS=iam-apiserver iam-authz-server iam-pump iam-watcher
 DEPLOYS=apiserver
 
 

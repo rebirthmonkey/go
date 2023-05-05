@@ -177,9 +177,7 @@ BenchmarkRandInt-12     80122806                14.87 ns/op
 
 ### GoMock
 
-GoMock 是由 Go 官方开发维护的测试框架，实现了较为完整的基于 interface 的 Mock 功能。其核心是为一个 interface 的函数提供指定的返回值。
-
-同时，它能够与 Go 内置的 testing 包良好集成，也能用于其他的测试环境中。GoMock 测试框架包含了 GoMock 包和  mockgen 工具两部分，其中 GoMock 包用来完成对象生命周期的管理，mockgen 工具用来生成 interface 对应的 Mock 类源文件。
+GoMock 是由 Go 官方开发维护的测试框架，实现了较为完整的基于 interface 的 Mock 功能。其核心是为一个 interface 的函数提供指定的返回值。同时，它能够与 Go 内置的 testing 包良好集成，也能用于其他的测试环境中。GoMock 测试框架包含了 GoMock 包和  mockgen 工具两部分，其中 GoMock 包用来完成对象生命周期的管理，mockgen 工具用来生成 interface 对应的 Mock 类源文件。
 
 gomock  支持以下输入参数匹配：
 

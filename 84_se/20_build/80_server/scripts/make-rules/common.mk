@@ -58,7 +58,6 @@ export USAGE_OPTIONS
 ROOT_PACKAGE=$(shell pwd)
 
 VERSION_PACKAGE=github.com/rebirthmonkey/go/pkg/version
-
 # set the version number. you should not need to do this
 # for the majority of scenarios.
 ifeq ($(origin VERSION), undefined)
@@ -67,7 +66,6 @@ endif
 
 # The OS must be linux when building docker images
 PLATFORMS ?= linux_amd64 linux_arm64 darwin_amd64
-# The OS can be linux/windows/darwin when building binaries
 # PLATFORMS ?= darwin_amd64 windows_amd64 linux_amd64 linux_arm64
 
 # Set a specific PLATFORM

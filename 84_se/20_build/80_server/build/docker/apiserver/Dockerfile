@@ -9,5 +9,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
 
 COPY apiserver /opt/apiserver/bin/
 
+EXPOSE 8080
+
 ENTRYPOINT ["/opt/apiserver/bin/apiserver"]
 CMD ["-c", "/etc/apiserver/apiserver.yaml"]

@@ -1,4 +1,3 @@
-
 IMG ?= xxx:yyy
 
 
@@ -36,7 +35,7 @@ docker-run-limit: ## Run docker image with the server.
 
 ##@ Test
 .PHONY: test
-test: test.unit test.api ## Run tests.
+test: test.unit test.api
 
 .PHONY: test-unit
 test-unit:

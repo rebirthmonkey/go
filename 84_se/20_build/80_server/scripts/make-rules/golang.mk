@@ -45,15 +45,8 @@ EXCLUDE_TESTS=github.com/rebirthmonkey/go/test github.com/rebirthmonkey/go/pkg/l
 # ==============================================================================
 # Targets
 
-.PHONY: go.build.verify
-go.build.verify:
-ifneq ($(shell $(GO) version | grep -q -E '\bgo($(GO_SUPPORTED_VERSIONS))\b' && echo 0 || echo 1), 0)
-	$(error unsupported go version. Please make install one of the following supported version: '$(GO_SUPPORTED_VERSIONS)')
-endif
-
-
 .PHONY: go.build.%
-go.build.%: go.build.verify
+go.build.%:
 	$(eval COMMAND := $(word 2,$(subst ., ,$*)))
 	$(eval PLATFORM := $(word 1,$(subst ., ,$*)))
 	$(eval OS := $(word 1,$(subst _, ,$(PLATFORM))))
@@ -64,11 +57,11 @@ go.build.%: go.build.verify
 
 
 .PHONY: go.build
-go.build: go.build.verify $(addprefix go.build., $(addprefix $(PLATFORM)., $(BINS)))
+go.build: $(addprefix go.build., $(addprefix $(PLATFORM)., $(BINS)))
 
 
 .PHONY: go.build.multiarch
-go.build.multiarch: go.build.verify $(foreach p,$(PLATFORMS),$(addprefix go.build., $(addprefix $(p)., $(BINS))))
+go.build.multiarch: $(foreach p,$(PLATFORMS),$(addprefix go.build., $(addprefix $(p)., $(BINS))))
 
 
 .PHONY: go.clean

@@ -5,60 +5,60 @@ all: clean build
 # ==============================================================================
 # Includes
 
-include scripts/make-rules/common.mk # make sure include common.mk at the first include line
-include scripts/make-rules/tools.mk
+include scripts/make-rules/common.mk
 include scripts/make-rules/golang.mk
 include scripts/make-rules/docker.mk
 include scripts/make-rules/k8s.mk
+include scripts/make-rules/tools.mk
 
 
 # ==============================================================================
-# Targets
+# Build
 
-## build: Build source code for host platform.
 .PHONY: build
 build:
+	@echo "===========> Building Go source code for host platform"
 	@$(MAKE) go.build
 
-## build.multiarch: Build source code for multiple platforms. See option PLATFORMS.
 .PHONY: build.multiarch
 build.multiarch:
+	@echo "===========> Building Go source code for all platforms"
 	@$(MAKE) go.build.multiarch
 
-## clean: Remove all files that are created by building.
 .PHONY: clean
 clean:
 	@echo "===========> Cleaning all build output"
 	@-rm -vrf $(OUTPUT_DIR)
 
-## run
 .PHONY: run
 run:
+	@echo "===========> Running Go source code"
 	@$(MAKE) go.run
 
-## Docker image
+
+# ==============================================================================
+# Docker & k8s
+
 .PHONY: docker-build
 docker-build:
 	@$(MAKE) docker.build
 
-## push
 .PHONY: docker-push
 docker-push:
 	@$(MAKE) docker.push
 
-
-## deploy
 .PHONY: k8s-deploy
-k8s-deploy: docker-build
+k8s-deploy:
 	@$(MAKE) k8s.deploy
 
-## undeploy
 .PHONY: k8s-undeploy
 k8s-undeploy:
 	@$(MAKE) k8s.undeploy
 
 
-## test: Run unit test.
+# ==============================================================================
+# Test
+
 .PHONY: test-unit
 test-unit:
 	@$(MAKE) go.test.unit
@@ -68,14 +68,18 @@ test-unit:
 test-api:
 	@./test/api/test.sh api::test::user
 
+.PHONY: test-api-wrk
+test-api-wrk:
+	@wrk -t4 -c300 -d10s -T5s --latency http://127.0.0.1:30080/healthz
 
-## tools: install dependent tools.
+
+# ==============================================================================
+# Tools & Help
+
 .PHONY: tools
 tools:
 	@$(MAKE) tools.install
 
-
-## help: Show this help info.
 .PHONY: help
 help: Makefile
 	@echo -e "\nUsage: make <TARGETS> <OPTIONS> ...\n\nTargets:"
