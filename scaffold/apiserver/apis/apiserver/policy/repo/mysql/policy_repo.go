@@ -64,7 +64,8 @@ func (p *policyRepo) Create(policy *model.Policy) error {
 }
 
 func (p *policyRepo) Delete(username, policyName string) error {
-	err := p.dbEngine.Where("username = ? and name = ?", username, policyName).Delete(&model.Policy{}).Error
+	//err := p.dbEngine.Where("username = ? and name = ?", username, policyName).Delete(&model.Policy{}).Error
+	err := p.dbEngine.Where("name = ?", policyName).Delete(&model.Policy{}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return errors.WithCode(errcode.ErrUnknown, err.Error())
@@ -99,7 +100,8 @@ func (p *policyRepo) Update(secret *model.Policy) error {
 
 func (p *policyRepo) Get(username, name string) (*model.Policy, error) {
 	policy := &model.Policy{}
-	err := p.dbEngine.Where("username = ? and name= ?", username, name).First(&policy).Error
+	//err := p.dbEngine.Where("username = ? and name= ?", username, name).First(&policy).Error
+	err := p.dbEngine.Where("name= ?", name).First(&policy).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.WithCode(errcode.ErrUnknown, err.Error())

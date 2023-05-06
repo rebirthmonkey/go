@@ -41,24 +41,24 @@ insecure::user() # 用于无 auth 验证
 insecure::secret()  # 运行：./tests/api/rest.sh secret
 {
   # 1. 如果有 secret0 密钥则先清空
-  ${DCURL} "${Header}" http://${INSECURE_SERVER}/v1/secrets/secret0; echo
+  ${DCURL} http://${INSECURE_SERVER}/v1/secrets/secret0; echo
 
   # 2. 创建 secret0 密钥
   ${CCURL} "${Header}" http://${INSECURE_SERVER}/v1/secrets \
-    -d'{"metadata":{"name":"secret0"},"expires":0,"description":"admin secret"}'; echo
+    -d'{"metadata":{"name":"secret0"},"expires":0,"description":"admin secret", "username":"yyy"}'; echo
 
   # 3. 列出所有 secret
-  ${RCURL} "${Header}" http://${INSECURE_SERVER}/v1/secrets; echo
+  ${RCURL} "http://${INSECURE_SERVER}/v1/secrets?offset=0&limit=10"; echo
 
   # 4. 获取 secret0 密钥的详细信息
-  ${RCURL} "${Header}" http://${INSECURE_SERVER}/v1/secrets/secret0; echo
+  ${RCURL} http://${INSECURE_SERVER}/v1/secrets/secret0; echo
 
   # 5. 修改 secret0 密钥
   ${UCURL} "${Header}" http://${INSECURE_SERVER}/v1/secrets/secret0 \
     -d'{"expires":0,"description":"admin secret(modified)"}'; echo
 
   # 6. 删除 secret0 密钥
-  ${DCURL} "${Header}" http://${INSECURE_SERVER}/v1/secrets/secret0; echo
+  ${DCURL} http://${INSECURE_SERVER}/v1/secrets/secret0; echo
 }
 
 insecure::policy()  # 运行：./tests/api/rest.sh policy
@@ -68,7 +68,7 @@ insecure::policy()  # 运行：./tests/api/rest.sh policy
 
  # 2. 创建 policy0 策略
   ${CCURL} "${Header}" http://${INSECURE_SERVER}/v1/policies \
-    -d'{"metadata":{"name":"policy0"},"policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
+    -d'{"metadata":{"name":"policy0"}, "username":"yyy", "policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
 
   # 3. 列出所有 policies
   ${RCURL} "${Header}" http://${INSECURE_SERVER}/v1/policies; echo

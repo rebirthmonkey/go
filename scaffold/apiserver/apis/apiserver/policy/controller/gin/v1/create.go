@@ -24,8 +24,7 @@ func (s *controller) Create(c *gin.Context) {
 		return
 	}
 
-	policy.Username = c.GetString(UsernameKey)
-
+	//policy.Username = c.GetString(UsernameKey)
 	if err := s.srv.NewPolicyService().Create(&policy); err != nil {
 		ginUtil.WriteResponse(c, err, nil)
 		return

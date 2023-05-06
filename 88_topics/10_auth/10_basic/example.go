@@ -9,7 +9,7 @@ import (
 func main() {
 	ginEngine := gin.New()
 
-	authStrategy := NewBasicStrategy(func(username string, password string) bool {
+	authStrategy := NewBasicStrategy(func(username, password string) bool {
 		if username == "admin" && password == "admin" {
 			return true
 		}

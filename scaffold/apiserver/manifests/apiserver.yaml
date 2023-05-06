@@ -23,7 +23,7 @@ spec:
             secretName: cert
       containers:
         - name: apiserver
-          image: wukongsun/apiserver-amd64:4aa5839
+          image: wukongsun/apiserver-amd64:v0.0.0
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: vol-config

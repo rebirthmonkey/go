@@ -19,6 +19,6 @@ func (s *controller) Delete(c *gin.Context) {
 		return
 	}
 
-	var msg string = "deleted policy " + c.Param("name")
+	var msg string = "deleted secret " + c.Param("name")
 	util.WriteResponse(c, nil, msg)
 }

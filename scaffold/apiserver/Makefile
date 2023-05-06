@@ -9,6 +9,7 @@ include scripts/make-rules/common.mk
 include scripts/make-rules/golang.mk
 include scripts/make-rules/docker.mk
 include scripts/make-rules/k8s.mk
+include scripts/make-rules/test.mk
 include scripts/make-rules/tools.mk
 
 
@@ -40,7 +41,7 @@ run.%:
 # Docker & k8s
 
 .PHONY: docker-build
-docker-build: docker-clean
+docker-build: build docker-clean
 	@$(MAKE) docker.build
 
 .PHONY: docker-push
@@ -52,7 +53,7 @@ docker-clean:
 	@$(MAKE) docker.clean
 
 .PHONY: k8s-deploy
-k8s-deploy:
+k8s-deploy: 
 	@$(MAKE) k8s.deploy
 
 .PHONY: k8s-undeploy
@@ -67,10 +68,21 @@ k8s-undeploy:
 test-unit:
 	@$(MAKE) go.test.unit
 
-## test: Run unit test.
+.PHONY: test-api.%
+test-api.%:
+	@$(MAKE) test.api.$*
+
 .PHONY: test-api
 test-api:
-	@./tests/api/rest.sh insecure::user
+	@$(MAKE) test.api
+
+.PHONY: test-api-basic
+test-api-basic:
+	@$(MAKE) test.api-basic
+
+.PHONY: test-api-jwt.%
+test-api-jwt.%:
+	@$(MAKE) test.api-jwt.$*
 
 .PHONY: test-api-wrk
 test-api-wrk:

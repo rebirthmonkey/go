@@ -9,8 +9,8 @@ import (
 	"github.com/rebirthmonkey/go/pkg/gin/middleware"
 	"github.com/rebirthmonkey/go/pkg/log"
 
-	userCtl "github.com/rebirthmonkey/go/84_se/20_build/80_server/apiserver/user/controller/gin/v1"
-	userRepoMysql "github.com/rebirthmonkey/go/84_se/20_build/80_server/apiserver/user/repo/mysql"
+	userCtl "github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/user/controller/gin/v1"
+	userRepoMysql "github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/user/repo/mysql"
 )
 
 // InitGin initializes the Gin server
@@ -32,11 +32,6 @@ func installController(g *gin.Engine) *gin.Engine {
 		log.Info("[GinServer] registry userHandler")
 		userv1 := v1.Group("/users")
 		{
-			//userRepoClient, err := userRepoFake.Repo()
-			//if err != nil {
-			//	log.Fatalf("failed to create fake repo: %s", err.Error())
-			//}
-
 			userRepoClient, err := userRepoMysql.Repo(config.CompletedMysqlConfig)
 			if err != nil {
 				log.Fatalf("failed to create Mysql repo: %s", err.Error())

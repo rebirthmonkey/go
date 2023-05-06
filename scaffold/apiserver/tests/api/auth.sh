@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 INSECURE_SERVER="127.0.0.1:8080"
-#INSECURE_SERVER="127.0.0.1:30080"  # Docker port
+#INSECURE_SERVER="127.0.0.1:30080"
 SECURE_SERVER="127.0.0.1:8443"
 
 Header="-HContent-Type: application/json"
@@ -17,13 +17,13 @@ insecure::basic()  # 运行：./tests/api/auth.sh insecure::basic
   HeaderBasic="-HAuthorization: Basic ${basic}"  # 注意 -H 与 Authorization 间不能有空格，否则解析会有问题
 
   # 2. 用 admin，如果有 test00、test01 用户先清空
-  ${DCURL} "${HeaderBasic}" http://${INSECURE_SERVER}/v1/users/test00; echo
-  ${DCURL} "${HeaderBasic}" http://${INSECURE_SERVER}/v1/users/test01; echo
+  ${DCURL} "${HeaderBasic}" http://${INSECURE_SERVER}/v2/users/test00; echo
+  ${DCURL} "${HeaderBasic}" http://${INSECURE_SERVER}/v2/users/test01; echo
 
   # 3. 用 admin，创建 test00、test01 用户
-  ${CCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v1/users \
+  ${CCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v2/users \
     -d'{"metadata":{"name":"test00"},"password":"User@2022","nickname":"00","email":"test00@gmail.com","phone":"1306280xxxx"}'; echo
-  ${CCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v1/users \
+  ${CCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v2/users \
     -d'{"metadata":{"name":"test01"},"password":"User@2022","nickname":"01","email":"test01@gmail.com","phone":"1306280xxxx"}'; echo
 
   # 4. 创建 test00 的 basic auth header
@@ -31,18 +31,18 @@ insecure::basic()  # 运行：./tests/api/auth.sh insecure::basic
   Header00="-HAuthorization: Basic ${basic00}"
 
   # 5. 用 test00，列出所有用户
-  ${RCURL} "${Header00}" "http://${INSECURE_SERVER}/v1/users?offset=0&limit=10"; echo
+  ${RCURL} "${Header00}" "http://${INSECURE_SERVER}/v2/users?offset=0&limit=10"; echo
 
   # 6. 用 test00，获取 test01 用户的详细信息
-  ${RCURL} "${Header00}" http://${INSECURE_SERVER}/v1/users/test01; echo
+  ${RCURL} "${Header00}" http://${INSECURE_SERVER}/v2/users/test01; echo
 
   # 7. 用 test00，修改 test01 用户
-  ${UCURL} "${Header}" "${Header00}" http://${INSECURE_SERVER}/v1/users/test01 \
+  ${UCURL} "${Header}" "${Header00}" http://${INSECURE_SERVER}/v2/users/test01 \
     -d'{"nickname":"test01_modified","email":"test00_modified@foxmail.com","phone":"1306280xxxx"}'; echo
 
   # 8. 用 test00，删除 test00、test01 用户
-  ${DCURL} "${Header00}" http://${INSECURE_SERVER}/v1/users/test01; echo
-  ${DCURL} "${Header00}" http://${INSECURE_SERVER}/v1/users/test00; echo
+  ${DCURL} "${Header00}" http://${INSECURE_SERVER}/v2/users/test01; echo
+  ${DCURL} "${Header00}" http://${INSECURE_SERVER}/v2/users/test00; echo
 }
 
 insecure::login()
@@ -55,27 +55,27 @@ insecure::login()
     -d'{"username":"admin","password":"Admin@2021"}' |  jq '.token' | sed 's/"//g'
 }
 
-insecure::jwt()  # 运行：./tests/api/auth.sh insecure::jwt
+insecure::jwt::secret()
 {
   # 0. 创建 admin 的 basic auth header, admin 密码为 "Admin@2021"
   basic=$(echo -n 'admin:Admin@2021'|base64)
   HeaderBasic="-HAuthorization: Basic ${basic}"  # 注意 -H 与 Authorization 间不能有空格，否则解析会有问题
 
   # 1. 用 admin 的 basic，如果有 test01 用户先清空
-  ${DCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v1/users/test01; echo
+  ${DCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v2/users/test01; echo
 
   # 2. 用 admin 的 basic，创建 test01 用户
-  ${CCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v1/users \
+  ${CCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v2/users \
     -d'{"metadata":{"name":"test01"},"password":"User@2022","nickname":"01","email":"test01@gmail.com","phone":"1306280xxxx"}'; echo
 
   # 3. 用 admin 的 basic，获得 admin 的 JWT token
   JWT="-HAuthorization: Bearer $(insecure::login)"
 
   # 4. 用 admin 的 JWT，如果有 secret1 密钥则先清空
-  ${DCURL} "${Header}" "${JWT}" http://${INSECURE_SERVER}/v1/secrets/secret1; echo
+  ${DCURL} "${Header}" "${JWT}" http://${INSECURE_SERVER}/v2/secrets/secret1; echo
 
   # 5. 用 admin 的 JWT，创建用于 test01 的密钥 secret1
-  ${CCURL} "${Header}" "${JWT}" http://${INSECURE_SERVER}/v1/secrets \
+  ${CCURL} "${Header}" "${JWT}" http://${INSECURE_SERVER}/v2/secrets \
     -d'{"metadata":{"name":"secret1"},"username":"test01", "expires":0,"description":"test01 secret"}'; echo
 
   # 6. 获取 test01 的秘钥 secret1
@@ -86,17 +86,71 @@ insecure::jwt()  # 运行：./tests/api/auth.sh insecure::jwt
   JWT01="-HAuthorization: Bearer ${token}"
 
   # 7. 用 test01 的秘钥 secret1，列出所有密钥
-  ${RCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v1/secrets; echo
+  ${RCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/secrets; echo
 
-  # 8. 用 secret1 获取 secret1 密钥的详细信息
-  ${RCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v1/secrets/secret1; echo
+  # 8. 用 test01 的秘钥 secret1，获取 secret1 密钥的详细信息
+  ${RCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/secrets/secret1; echo
 
-  # 9. 用 secret1，修改 secret1 密钥
-  ${UCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v1/secrets/secret1 \
+  # 9. 用 test01 的秘钥 secret1，修改 secret1 密钥
+  ${UCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/secrets/secret1 \
     -d'{"expires":0,"description":"test01 secret(modified)"}'; echo
 
-  # 10. 用 secret1 删除 secret1 密钥
-  ${DCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v1/secrets/secret1; echo
+  # 10. 用 test01 的秘钥 secret1，删除 secret1 密钥
+  ${DCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/secrets/secret1; echo
+}
+
+insecure::jwt::policy()
+{
+  # 0. 创建 admin 的 basic auth header, admin 密码为 "Admin@2021"
+  basic=$(echo -n 'admin:Admin@2021'|base64)
+  HeaderBasic="-HAuthorization: Basic ${basic}"  # 注意 -H 与 Authorization 间不能有空格，否则解析会有问题
+
+  # 1. 用 admin 的 basic，如果有 test01 用户先清空
+  ${DCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v2/users/test01; echo
+
+  # 2. 用 admin 的 basic，创建 test01 用户
+  ${CCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v2/users \
+    -d'{"metadata":{"name":"test01"},"password":"User@2022","nickname":"01","email":"test01@gmail.com","phone":"1306280xxxx"}'; echo
+
+  # 3. 用 admin 的 basic，获得 admin 的 JWT token
+  JWT="-HAuthorization: Bearer $(insecure::login)"
+
+  # 4. 用 admin 的 JWT，如果有 secret1 密钥则先清空
+  ${DCURL} "${Header}" "${JWT}" http://${INSECURE_SERVER}/v2/secrets/secret1; echo
+
+  # 5. 用 admin 的 JWT，创建用于 test01 的密钥 secret1
+  ${CCURL} "${Header}" "${JWT}" http://${INSECURE_SERVER}/v2/secrets \
+    -d'{"metadata":{"name":"secret1"},"username":"test01", "expires":0,"description":"test01 secret"}'; echo
+
+  # 6. 获取 test01 的秘钥 secret1
+  basic01=$(echo -n 'test01:User@2022'|base64)
+  HeaderBasic01="-HAuthorization: Basic ${basic01}"
+  token=$(${CCURL} "${Header}" "${HeaderBasic01}" http://${INSECURE_SERVER}/login \
+    -d'{"username":"test01","password":"User@2022"}' |  jq '.token' | sed 's/"//g')
+  JWT01="-HAuthorization: Bearer ${token}"
+
+  # 7. 用 test01 的秘钥 secret1，列出所有 policy
+  ${RCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/policies; echo
+
+  # 8. 用 test01 的秘钥 secret1，删除 policy01
+  ${DCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/policies/policy01; echo
+
+  # 9 用 test01 的秘钥 secret1，创建 policy01 策略
+  ${CCURL} "${Header}" "${token}" http://${INSECURE_SERVER}/v1/policies \
+    -d'{"metadata":{"name":"policy01"},"username":"test01", "policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
+
+  # 10. 用 test01 的秘钥 secret1，获取 policy01 密钥的详细信息
+  ${RCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/policies/policy01; echo
+
+  # 11. 用 test01 的秘钥 secret1，修改 policy01
+  ${UCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/policies/policy01 \
+    -d'{"expires":0,"description":"policy01 policy(modified)"}'; echo
+
+  # 12. 用 test01 的秘钥 secret1，删除 policy01
+  ${DCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/policies/policy01; echo
+
+  # 13. 用 test01 的秘钥 secret1，删除 secret1 密钥
+  ${DCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/secrets/secret1; echo
 }
 
 

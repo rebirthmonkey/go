@@ -62,7 +62,8 @@ func (s *secretRepo) Create(secret *model.Secret) error {
 }
 
 func (s *secretRepo) Delete(username, secretName string) error {
-	err := s.dbEngine.Where("username = ? and name = ?", username, secretName).Delete(&model.Secret{}).Error
+	//err := s.dbEngine.Where("username = ? and name = ?", username, secretName).Delete(&model.Secret{}).Error
+	err := s.dbEngine.Where("name = ?", secretName).Delete(&model.Secret{}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return errors.WithCode(errcode.ErrUnknown, err.Error())
@@ -97,7 +98,8 @@ func (s *secretRepo) Update(secret *model.Secret) error {
 
 func (s *secretRepo) Get(username, name string) (*model.Secret, error) {
 	secret := &model.Secret{}
-	err := s.dbEngine.Where("username = ? and name= ?", username, name).First(&secret).Error
+	//err := s.dbEngine.Where("username = ? and name= ?", username, name).First(&secret).Error
+	err := s.dbEngine.Where("name= ?", name).First(&secret).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.WithCode(errcode.ErrUnknown, err.Error())

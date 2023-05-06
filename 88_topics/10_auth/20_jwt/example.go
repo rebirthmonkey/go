@@ -42,7 +42,7 @@ func main() {
 			if username == "admin" && password == "admin" {
 				return &User{
 					Username:  username,
-					Lastname:  "Sun",
+					Lastname:  "SUN",
 					Firstname: "Wukong",
 				}, nil
 			}

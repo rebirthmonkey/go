@@ -30,18 +30,6 @@ $(echo "$CONFIG_CONTENT" | sed 's/^/    /')
 $(echo "$AUTHZ_CONFIG_CONTENT" | sed 's/^/    /')
 EOF
 
-## 生成 ConfigMap YAML 文件
-#cat <<EOF > manifests/config.yaml
-#apiVersion: v1
-#kind: ConfigMap
-#metadata:
-#  name: $CONFIG_MAP_NAME
-#  namespace: $NAMESPACE
-#data:
-#  authz.yaml: |
-#$(echo "$AUTHZ_CONFIG_CONTENT" | sed 's/^/    /')
-#EOF
-
 # 设置变量
 CERT_FILE=./configs/cert/server.pem
 CERT_NAME=cert

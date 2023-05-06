@@ -45,13 +45,13 @@ docker.build.%:
 	$(eval IMAGE := $(word 2, $(subst ., ,$*)))
 	$(eval ARCH := $(word 2, $(subst _, ,$(word 1, $(subst ., ,$*)))))
 	$(eval IMAGE_OS := $(word 1, $(subst _, ,$(word 1, $(subst ., ,$*)))))
-	@echo "===========> Building Docker image $(REGISTRY_PREFIX)/$(IMAGE)-$(ARCH):$(VERSION) for $(IMAGE_OS)"
+	@echo "===========> Building Docker image $(REGISTRY_PREFIX)/$(IMAGE)-$(ARCH):$(IMAGE_VERSION) for $(IMAGE_OS)"
 	@mkdir -p $(TMP_DIR)/$(IMAGE)
 	@cat $(ROOT_DIR)/build/docker/$(IMAGE)/Dockerfile\
 		| sed "s#BASE_IMAGE#$(BASE_IMAGE)#g" >$(TMP_DIR)/$(IMAGE)/Dockerfile
 	@cp $(OUTPUT_DIR)/platforms/$(IMAGE_OS)/$(ARCH)/$(IMAGE) $(TMP_DIR)/$(IMAGE)/
 	@DST_DIR=$(TMP_DIR)/$(IMAGE) $(ROOT_DIR)/build/docker/$(IMAGE)/build.sh 2>/dev/null || true
-	$(eval BUILD_SUFFIX := $(_DOCKER_BUILD_EXTRA_ARGS) --pull -t $(REGISTRY_PREFIX)/$(IMAGE)-$(ARCH):$(VERSION) $(TMP_DIR)/$(IMAGE))
+	$(eval BUILD_SUFFIX := $(_DOCKER_BUILD_EXTRA_ARGS) --pull -t $(REGISTRY_PREFIX)/$(IMAGE)-$(ARCH):$(IMAGE_VERSION) $(TMP_DIR)/$(IMAGE))
 	@if [ $(shell $(GO) env GOARCH) != $(ARCH) ] ; then \
 		$(DOCKER) build --platform $(IMAGE_PLAT) $(BUILD_SUFFIX) ; \
 	else \
@@ -69,8 +69,8 @@ docker.push.multiarch: $(foreach p,$(PLATFORMS),$(addprefix docker.push., $(addp
 docker.push.%:
 	$(eval IMAGE := $(word 2, $(subst ., ,$*)))
 	$(eval ARCH := $(word 2, $(subst _, ,$(word 1, $(subst ., ,$*)))))
-	@echo "===========> Pushing Docker image $(IMAGE)-$(ARCH):$(VERSION) to $(REGISTRY_PREFIX)"
-	$(DOCKER) push $(REGISTRY_PREFIX)/$(IMAGE)-$(ARCH):$(VERSION)
+	@echo "===========> Pushing Docker image $(IMAGE)-$(ARCH):$(IMAGE_VERSION) to $(REGISTRY_PREFIX)"
+	$(DOCKER) push $(REGISTRY_PREFIX)/$(IMAGE)-$(ARCH):$(IMAGE_VERSION)
 
 .PHONY: docker.clean
 docker.clean: $(addprefix docker.clean., $(addprefix $(IMAGE_PLAT)., $(IMAGES)))
@@ -80,5 +80,5 @@ docker.clean.%:
 	$(eval IMAGE := $(word 2, $(subst ., ,$*)))
 	$(eval ARCH := $(word 2, $(subst _, ,$(word 1, $(subst ., ,$*)))))
 	$(eval IMAGE_OS := $(word 1, $(subst _, ,$(word 1, $(subst ., ,$*)))))
-	@echo "===========> Cleaning Docker image $(REGISTRY_PREFIX)/$(IMAGE)-$(ARCH):$(VERSION)"
-	$(DOCKER) image rm $(REGISTRY_PREFIX)/$(IMAGE)-$(ARCH):$(VERSION)
+	@echo "===========> Cleaning Docker image $(REGISTRY_PREFIX)/$(IMAGE)-$(ARCH):$(IMAGE_VERSION)"
+	$(DOCKER) image rm $(REGISTRY_PREFIX)/$(IMAGE)-$(ARCH):$(IMAGE_VERSION)

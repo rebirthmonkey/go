@@ -14,7 +14,7 @@ type authOperator struct {
 	strategy AuthStrategy
 }
 
-// AuthFunc executes the set authentication.
+// AuthFunc executes the authentication.
 func (operator *authOperator) AuthFunc() gin.HandlerFunc {
 	return operator.strategy.AuthFunc()
 }

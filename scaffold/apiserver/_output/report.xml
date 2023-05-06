@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-	<testsuite tests="1" failures="0" time="0.546" name="github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/user/service/v1">
+	<testsuite tests="1" failures="0" time="0.492" name="github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/user/service/v1">
 		<properties>
 			<property name="go.version" value="go1.17.3"></property>
 			<property name="coverage.statements.pct" value="0.0"></property>

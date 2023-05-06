@@ -3,8 +3,8 @@
 INSECURE_SERVER="127.0.0.1:8080"
 #INSECURE_SERVER="127.0.0.1:30080"  # Docker port
 SECURE_SERVER="127.0.0.1:8443"
-#INSECURE_AUTHZ_SERVER="127.0.0.1:8090"
-INSECURE_AUTHZ_SERVER="127.0.0.1:30090"
+INSECURE_AUTHZ_SERVER="127.0.0.1:8080"
+#INSECURE_AUTHZ_SERVER="127.0.0.1:30090"
 
 Header="-HContent-Type: application/json"
 CCURL="curl -f -s -XPOST" # Create
@@ -19,13 +19,13 @@ insecure::login()
   HeaderBasic="-HAuthorization: Basic ${basic}"  # 注意 -H 与 Authorization 间不能有空格，否则解析会有问题
 
   ${CCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/login \
-    -d'{"username":"admin","password":"Admin@2021"}' |  jq '.token' | sed 's/"//g'
+    -d'{"username":"admin","password":"Admin@2021"}' |  jq '.token' | sed 's/"//g'; echo
 }
 
 insecure::authz-noauth()
 {
   # 1. admin login
-  token="-HAuthorization: Bearer $(insecure::login)"
+  token="-HAuthorization: Bearer $(insecure::login)"; echo
 
   # 2 如果有 wkpolicy 策略先清空
   ${DCURL} "${token}" http://${INSECURE_SERVER}/v1/policies/wkpolicy; echo
@@ -36,7 +36,7 @@ insecure::authz-noauth()
 
   # 4. 调用 /v1/authz 完成资源鉴权
   $CCURL "${Header}" http://${INSECURE_AUTHZ_SERVER}/v1/authz \
-    -d'{"subject":"users:maria","action":"delete","resource":"resources:articles:ladon-introduction","context":{"remoteIPAddress":"192.168.0.5"}}'
+    -d'{"subject":"users:maria","action":"delete","resource":"resources:articles:ladon-introduction","context":{"remoteIPAddress":"192.168.0.5"}}'; echo
 }
 
 if [[ "$*" =~ insecure:: ]];then
