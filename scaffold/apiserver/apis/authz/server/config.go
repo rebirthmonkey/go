@@ -11,6 +11,8 @@ import (
 	"github.com/rebirthmonkey/go/pkg/grpc"
 	"github.com/rebirthmonkey/go/pkg/log"
 	"github.com/rebirthmonkey/go/pkg/mysql"
+
+	"github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/server/authz"
 )
 
 // Config is the running configuration structure of the server.
@@ -19,6 +21,7 @@ type Config struct {
 	MysqlConfig *mysql.Config
 	GinConfig   *gin.Config
 	GrpcConfig  *grpc.Config
+	AuthzConfig *authz.Config
 }
 
 // CompletedConfig is the complete configuration structure of the server.
@@ -27,6 +30,7 @@ type CompletedConfig struct {
 	CompletedMysqlConfig *mysql.CompletedConfig
 	CompletedGinConfig   *gin.CompletedConfig
 	CompletedGrpcConfig  *grpc.CompletedConfig
+	CompletedAuthzConfig *authz.CompletedConfig
 }
 
 var (
@@ -42,6 +46,7 @@ func NewConfig() *Config {
 		MysqlConfig: mysql.NewConfig(),
 		GinConfig:   gin.NewConfig(),
 		GrpcConfig:  grpc.NewConfig(),
+		AuthzConfig: authz.NewConfig(),
 	}
 }
 
@@ -54,6 +59,7 @@ func (c *Config) Complete() *CompletedConfig {
 			CompletedMysqlConfig: c.MysqlConfig.Complete(),
 			CompletedGinConfig:   c.GinConfig.Complete(),
 			CompletedGrpcConfig:  c.GrpcConfig.Complete(),
+			CompletedAuthzConfig: c.AuthzConfig.Complete(),
 		}
 	})
 
@@ -77,6 +83,12 @@ func (c *CompletedConfig) New() (*Server, error) {
 	grpcServer, err := c.CompletedGrpcConfig.New()
 	if err != nil {
 		log.Fatalf("Failed to launch Grpc Server: %s", err.Error())
+		return nil, err
+	}
+
+	err = c.CompletedAuthzConfig.New()
+	if err != nil {
+		log.Fatalf("Failed to launch Authz: %s", err.Error())
 		return nil, err
 	}
 

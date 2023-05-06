@@ -11,11 +11,11 @@ import (
 	"sync"
 
 	"github.com/ory/ladon"
-	"github.com/rebirthmonkey/go/pkg/gin"
 	"github.com/rebirthmonkey/go/pkg/log"
 
 	model "github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/policy/model/v1"
 	authzRepo "github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/authorizer/repo"
+	"github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/server/authz"
 )
 
 type ladonPolicyRepo struct {
@@ -29,10 +29,11 @@ var (
 
 var _ authzRepo.LadonPolicyRepo = (*ladonPolicyRepo)(nil)
 
-func newLadonPolicyRepo(cfg *gin.CompletedConfig) authzRepo.LadonPolicyRepo {
+func newLadonPolicyRepo(cfg *authz.CompletedConfig) authzRepo.LadonPolicyRepo {
 	onceCache.Do(func() {
 		landonPolicyRepoInstance = &ladonPolicyRepo{
-			policyRestURL: "http://" + cfg.Insecure.Address + "/v1/policies",
+			//policyRestURL: "http://" + cfg.Insecure.Address + "/v1/policies",
+			policyRestURL: "http://" + cfg.PolicyServer + "/v1/policies",
 		}
 	})
 

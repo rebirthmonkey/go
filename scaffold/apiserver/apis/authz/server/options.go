@@ -12,6 +12,8 @@ import (
 	"github.com/rebirthmonkey/go/pkg/grpc"
 	"github.com/rebirthmonkey/go/pkg/log"
 	"github.com/rebirthmonkey/go/pkg/mysql"
+
+	"github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/server/authz"
 )
 
 // Options is the options of a server.
@@ -20,6 +22,7 @@ type Options struct {
 	MysqlOptions *mysql.Options `json:"mysql"   mapstructure:"mysql"`
 	GinOptions   *gin.Options   `json:"gin"   mapstructure:"gin"`
 	GrpcOptions  *grpc.Options  `json:"grpc"   mapstructure:"grpc"`
+	AuthzOptions *authz.Options `json:"authz"   mapstructure:"authz"`
 }
 
 var (
@@ -35,6 +38,7 @@ func NewOptions() *Options {
 			MysqlOptions: mysql.NewOptions(),
 			GinOptions:   gin.NewOptions(),
 			GrpcOptions:  grpc.NewOptions(),
+			AuthzOptions: authz.NewOptions(),
 		}
 	})
 
@@ -49,6 +53,7 @@ func (o *Options) Validate() []error {
 	errs = append(errs, o.MysqlOptions.Validate()...)
 	errs = append(errs, o.GinOptions.Validate()...)
 	errs = append(errs, o.GrpcOptions.Validate()...)
+	errs = append(errs, o.AuthzOptions.Validate()...)
 
 	return errs
 }
@@ -71,6 +76,10 @@ func (o *Options) ApplyTo(c *Config) error {
 		log.Panic(err.Error())
 	}
 
+	if err := o.AuthzOptions.ApplyTo(c.AuthzConfig); err != nil {
+		log.Panic(err.Error())
+	}
+
 	return nil
 }
 
@@ -80,6 +89,7 @@ func (o *Options) Flags() (fss cliflag.NamedFlagSets) {
 	o.GrpcOptions.AddFlags(fss.FlagSet("grpc"))
 	o.MysqlOptions.AddFlags(fss.FlagSet("mysql"))
 	o.LogOptions.AddFlags(fss.FlagSet("log"))
+	o.AuthzOptions.AddFlags(fss.FlagSet("authz"))
 
 	return fss
 }

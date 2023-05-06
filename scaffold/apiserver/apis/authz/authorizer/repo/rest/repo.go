@@ -5,7 +5,7 @@
 package rest
 
 import (
-	"github.com/rebirthmonkey/go/pkg/gin"
+	"github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/server/authz"
 
 	authzRepo "github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/authorizer/repo"
 	"sync"
@@ -20,7 +20,7 @@ var (
 	once sync.Once
 )
 
-func Repo(cfg *gin.CompletedConfig) (authzRepo.Repo, error) {
+func Repo(cfg *authz.CompletedConfig) (authzRepo.Repo, error) {
 	once.Do(func() {
 		r = repo{
 			ladonPolicyRepo: newLadonPolicyRepo(cfg),
