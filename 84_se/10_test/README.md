@@ -419,6 +419,8 @@ go test -bench=".*"
 
 ### Mock
 
+#### gomock
+
 安装 GoMock
 
 ```shell
@@ -436,6 +438,26 @@ $ go generate # 通过spider.go的注释 //go:generate mockgen -destination ... 
 $ cd .. 
 $ go test
 ```
+
+#### go-sqlmock
+
+go-sqlmock 用于模拟数据库的数据读取
+
+```shell
+cd 20_sqlmock
+go test
+```
+
+#### httptest
+
+Httptest 用于模拟外部 Http API 的调用
+
+```shell
+cd 30_httptest
+go test
+```
+
+
 
 ### 接口测试
 
