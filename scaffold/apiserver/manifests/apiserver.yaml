@@ -37,6 +37,13 @@ spec:
             - containerPort: 8081
               name: rpc
               protocol: TCP
+          resources:
+            limits:
+              cpu: "0.2"
+              memory: "200Mi"
+            requests:
+              cpu: "0.1"
+              memory: "100Mi"
 ---
 apiVersion: v1
 kind: Service
