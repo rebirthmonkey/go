@@ -58,6 +58,7 @@ require (
 )
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect

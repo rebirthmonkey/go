@@ -250,7 +250,7 @@ gin-vue-admin 是一个基于 Gin 和 Vue 开发的全栈前后端分离的后�
 
 ### ladon
 
-- [Ladon 示例](20_ladon/README.md)：Ladon 是用 Go 语言编写的用于实现访问控制策略的库，类似于 RBAC 和 ACL。但与 RBAC 和 ACL 相比，Ladon 可以实现更细粒度的访问控制，并且能够在更为复杂的环境中（例如多租户、分布式应用程序和大型组织）工作。因此，本课程选择 Ladon 作为基础，具体代码[在此](20_ladon/README.md)。
+- [Ladon 示例](20_ladon/README.md)：Ladon 是 Go 编写的用于实现访问控制策略的库，类似于 RBAC 和 ACL。但与 RBAC 和 ACL 相比，Ladon 可以实现更细粒度的访问控制，并且能够在更为复杂的环境中（例如多租户、分布式应用程序和大型组织）工作。因此，本课程选择 Ladon 作为基础，具体代码[在此](20_ladon/README.md)。
 
 ### apiserver 示例
 
@@ -289,7 +289,8 @@ Policy 相关接口
 
 <img src="figures/image-20221103201632644.png" alt="image-20221103201632644" style="zoom:50%;" />
 
+#### Lab
 
-
-
-
+- 需要同时启动 apiserver 和 authz 2 个服务（建议用 k8s 启动）：`make k8s-deploy`
+- 验证无 auth 的 authz 鉴权：`make test-api-authz`
+- 验证有 JWT auth 的 authz 鉴权：`make test-api-authz-jwt`

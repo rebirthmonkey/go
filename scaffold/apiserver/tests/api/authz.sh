@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-INSECURE_SERVER="127.0.0.1:8080"
-#INSECURE_SERVER="127.0.0.1:30080"  # Docker port
-SECURE_SERVER="127.0.0.1:8443"
-INSECURE_AUTHZ_SERVER="127.0.0.1:8080"
-#INSECURE_AUTHZ_SERVER="127.0.0.1:30090"
+#INSECURE_SERVER="127.0.0.1:8080"
+INSECURE_SERVER="127.0.0.1:30080"  # Docker port
+SECURE_SERVER="127.0.0.1:84430"
+#INSECURE_AUTHZ_SERVER="127.0.0.1:8080"
+INSECURE_AUTHZ_SERVER="127.0.0.1:30090"
 
 Header="-HContent-Type: application/json"
 CCURL="curl -f -s -XPOST" # Create
@@ -22,21 +22,74 @@ insecure::login()
     -d'{"username":"admin","password":"Admin@2021"}' |  jq '.token' | sed 's/"//g'; echo
 }
 
-insecure::authz-noauth()
+insecure::authz()
 {
-  # 1. admin login
-  token="-HAuthorization: Bearer $(insecure::login)"; echo
+  # 1 如果有 wkpolicy 策略先清空
+  ${DCURL} "${Header}" http://${INSECURE_SERVER}/v1/policies/wkpolicy; echo
 
-  # 2 如果有 wkpolicy 策略先清空
-  ${DCURL} "${token}" http://${INSECURE_SERVER}/v1/policies/wkpolicy; echo
-
-  # 3 创建 wkpolicy 策略
+  # 2 创建 wkpolicy 策略
   ${CCURL} "${Header}" "${token}" http://${INSECURE_SERVER}/v1/policies \
-    -d'{"metadata":{"name":"wkpolicy"},"policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
+    -d'{"metadata":{"name":"wkpolicy"}, "username":"yyy", "policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
 
-  # 4. 调用 /v1/authz 完成资源鉴权
+  # 3. 调用 /authz 完成资源鉴权
   $CCURL "${Header}" http://${INSECURE_AUTHZ_SERVER}/v1/authz \
     -d'{"subject":"users:maria","action":"delete","resource":"resources:articles:ladon-introduction","context":{"remoteIPAddress":"192.168.0.5"}}'; echo
+
+  # 4. 删除 wkpolicy 策略
+  ${DCURL} "${Header}" http://${INSECURE_SERVER}/v1/policies/wkpolicy; echo
+}
+
+insecure::authz-jwt()
+{
+  # 0. 创建 admin 的 basic auth header, admin 密码为 "Admin@2021"
+  basic=$(echo -n 'admin:Admin@2021'|base64)
+  HeaderBasic="-HAuthorization: Basic ${basic}"  # 注意 -H 与 Authorization 间不能有空格，否则解析会有问题
+
+  # 1. 用 admin 的 basic，如果有 test01 用户先清空
+  ${DCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v2/users/test01; echo
+
+  # 2. 用 admin 的 basic，创建 test01 用户
+  ${CCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v2/users \
+    -d'{"metadata":{"name":"test01"},"password":"User@2022","nickname":"01","email":"test01@gmail.com","phone":"1306280xxxx"}'; echo
+
+  # 3. 用 admin 的 basic，获得 admin 的 JWT token
+  JWT="-HAuthorization: Bearer $(insecure::login)"
+
+  # 4. 用 admin 的 JWT，如果有 secret1 密钥则先清空
+  ${DCURL} "${Header}" "${JWT}" http://${INSECURE_SERVER}/v2/secrets/secret1; echo
+
+  # 5. 用 admin 的 JWT，创建用于 test01 的密钥 secret1
+  ${CCURL} "${Header}" "${JWT}" http://${INSECURE_SERVER}/v2/secrets \
+    -d'{"metadata":{"name":"secret1"},"username":"test01", "expires":0,"description":"test01 secret"}'; echo
+
+  # 6. 获取 test01 的 JWT token
+  basic01=$(echo -n 'test01:User@2022'|base64)
+  HeaderBasic01="-HAuthorization: Basic ${basic01}"
+  token=$(${CCURL} "${Header}" "${HeaderBasic01}" http://${INSECURE_SERVER}/login \
+    -d'{"username":"test01","password":"User@2022"}' |  jq '.token' | sed 's/"//g')
+  JWT01="-HAuthorization: Bearer ${token}"
+
+  # 7. 用 test01 的 JWT token，删除 policy01
+  ${DCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/policies/policy01; echo
+
+  # 8. 用 test01 的 JWT token，创建 policy01 策略
+  ${CCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/policies \
+    -d'{"metadata":{"name":"policy01"}, "username":"test01", "policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
+
+
+  # 9. 用 test01 的 JWT token，验证 authz
+  ${CCURL} "${Header}" "${JWT01}" http://${INSECURE_AUTHZ_SERVER}/v2/authz \
+    -d'{"subject":"users:maria","action":"delete","resource":"resources:articles:ladon-introduction","context":{"remoteIPAddress":"192.168.0.5"}}'; echo
+
+
+  # 10. 用 test01 的 JWT token，删除 policy01
+  ${DCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/policies/policy01; echo
+
+  # 11. 用 test01 的 JWT token，删除 secret1 密钥
+  ${DCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/secrets/secret1; echo
+
+  # 12. 用 admin 的 Basic，删除 test01 用户
+  ${DCURL} "${Header}" "${HeaderBasic}" http://${INSECURE_SERVER}/v2/users/test01; echo
 }
 
 if [[ "$*" =~ insecure:: ]];then

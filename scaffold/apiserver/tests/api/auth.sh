@@ -78,24 +78,24 @@ insecure::jwt::secret()
   ${CCURL} "${Header}" "${JWT}" http://${INSECURE_SERVER}/v2/secrets \
     -d'{"metadata":{"name":"secret1"},"username":"test01", "expires":0,"description":"test01 secret"}'; echo
 
-  # 6. 获取 test01 的秘钥 secret1
+  # 6. 获取 test01 的 JWT token
   basic01=$(echo -n 'test01:User@2022'|base64)
   HeaderBasic01="-HAuthorization: Basic ${basic01}"
   token=$(${CCURL} "${Header}" "${HeaderBasic01}" http://${INSECURE_SERVER}/login \
     -d'{"username":"test01","password":"User@2022"}' |  jq '.token' | sed 's/"//g')
   JWT01="-HAuthorization: Bearer ${token}"
 
-  # 7. 用 test01 的秘钥 secret1，列出所有密钥
+  # 7. 用 test01 的 JWT token，列出所有密钥
   ${RCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/secrets; echo
 
-  # 8. 用 test01 的秘钥 secret1，获取 secret1 密钥的详细信息
+  # 8. 用 test01 的 JWT token，获取 secret1 密钥的详细信息
   ${RCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/secrets/secret1; echo
 
-  # 9. 用 test01 的秘钥 secret1，修改 secret1 密钥
+  # 9. 用 test01 的 JWT token，修改 secret1 密钥
   ${UCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/secrets/secret1 \
     -d'{"expires":0,"description":"test01 secret(modified)"}'; echo
 
-  # 10. 用 test01 的秘钥 secret1，删除 secret1 密钥
+  # 10. 用 test01 的 JWT token，删除 secret1 密钥
   ${DCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/secrets/secret1; echo
 }
 
@@ -122,34 +122,34 @@ insecure::jwt::policy()
   ${CCURL} "${Header}" "${JWT}" http://${INSECURE_SERVER}/v2/secrets \
     -d'{"metadata":{"name":"secret1"},"username":"test01", "expires":0,"description":"test01 secret"}'; echo
 
-  # 6. 获取 test01 的秘钥 secret1
+  # 6. 获取 test01 的 JWT token
   basic01=$(echo -n 'test01:User@2022'|base64)
   HeaderBasic01="-HAuthorization: Basic ${basic01}"
   token=$(${CCURL} "${Header}" "${HeaderBasic01}" http://${INSECURE_SERVER}/login \
     -d'{"username":"test01","password":"User@2022"}' |  jq '.token' | sed 's/"//g')
   JWT01="-HAuthorization: Bearer ${token}"
 
-  # 7. 用 test01 的秘钥 secret1，列出所有 policy
+  # 7. 用 test01 的 JWT token，列出所有 policy
   ${RCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/policies; echo
 
-  # 8. 用 test01 的秘钥 secret1，删除 policy01
+  # 8. 用 test01 的 JWT token，删除 policy01
   ${DCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/policies/policy01; echo
 
-  # 9 用 test01 的秘钥 secret1，创建 policy01 策略
+  # 9 用 test01 的 JWT token，创建 policy01 策略
   ${CCURL} "${Header}" "${token}" http://${INSECURE_SERVER}/v1/policies \
     -d'{"metadata":{"name":"policy01"},"username":"test01", "policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
 
-  # 10. 用 test01 的秘钥 secret1，获取 policy01 密钥的详细信息
+  # 10. 用 test01 的 JWT token，获取 policy01 密钥的详细信息
   ${RCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/policies/policy01; echo
 
-  # 11. 用 test01 的秘钥 secret1，修改 policy01
+  # 11. 用 test01 的 JWT token，修改 policy01
   ${UCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/policies/policy01 \
     -d'{"expires":0,"description":"policy01 policy(modified)"}'; echo
 
-  # 12. 用 test01 的秘钥 secret1，删除 policy01
+  # 12. 用 test01 的 JWT token，删除 policy01
   ${DCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/policies/policy01; echo
 
-  # 13. 用 test01 的秘钥 secret1，删除 secret1 密钥
+  # 13. 用 test01 的 JWT token，删除 secret1 密钥
   ${DCURL} "${Header}" "${JWT01}" http://${INSECURE_SERVER}/v2/secrets/secret1; echo
 }
 

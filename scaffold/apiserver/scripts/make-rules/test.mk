@@ -18,3 +18,11 @@ test.api-basic:
 .PHONY: test.api-jwt.%
 test.api-jwt.%:
 	@./tests/api/auth.sh insecure::jwt::$*
+
+.PHONY: test.api-authz
+test.api-authz:
+	@./tests/api/authz.sh insecure::authz
+
+.PHONY: test.api-authz-jwt
+test.api-authz-jwt:
+	@./tests/api/authz.sh insecure::authz-jwt

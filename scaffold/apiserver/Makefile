@@ -53,7 +53,7 @@ docker-clean:
 	@$(MAKE) docker.clean
 
 .PHONY: k8s-deploy
-k8s-deploy: 
+k8s-deploy: docker-build
 	@$(MAKE) k8s.deploy
 
 .PHONY: k8s-undeploy
@@ -83,6 +83,14 @@ test-api-basic:
 .PHONY: test-api-jwt.%
 test-api-jwt.%:
 	@$(MAKE) test.api-jwt.$*
+
+.PHONY: test-api-authz
+test-api-authz:
+	@$(MAKE) test.api-authz
+
+.PHONY: test-api-authz-jwt
+test-api-authz-jwt:
+	@$(MAKE) test.api-authz-jwt
 
 .PHONY: test-api-wrk
 test-api-wrk:
