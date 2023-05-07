@@ -11,9 +11,9 @@ import (
 // SecretRepo defines the secret resources.
 type SecretRepo interface {
 	Create(secret *model.Secret) error
-	Delete(username, secretName string) error
+	Delete(secretName string) error
 	DeleteByUser(username string) error
 	Update(secret *model.Secret) error
-	Get(username, secretName string) (*model.Secret, error)
-	List(username string) (*model.SecretList, error)
+	Get(secretName string) (*model.Secret, error)
+	List() (*model.SecretList, error)
 }

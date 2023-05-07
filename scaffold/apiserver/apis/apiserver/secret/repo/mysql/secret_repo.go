@@ -61,7 +61,7 @@ func (s *secretRepo) Create(secret *model.Secret) error {
 	return nil
 }
 
-func (s *secretRepo) Delete(username, secretName string) error {
+func (s *secretRepo) Delete(secretName string) error {
 	//err := s.dbEngine.Where("username = ? and name = ?", username, secretName).Delete(&model.Secret{}).Error
 	err := s.dbEngine.Where("name = ?", secretName).Delete(&model.Secret{}).Error
 	if err != nil {
@@ -96,7 +96,7 @@ func (s *secretRepo) Update(secret *model.Secret) error {
 	return nil
 }
 
-func (s *secretRepo) Get(username, name string) (*model.Secret, error) {
+func (s *secretRepo) Get(name string) (*model.Secret, error) {
 	secret := &model.Secret{}
 	//err := s.dbEngine.Where("username = ? and name= ?", username, name).First(&secret).Error
 	err := s.dbEngine.Where("name= ?", name).First(&secret).Error
@@ -111,7 +111,7 @@ func (s *secretRepo) Get(username, name string) (*model.Secret, error) {
 	return secret, nil
 }
 
-func (s *secretRepo) List(username string) (*model.SecretList, error) {
+func (s *secretRepo) List() (*model.SecretList, error) {
 	ret := &model.SecretList{}
 
 	//if username != "" {

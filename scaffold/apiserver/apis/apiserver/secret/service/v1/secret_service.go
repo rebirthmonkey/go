@@ -12,9 +12,9 @@ import (
 type SecretService interface {
 	Create(secret *model.Secret) error
 	Update(secret *model.Secret) error
-	Delete(username, secretID string) error
-	Get(username, secretID string) (*model.Secret, error)
-	List(username string) (*model.SecretList, error)
+	Delete(secretID string) error
+	Get(secretID string) (*model.Secret, error)
+	List() (*model.SecretList, error)
 }
 
 type secretService struct {
@@ -32,18 +32,18 @@ func (s *secretService) Create(secret *model.Secret) error {
 	return s.repo.SecretRepo().Create(secret)
 }
 
-func (s *secretService) Delete(username, secretName string) error {
-	return s.repo.SecretRepo().Delete(username, secretName)
+func (s *secretService) Delete(secretName string) error {
+	return s.repo.SecretRepo().Delete(secretName)
 }
 
 func (s *secretService) Update(secret *model.Secret) error {
 	return s.repo.SecretRepo().Update(secret)
 }
 
-func (s *secretService) Get(username, secretName string) (*model.Secret, error) {
-	return s.repo.SecretRepo().Get(username, secretName)
+func (s *secretService) Get(secretName string) (*model.Secret, error) {
+	return s.repo.SecretRepo().Get(secretName)
 }
 
-func (s *secretService) List(username string) (*model.SecretList, error) {
-	return s.repo.SecretRepo().List(username)
+func (s *secretService) List() (*model.SecretList, error) {
+	return s.repo.SecretRepo().List()
 }

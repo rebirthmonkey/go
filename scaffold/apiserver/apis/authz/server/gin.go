@@ -10,7 +10,7 @@ import (
 	"github.com/rebirthmonkey/go/pkg/log"
 	authzCtl "github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/authorizer/controller/v1"
 	authzRepo "github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/authorizer/repo"
-	authzRepoRest "github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/authorizer/repo/rest"
+	authzRepoGrpc "github.com/rebirthmonkey/go/scaffold/apiserver/apis/authz/authorizer/repo/grpc"
 )
 
 // InitGin initializes the Gin server
@@ -32,7 +32,8 @@ func installController(g *gin.Engine) *gin.Engine {
 		log.Info("[GinServer] registry authzHandler")
 		authzv1 := v1.Group("/authz")
 		{
-			authzRepoClient, _ := authzRepoRest.Repo(config.CompletedAuthzConfig)
+			//authzRepoClient, _ := authzRepoRest.Repo(config.CompletedAuthzConfig)
+			authzRepoClient, _ := authzRepoGrpc.Repo(config.CompletedAuthzConfig)
 			authzRepo.SetClient(authzRepoClient)
 			authzController := authzCtl.NewController(authzRepoClient)
 			authzv1.POST("", authzController.Authorize)
@@ -47,7 +48,8 @@ func installController(g *gin.Engine) *gin.Engine {
 		log.Info("[GinServer] registry authzHandler")
 		authzv2 := v2.Group("/authz", jwtStrategy.AuthFunc())
 		{
-			authzRepoClient, _ := authzRepoRest.Repo(config.CompletedAuthzConfig)
+			//authzRepoClient, _ := authzRepoRest.Repo(config.CompletedAuthzConfig)
+			authzRepoClient, _ := authzRepoGrpc.Repo(config.CompletedAuthzConfig)
 			authzRepo.SetClient(authzRepoClient)
 			authzController := authzCtl.NewController(authzRepoClient)
 			authzv2.POST("", authzController.Authorize)

@@ -19,7 +19,7 @@ import (
 )
 
 type ladonPolicyRepo struct {
-	policyRestURL string
+	policyURL string
 }
 
 var (
@@ -32,8 +32,7 @@ var _ authzRepo.LadonPolicyRepo = (*ladonPolicyRepo)(nil)
 func newLadonPolicyRepo(cfg *authz.CompletedConfig) authzRepo.LadonPolicyRepo {
 	onceCache.Do(func() {
 		landonPolicyRepoInstance = &ladonPolicyRepo{
-			//policyRestURL: "http://" + cfg.Insecure.Address + "/v1/policies",
-			policyRestURL: "http://" + cfg.PolicyServer + "/v1/policies",
+			policyURL: cfg.PolicyServer + "/v1/policies",
 		}
 	})
 
@@ -43,7 +42,7 @@ func newLadonPolicyRepo(cfg *authz.CompletedConfig) authzRepo.LadonPolicyRepo {
 func (p *ladonPolicyRepo) List() ([]*ladon.DefaultPolicy, error) {
 	log.Info("[Authorizer] PolicyRepo: list")
 
-	response, err := http.Get(p.policyRestURL)
+	response, err := http.Get(p.policyURL)
 	if err != nil {
 		log.Error("[AuthzPolicy/repo/rest] List: HTTP Response error")
 		return nil, err

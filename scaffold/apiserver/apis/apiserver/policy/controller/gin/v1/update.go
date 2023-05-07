@@ -23,10 +23,9 @@ func (s *controller) Update(c *gin.Context) {
 		return
 	}
 
-	username := c.GetString(UsernameKey)
 	policyName := c.Param("name")
 
-	policy, err := s.srv.NewPolicyService().Get(username, policyName)
+	policy, err := s.srv.NewPolicyService().Get(policyName)
 	if err != nil {
 		util.WriteResponse(c, err, nil)
 

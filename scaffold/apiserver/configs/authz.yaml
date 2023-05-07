@@ -49,7 +49,9 @@ log:
   error-output-paths: stderr # zap内部(非业务)错误日志输出路径，多个输出，逗号分开
 
 authz:
-  policy-server: apiserver:8080
-#  policy-server: 127.0.0.1:30080  # 在本地访问容器中policy server
-
+#  policy-server: http://apiserver:8080 # k8s内REST
+#  policy-server: http://127.0.0.1:30080  # 在本地访问容器中policy server
+#  policy-server: 127.0.0.1:8081  # 本地GRPC
+#  policy-server: 127.0.0.1:30081  # k8s内GRPC
+  policy-server: apiserver:8081  # k8s内GRPC
 

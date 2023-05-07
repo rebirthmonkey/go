@@ -1,0 +1,36 @@
+// Copyright 2022 Wukong SUN <rebirthmonkey@gmail.com>. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
+syntax = "proto3";
+
+option go_package = "github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/policy/controller/grpc/v1/pb";
+
+
+package policy;
+
+
+// User implements a cache rpc service.
+service Policy{
+	rpc ListPolicies(ListPoliciesRequest) returns (ListPoliciesResponse) {}
+}
+
+// ListUsersRequest defines ListUsers request struct.
+message ListPoliciesRequest {
+    optional int64 offset = 1;
+    optional int64 limit = 2;
+}
+
+// UserInfo contains user details.
+message PolicyInfo {
+    string Username = 1;
+    string AuthzPolicy = 2;
+    string PolicyShadow  = 3;
+}
+
+// ListUsersResponse defines ListUsers response struct.
+message ListPoliciesResponse {
+    int64 total_count = 1;
+    repeated  PolicyInfo items = 2;
+}
+

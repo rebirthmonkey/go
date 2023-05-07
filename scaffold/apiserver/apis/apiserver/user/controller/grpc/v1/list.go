@@ -8,10 +8,12 @@ import (
 	"context"
 
 	"github.com/rebirthmonkey/go/pkg/log"
+
+	"github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/user/controller/grpc/v1/pb"
 )
 
 // ListUsers lists the users in the storage.
-func (c *controller) ListUsers(ctx context.Context, r *ListUsersRequest) (*ListUsersResponse, error) {
+func (c *controller) ListUsers(ctx context.Context, r *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
 	log.L(ctx).Info("[GrpcServer] controller: ListUsers")
 
 	users, err := c.srv.NewUserService().List()
@@ -19,9 +21,9 @@ func (c *controller) ListUsers(ctx context.Context, r *ListUsersRequest) (*ListU
 		return nil, err
 	}
 
-	items := make([]*UserInfo, 0)
+	items := make([]*pb.UserInfo, 0)
 	for _, user := range users.Items {
-		items = append(items, &UserInfo{
+		items = append(items, &pb.UserInfo{
 			Nickname:  user.Name,
 			Password:  user.Password,
 			Email:     user.Email,
@@ -31,7 +33,7 @@ func (c *controller) ListUsers(ctx context.Context, r *ListUsersRequest) (*ListU
 
 	}
 
-	return &ListUsersResponse{
+	return &pb.ListUsersResponse{
 		TotalCount: users.TotalCount,
 		Items:      items,
 	}, nil

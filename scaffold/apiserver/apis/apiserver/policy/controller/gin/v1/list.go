@@ -13,7 +13,7 @@ import (
 func (s *controller) List(c *gin.Context) {
 	log.L(c).Info("[GINServer] policyController: List")
 
-	policies, err := s.srv.NewPolicyService().List(c.GetString(UsernameKey))
+	policies, err := s.srv.NewPolicyService().List()
 	if err != nil {
 		util.WriteResponse(c, err, nil)
 

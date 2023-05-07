@@ -10,12 +10,11 @@ import (
 
 	"google.golang.org/grpc"
 
-	pb "github.com/rebirthmonkey/go/60_paas/20_db/10_mysql/80_server/apiserver/user/controller/grpc/v1"
+	"github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/user/controller/grpc/v1/pb"
 )
 
 func main() {
-	const address = "127.0.0.1:8081"
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	conn, err := grpc.Dial("127.0.0.1:8081", grpc.WithInsecure())
 	if err != nil {
 		fmt.Println("did not connect.", err)
 		return
@@ -24,8 +23,7 @@ func main() {
 
 	client := pb.NewUserClient(conn)
 
-	ctx := context.Background()
 	c := &pb.ListUsersRequest{}
-	sl, _ := client.ListUsers(ctx, c)
+	sl, _ := client.ListUsers(context.TODO(), c)
 	fmt.Print("User List is:", sl)
 }

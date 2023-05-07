@@ -96,9 +96,9 @@ test-api-authz-jwt:
 test-api-wrk:
 	@wrk -t4 -c300 -d10s -T5s --latency http://127.0.0.1:8080/healthz
 
-.PHONY: test-api-grpc
-test-api-grpc:
-	@$(GO) run ./tests/api/grpc_user.go
+.PHONY: test-api-grpc.%
+test-api-grpc.%:
+	@$(GO) run ./tests/api/grpc_$*.go
 
 
 # ==============================================================================

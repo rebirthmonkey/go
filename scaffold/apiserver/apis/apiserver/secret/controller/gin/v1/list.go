@@ -13,7 +13,7 @@ import (
 func (s *controller) List(c *gin.Context) {
 	log.L(c).Info("[GINServer] secretController: List")
 
-	secrets, err := s.srv.NewSecretService().List(c.GetString(UsernameKey))
+	secrets, err := s.srv.NewSecretService().List()
 	if err != nil {
 		util.WriteResponse(c, err, nil)
 

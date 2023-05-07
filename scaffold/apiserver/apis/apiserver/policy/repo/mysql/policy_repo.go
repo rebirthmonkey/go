@@ -63,7 +63,7 @@ func (p *policyRepo) Create(policy *model.Policy) error {
 	return nil
 }
 
-func (p *policyRepo) Delete(username, policyName string) error {
+func (p *policyRepo) Delete(policyName string) error {
 	//err := p.dbEngine.Where("username = ? and name = ?", username, policyName).Delete(&model.Policy{}).Error
 	err := p.dbEngine.Where("name = ?", policyName).Delete(&model.Policy{}).Error
 	if err != nil {
@@ -98,7 +98,7 @@ func (p *policyRepo) Update(secret *model.Policy) error {
 	return nil
 }
 
-func (p *policyRepo) Get(username, name string) (*model.Policy, error) {
+func (p *policyRepo) Get(name string) (*model.Policy, error) {
 	policy := &model.Policy{}
 	//err := p.dbEngine.Where("username = ? and name= ?", username, name).First(&policy).Error
 	err := p.dbEngine.Where("name= ?", name).First(&policy).Error
@@ -113,7 +113,7 @@ func (p *policyRepo) Get(username, name string) (*model.Policy, error) {
 	return policy, nil
 }
 
-func (p *policyRepo) List(username string) (*model.PolicyList, error) {
+func (p *policyRepo) List() (*model.PolicyList, error) {
 	ret := &model.PolicyList{}
 
 	//if username != "" {

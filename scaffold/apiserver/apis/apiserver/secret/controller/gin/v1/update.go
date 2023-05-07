@@ -22,10 +22,10 @@ func (s *controller) Update(c *gin.Context) {
 		return
 	}
 
-	username := c.GetString(UsernameKey)
+	//username := c.GetString(UsernameKey)
 	secretName := c.Param("name")
 
-	secret, err := s.srv.NewSecretService().Get(username, secretName)
+	secret, err := s.srv.NewSecretService().Get(secretName)
 	if err != nil {
 		util.WriteResponse(c, err, nil)
 
