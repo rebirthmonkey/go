@@ -265,7 +265,7 @@ apiserver 的鉴权通过提供 /v1/authz RESTful API 接口完成资源授权�
 
 <img src="figures/image-20221024160507988.png" alt="image-20221024160507988" style="zoom:50%;" />
 
-#### Policy 接口
+#### Policy接口
 
 可以看到，在上面的流程中，apiserver 使用到了 3 种资源：User、Secret、Policy。它们映射到程序设计中就是 3 种 REST 资源。
 
@@ -283,9 +283,9 @@ Policy 相关接口
 | GET  /v1/policies/:name    | 查询授权策略详细信息 |
 | GET  /v1/policies          | 查询授权策略列表     |
 
-#### 代码解析
+#### 后端优化
 
-具体代码[在此](../../scaffold/apiserver/README.md)
+authz/ 接口需要读取后端的 policies/ 接口来拉取鉴权策略列表，默认通过 REST 方式拉取，但该方法在性能上有所损耗。较为先进的做法是用 gRPC 代替 REST，具体代码[在此](../../scaffold/apiserver/README.md)。
 
 <img src="figures/image-20221103201632644.png" alt="image-20221103201632644" style="zoom:50%;" />
 
