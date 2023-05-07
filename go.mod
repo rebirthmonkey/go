@@ -3,8 +3,10 @@ module github.com/rebirthmonkey/go
 go 1.18
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/appleboy/gin-jwt/v2 v2.8.0
+	github.com/avast/retry-go v3.0.0+incompatible
 	github.com/dgraph-io/ristretto v0.1.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dlclark/regexp2 v1.2.0
@@ -14,10 +16,8 @@ require (
 	github.com/go-logr/logr v1.2.3
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.6.0
-	github.com/gofrs/uuid v4.2.0+incompatible
 	github.com/golang-collections/collections v0.0.0-20130729185459-604e922904d3
 	github.com/golang/mock v1.6.0
-	github.com/golang/protobuf v1.5.2
 	github.com/goombaio/dag v0.0.0-20181006234417-a8874b1f72ff
 	github.com/gorilla/sessions v1.2.1
 	github.com/gosuri/uitable v0.0.4
@@ -49,7 +49,6 @@ require (
 	golang.org/x/crypto v0.1.0
 	golang.org/x/sync v0.1.0
 	google.golang.org/grpc v1.46.2
-	google.golang.org/grpc/examples v0.0.0-20220510235641-db79903af928
 	google.golang.org/protobuf v1.28.0
 	gorm.io/driver/mysql v1.3.3
 	gorm.io/gorm v1.23.5
@@ -58,7 +57,6 @@ require (
 )
 
 require (
-	github.com/DATA-DOG/go-sqlmock v1.5.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
@@ -77,6 +75,7 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-jwt/jwt/v4 v4.2.0 // indirect
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/google/gofuzz v1.1.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
