@@ -16,22 +16,15 @@
  *
  */
 
-// Package main implements a server for Greeter service.
 package main
 
 import (
 	"context"
-	"flag"
-	"fmt"
 	"log"
 	"net"
 
-	pb "github.com/rebirthmonkey/pkg/grpc/helloworld"
+	"github.com/rebirthmonkey/pkg/grpc/helloworld/pb"
 	"google.golang.org/grpc"
-)
-
-var (
-	port = flag.Int("port", 50051, "The server port")
 )
 
 // server is used to implement helloworld.GreeterServer.
@@ -41,25 +34,26 @@ type server struct {
 
 // SayHello implements helloworld.GreeterServer
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	log.Printf("Received: %v", in.GetName())
+	log.Println("SayHello sends the message: Hello ", in.GetName())
 	return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
 }
 
 func (s *server) SayHelloAgain(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
+	log.Println("SayHelloAgain sends the message: Hello ", in.GetName())
 	return &pb.HelloReply{Message: "Hello again " + in.GetName()}, nil
 }
 
-
 func main() {
-	flag.Parse()
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
+	listener, err := net.Listen("tcp", "127.0.0.1:8081")
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatalln("failed to listen: ", err)
 	}
+
 	s := grpc.NewServer()
 	pb.RegisterGreeterServer(s, &server{})
-	log.Printf("server listening at %v", lis.Addr())
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+	log.Println("server listening at ", listener.Addr())
+
+	if err := s.Serve(listener); err != nil {
+		log.Fatalln("failed to serve: ", err)
 	}
 }

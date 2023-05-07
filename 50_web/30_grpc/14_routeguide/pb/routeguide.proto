@@ -14,12 +14,9 @@
 
 syntax = "proto3";
 
-option go_package = "github.com/rebirthmonkey/pkg/grpc/routeguide";
-option java_multiple_files = true;
-option java_package = "io.grpc.examples.routeguide";
-option java_outer_classname = "RouteGuideProto";
+option go_package = "github.com/rebirthmonkey/pkg/grpc/routeguide/pb";
 
-package routeguide;
+package pb;
 
 // Interface exported by the server.
 service RouteGuide {

@@ -6,9 +6,10 @@ package server
 
 import (
 	"github.com/rebirthmonkey/go/pkg/log"
+	"google.golang.org/grpc"
+
 	"github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/user/controller/grpc/v1"
 	userRepoMysql "github.com/rebirthmonkey/go/scaffold/apiserver/apis/apiserver/user/repo/mysql"
-	"google.golang.org/grpc"
 )
 
 // InitGrpc initializes the Grpc server

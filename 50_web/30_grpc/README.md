@@ -31,7 +31,7 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
 
 ## 原理
 
-gRPC 由 数据模型、server 端和 client 端 3部分组成
+gRPC 由数据模型、server 端和 client 端 3 部分组成。
 
 ### 数据模型
 
@@ -48,7 +48,7 @@ Protocol Buffers（ProtocolBuffer/protobuf）是 Google 开发的一套对数据
 
 在 gRPC 的框架中，Protocol Buffers 主要有三个作用：
 
-- 第一，可以用来定义数据结构：下面的代码定义了一个 SecretInfo 数据结构：
+- 定义数据结构：下面的代码定义了一个 SecretInfo 数据结构：
 
 ```go
 // SecretInfo contains secret details.
@@ -64,7 +64,7 @@ message SecretInfo {
 }
 ```
 
-- 第二，可以用来定义服务接口：下面的代码定义了一个 Cache 服务，服务包含了 ListSecrets 和 ListPolicies 两个 API 接口。
+- 定义服务接口：下面的代码定义了一个 Cache 服务，服务包含了 ListSecrets 和 ListPolicies 两个 API 接口。
 
 ```go
 // Cache implements a cache rpc service.
@@ -74,15 +74,15 @@ service Cache{
 }
 ```
 
-- 第三，可以通过 protobuf 序列化和反序列化，提升传输效率。
+- 通过 protobuf 序列化和反序列化，提升传输效率。
 
 #### xxx.pb.go
 
-用于存储由 message 定义、创建的数据结构
+用于存储由 Protocol Buffers/message 定义、创建的数据结构。
 
 #### xxx_grpc.pb.go
 
-用于存储由 service 定义、创建的 interface、struct、method 等。该文件采用标准的 Go 包结构，内部包括（以 ProductInfo 为例）
+用于存储由 Protocol Buffers/service 定义、创建的 interface、struct、method 等。该文件采用标准的 Go 包结构，内部包括（以 ProductInfo 为例）：
 
 ##### client 端
 
@@ -151,41 +151,41 @@ message HelloReply {
 }
 ```
 
-本示例使用了简单模式，.proto 文件也包含了 Protocol Buffers 消息的定义，包括请求消息和返回消息。
+本示例使用了简单模式，.proto 文件也包含了 Protocol Buffers message 的定义，包括请求消息和返回消息。
 
 #### 生成客户端和服务端接口
 
 根据 .proto 服务定义生成 gRPC 客户端和服务器接口。可以使用 protoc 编译工具，并指定使用其 Go 语言插件来生成：
 
 ```bash
-cd 10_helloworld/helloworld
+cd 10_helloworld/pb
 protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     helloworld.proto
 ls
 ```
 
-```text
-helloworld.pb.go  helloworld.proto # 新增了一个 helloworld.pb.go 文件
+```shell
+helloworld.pb.go  helloworld.proto  # 新增了一个 helloworld.pb.go 文件
 ```
 
 #### 实现 gRPC 服务端
 
-进入 ../greeter_server 目录，新建 main.go 文件。
+进入 ../server 目录，新建 main.go 文件。
 
 在代码中实现了上一步根据服务定义生成的 Go 接口：
 
 - 先定义了一个 Go 结构体 server，并为 server 结构体添加了`SayHello(context.Context,  pb.HelloRequest) (pb.HelloReply, error)`方法，也就是 server 是 GreeterServer  接口（位于 helloworld.pb.go 文件中）的一个实现。
 - 在实现了 gRPC 服务所定义的方法之后，就可以通过 net.Listen(...) 指定监听客户端请求的端口；
 - 通过 grpc.NewServer() 创建一个 gRPC Server 实例，并通过 `pb.RegisterGreeterServer(s, &server{})` 将该服务注册到 gRPC 框架中；
-- 通过 s.Serve(lis) 启动 gRPC 服务。
+- 通过 s.Serve(listener) 启动 gRPC 服务。
 - 创建完 main.go 文件后，在当前目录下执行 `go run main.go` 启动  gRPC 服务。
 
 注意：如果 go-grpc 不同版本存在兼容性问题，需要手动调整 go.mod 中的版本号。
 
 #### 实现 gRPC 客户端
 
-进入 ../greeter-client 目录，新建 main.go 文件。
+进入 ../client 目录，新建 main.go 文件。
 
 - 创建了一个 gRPC 连接，用来跟服务端进行通信。在创建连接时，可以指定不同的选项，用来控制创建连接的方式，如 `grpc.WithInsecure()`、`grpc.WithBlock()` 等，更多的选项可以参考 grpc 仓库下dialoptions.go文件中以 With 开头的函数。
 - 连接建立起来之后，需要创建一个客户端 stub，用来执行 RPC 请求 `c :=  pb.NewGreeterClient(conn)`。
@@ -199,7 +199,7 @@ helloworld.pb.go  helloworld.proto # 新增了一个 helloworld.pb.go 文件
 生成 pb
 
 ```bash
-cd 12_productinfo/productinfo
+cd 12_productinfo/pb
 protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     productinfo.proto
@@ -221,7 +221,6 @@ type server struct {
 cd 12_productinfo
 go run server/main.go 
 # 新建终端，并在新建的终端继续
-cd 12_productinfo
 go run client/main.go
 ```
 
@@ -234,7 +233,7 @@ sleep 10
 go run client/main.go
 ```
 
-### route-guide
+### routeguide
 
 #### 创建proto
 
@@ -246,22 +245,21 @@ go run client/main.go
   - An interface type for servers to implement, also with the methods defined in the `RouteGuide` service.
 
 ```shell
-cd 14_route-guide/routeguide
+cd 14_routeguide/pb
 protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     routeguide.proto
 ls
 cd ..
-go run server/server.go
+go run server/main.go
 # 新建终端，并在新建的终端继续
-cd 14_route-guide/routeguide
 go run client/client.go
 ```
 
 或者在同一个终端窗口中执行
 
 ```bash
-cd 14_route-guide/routeguide
+cd 14_routeguide/routeguide
 protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     routeguide.proto
@@ -271,14 +269,6 @@ go run server/server.go &
 sleep 10
 go run client/client.go
 ```
-
-#### 创建 server 端
-
-见代码
-
-#### 创建 client 端
-
-见代码
 
 ## apiserver 示例
 
