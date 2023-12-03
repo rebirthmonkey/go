@@ -2,7 +2,7 @@
 
 ## 简介
 
-反射（reflection）是在 Java 出现后迅速流行起来的一种概念。通过反射，可以获取丰富的类型信息，并可以利用这些类型信息做非常灵活的工作。例如，我们需要一个能统一处理各种类型的函数，但有些信息只有在运行时才能确定（要从文件或网络中获取一些字典数据）。在这种情况下就需要`reflection`，它能帮你：
+反射（reflection）是在 Java 出现后迅速流行起来的一种概念。通过反射，可以获取丰富的类型信息，并可以利用这些类型信息做非常灵活的工作。例如，我们需要一个能统一处理各种类型的函数，但有些信息只有在运行时才能确定（要从文件或网络中获取一些字典数据）。在这种情况下就需要`reflect`，它能帮：
 
 - 在运行时检查 type
 - 在运行时检查/修改/创建 值/函数/结构
@@ -13,7 +13,7 @@
 
 Go 中的变量包括 type 和 value 两部分：type 包括 static type 和 concrete type，static type 是 Go 默认自带的类型（如 int、string），而 concrete type 是用户定义的 struct 或 interface， runtime 看见的类型。类型断言能否成功，取决于变量的 concrete type，而不是 static type。因此，一个 reader 变量如果它的 concrete type 也实现了 write 方法，它也可以被类型断言为 writer。反射就是建立在 type 之上的，Golang 的指定 type 的变量类型是 static type（也就是指定 int、string 这些的变量），在创建变量的时候就已经确定。而 Go 中反射主要与 interface 类型相关，只有 interface 类型才有反射一说。
 
-value 是实际变量值，type 是实际变量的类型。一个 interface{} 类型的变量包含了 2 个指针，一个指针指向值的concrete type，另外一个指针指向实际的 value。例如，创建类型为 ``*os.File` 的变量，然后将其赋给一个接口变量 r：
+value 是实际变量值，type 是实际变量的类型。一个 interface{} 类型的变量包含了 2 个指针，一个指针指向值的 concrete type，另外一个指针指向实际的 value。例如，创建类型为 ``*os.File` 的变量，然后将其赋给一个接口变量 r：
 
 ```go
 tty, err := os.OpenFile("/dev/tty", os.O_RDWR, 0)
@@ -90,8 +90,6 @@ newPtrVal := reflect.New(varType)
 ```
 
 - 反射开发中最常用的可能就是reflect.DeepEqual
-
-
 
 ## interface
 

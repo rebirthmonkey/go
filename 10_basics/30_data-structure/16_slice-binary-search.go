@@ -1,6 +1,6 @@
 package main
 
-func BinarySearch(data []int, value int) bool{
+func BinarySearch(data []int, value int) bool {
 	var low int = 0
 	var high int = len(data) - 1
 	var mid int
@@ -11,7 +11,7 @@ func BinarySearch(data []int, value int) bool{
 			return true
 		} else {
 			if data[mid] > value {
-				high = mid + 1
+				high = mid - 1
 			} else {
 				low = mid + 1
 			}
@@ -20,7 +20,8 @@ func BinarySearch(data []int, value int) bool{
 	return false
 }
 
-func main(){
-	var d = []int{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17}
-	println("the binary search result is: ", BinarySearch(d,20))
+func main() {
+	var d = []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
+	println("the binary search result is: ", BinarySearch(d, 20))
+	println("the binary search result is: ", BinarySearch(d, 13))
 }

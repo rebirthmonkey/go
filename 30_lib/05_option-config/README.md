@@ -113,7 +113,7 @@ i, err := flagset.GetInt("flagname")
 
 在定义完 flag 之后，可以调用 `pflag.Parse()` 来解析定义的 flag。解析后，可通过 `pflag.Args()`返回所有的非选项参数，通过 `pflag.Arg(i)` 返回第i个非选项参数。参数下标 0 到 `pflag.NArg() - 1`。
 
-###### 认值设置 
+###### 默认值设置 
 
 创建一个 Flag 后，可以为这个 Flag 设置 pflag.NoOptDefVal。如果一个 Flag 具有 NoOptDefVal，并且该 Flag 在命令行上没有设置这个 Flag 的值，则该标志将设置为 NoOptDefVal 指定的值。如：
 
@@ -309,9 +309,9 @@ go run example3.go
 
 Cobra 既是一个可以创建 CLI 应用程序的库，也是一个可以生成应用和命令文件的程序。有许多大型项目都是用 Cobra 来构建应用程序的，如 Kubernetes、Docker、etcd、Rkt、Hugo 等。Cobra 建立在 commands、arguments 和 flags 结构之上。一个好的应用程序应该是易懂的，用户可以清晰地知道如何去使用这个应用程序。应用程序通常遵循如下模式：`APPNAME COMMAND ARG --FLAG`，如：`git clone URL --bare`
 
-- clone 是一个命令，
-- URL 是一个非选项参数，
-- bare 是一个选项参数
+- clone：是一个子命令，
+- URL：是一个 arg 非选项参数，
+- bare：是一个 flag 选项参数
 
 #### 构建
 
@@ -430,8 +430,6 @@ go run ./example3.go --config config.yaml
 go run ./example4.go --config config.yaml  # 读取配置文件信息
 go run ./example4.go --config config.yaml --name Alice --age 18  # 虽然读取配置文件信息，但被Flag信息覆盖
 ```
-
-
 
 ## option/config/app 设计模式
 

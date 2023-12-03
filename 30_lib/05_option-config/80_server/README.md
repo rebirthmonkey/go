@@ -10,8 +10,6 @@ apiserver 应用核心是对外提供一个 web service，包括 CRUD 等不同�
 
 <img src="figures/image-20220912161704546.png" alt="image-20220912161704546" style="zoom:50%;" />
 
-
-
 ### roadmap
 
 总体来说，整个 apiserver 应用将从实战准备、基础实战、进阶实战等 3 个阶段进行讲解。具体内容包括：

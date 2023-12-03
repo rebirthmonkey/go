@@ -125,9 +125,9 @@ sync.WaitGroup 是 go 标准库的一部分，它等待一系列 goroutines 执�
 ```go
 var wg sync.WaitGroup
 wg.Add(5)
-for i := 0; i < 5; **i++** {
+for i := 0; i < 5; i++ {
     go func() {
-        **fmt.Print(i)** // 局部变量i被6个goroutine共享
+        fmt.Print(i) // 局部变量i被6个goroutine共享
         wg.Done()
     }()
 }

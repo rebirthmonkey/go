@@ -251,7 +251,7 @@ require (
 replace github.com/rebirthmonkey/wklib2 => ../wklib2
 ```
 
-```
+```shell
 go mod tidy 
 go run main.go
 ````
