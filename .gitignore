@@ -16,6 +16,8 @@
 bin/
 src/
 
+#Bak
+.bak
 */.bak
 */*/.bak
 */*/*/.bak
